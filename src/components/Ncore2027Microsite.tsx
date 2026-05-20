@@ -1,15 +1,13 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import {
   Search, MapPin, Calendar, Hotel, Music, Utensils, Trophy,
   Users, ShieldCheck, Building2, Sparkles, ArrowRight, Mic2,
-  Globe2, Bot, Handshake, Ticket, Plane,
+  Globe2, Bot, Handshake, Ticket, Plane, Sun, Moon,
 } from "lucide-react";
 
-// ── Design tokens extracted from NCORE VEGAS ARIA 2027 2.pptx ─
-const C = {
-  bg:     "#1a2f3d",
-  panel:  "#274552",
+// ── PPTX accent colours (same in both modes) ─────────────────
+const A = {
   teal:   "#17a186",
   orange: "#f39e14",
   red:    "#c13a2c",
@@ -17,14 +15,51 @@ const C = {
   blue:   "#2a81ba",
 };
 
+// ── Day / Night theme tokens ──────────────────────────────────
+const DARK = {
+  bg:          "#1a2f3d",
+  panel:       "#274552",
+  panelAlt:    "#1e3a4a",
+  text:        "#ffffff",
+  muted:       "#94a3b8",
+  subtleMuted: "#64748b",
+  border:      "rgba(255,255,255,0.10)",
+  cardInner:   "rgba(26,47,61,0.85)",
+  navBg:       "rgba(39,69,82,0.92)",
+  heroL:       "rgba(39,69,82,0.93)",
+  heroR:       "rgba(39,69,82,0.62)",
+  heroFade:    "#1a2f3d",
+  glassBg:     "rgba(255,255,255,0.08)",
+  glassBorder: "rgba(255,255,255,0.14)",
+};
+
+const LIGHT = {
+  bg:          "#ddedf2",
+  panel:       "#ffffff",
+  panelAlt:    "#f0f8fb",
+  text:        "#0f2130",
+  muted:       "#3d5a6a",
+  subtleMuted: "#5a7a8a",
+  border:      "rgba(0,0,0,0.09)",
+  cardInner:   "rgba(255,255,255,0.90)",
+  navBg:       "rgba(255,255,255,0.92)",
+  heroL:       "rgba(15,33,48,0.82)",
+  heroR:       "rgba(15,33,48,0.42)",
+  heroFade:    "#ddedf2",
+  glassBg:     "rgba(255,255,255,0.22)",
+  glassBorder: "rgba(255,255,255,0.40)",
+};
+
+type Theme = typeof DARK;
+
 const nav = ["Overview", "Destination", "Program", "Venue", "NCORE Live", "NALU", "Partners"];
 
 const faqs = [
-  { q: "Is there an NCORE conference in 2026?",       a: "No. The current positioning states there will be no NCORE conference held in 2026, with the next expected conference in 2027." },
-  { q: "Where is NCORE 2027 being positioned?",       a: "TPG Worldwide has secured a venue hold at ARIA Resort & Casino in Las Vegas for the NCORE 2027 destination program." },
-  { q: "What is NCORE?",                              a: "NCORE is a leading higher education forum focused on race, ethnicity, cultural diversity, identity, access, opportunity, cross-cultural understanding, and institutional success." },
-  { q: "What will NALU answer?",                      a: "NALU will operate as the event information engine for NCORE, ARIA, Las Vegas travel, dining, entertainment, sports, program updates, venue logistics, and attendee support." },
-  { q: "What is the TPG Live / venue hold layer?",    a: "It is TPG Worldwide's event infrastructure layer for venue holds, entertainment overlays, destination programming, hospitality, sponsorship, and future conference activation pipelines." },
+  { q: "Is there an NCORE conference in 2026?",    a: "No. The current positioning states there will be no NCORE conference held in 2026, with the next expected conference in 2027." },
+  { q: "Where is NCORE 2027 being positioned?",    a: "TPG Worldwide has secured a venue hold at ARIA Resort & Casino in Las Vegas for the NCORE 2027 destination program." },
+  { q: "What is NCORE?",                           a: "NCORE is a leading higher education forum focused on race, ethnicity, cultural diversity, identity, access, opportunity, cross-cultural understanding, and institutional success." },
+  { q: "What will NALU answer?",                   a: "NALU will operate as the event information engine for NCORE, ARIA, Las Vegas travel, dining, entertainment, sports, program updates, venue logistics, and attendee support." },
+  { q: "What is the TPG Live / venue hold layer?", a: "It is TPG Worldwide's event infrastructure layer for venue holds, entertainment overlays, destination programming, hospitality, sponsorship, and future conference activation pipelines." },
 ];
 
 const programTiles = [
@@ -41,11 +76,10 @@ const venueStack = [
   { label: "Platform Layer", value: "TPG Worldwide + NALU" },
 ];
 
-// ── Bubble cluster — replicates the PPTX slide 3/4 visual ─────
+// ── Bubble cluster — replicates PPTX slide 3/4 visual ────────
 function BubbleCluster({ className = "" }: { className?: string }) {
   return (
     <svg viewBox="0 0 480 720" className={className} aria-hidden="true">
-      {/* ghost / muted circles */}
       <circle cx="380" cy="55"  r="28" fill="rgba(255,255,255,0.09)" />
       <circle cx="440" cy="120" r="42" fill="rgba(255,255,255,0.07)" />
       <circle cx="355" cy="190" r="20" fill="rgba(255,255,255,0.09)" />
@@ -56,11 +90,9 @@ function BubbleCluster({ className = "" }: { className?: string }) {
       <circle cx="315" cy="480" r="15" fill="rgba(255,255,255,0.08)" />
       <circle cx="415" cy="535" r="11" fill="rgba(255,255,255,0.06)" />
       <circle cx="340" cy="610" r="14" fill="rgba(255,255,255,0.07)" />
-      {/* main accent circles */}
-      <circle cx="355" cy="400" r="82"  fill={C.teal} />
-      <circle cx="275" cy="520" r="64"  fill={C.orange} />
-      <circle cx="415" cy="600" r="94"  fill={C.red} />
-      {/* white connector lines + dots */}
+      <circle cx="355" cy="400" r="82"  fill={A.teal}   />
+      <circle cx="275" cy="520" r="64"  fill={A.orange} />
+      <circle cx="415" cy="600" r="94"  fill={A.red}    />
       <line x1="90"  y1="385" x2="275" y2="400" stroke="white" strokeWidth="1" strokeLinecap="round" opacity="0.65" />
       <circle cx="275" cy="400" r="3" fill="white" opacity="0.65" />
       <line x1="70"  y1="510" x2="213" y2="520" stroke="white" strokeWidth="1" strokeLinecap="round" opacity="0.65" />
@@ -71,28 +103,21 @@ function BubbleCluster({ className = "" }: { className?: string }) {
   );
 }
 
-// ── Google Maps embed of ARIA Las Vegas ───────────────────────
-function DestinationMapCard() {
+// ── Google Maps embed ─────────────────────────────────────────
+function DestinationMapCard({ T }: { T: Theme }) {
   return (
-    <div
-      className="relative overflow-hidden rounded-[2rem] border border-white/10 p-6 shadow-2xl"
-      style={{ background: C.panel }}
-    >
+    <div className="relative overflow-hidden rounded-[2rem] p-6 shadow-2xl" style={{ background: T.panel, border: `1px solid ${T.border}` }}>
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-xs uppercase tracking-[0.3em]" style={{ color: C.teal }}>
-            Las Vegas Destination Map
-          </p>
-          <h3 className="mt-2 text-2xl font-semibold text-white">
-            ARIA Resort &amp; Casino, Las Vegas
-          </h3>
-          <p className="mt-2 max-w-xl text-sm leading-6 text-slate-300">
+          <p className="text-xs uppercase tracking-[0.3em]" style={{ color: A.teal }}>Las Vegas Destination Map</p>
+          <h3 className="mt-2 text-2xl font-semibold" style={{ color: T.text }}>ARIA Resort &amp; Casino, Las Vegas</h3>
+          <p className="mt-2 max-w-xl text-sm leading-6" style={{ color: T.muted }}>
             NCORE 2027 is positioned at the ARIA Resort &amp; Casino on the Las Vegas Strip — a AAA Five Diamond property anchoring conference programming, hospitality, and TPG Live activations.
           </p>
         </div>
-        <MapPin className="h-8 w-8 shrink-0" style={{ color: C.orange }} />
+        <MapPin className="h-8 w-8 shrink-0" style={{ color: A.orange }} />
       </div>
-      <div className="mt-6 overflow-hidden rounded-3xl border border-white/10" style={{ height: 400 }}>
+      <div className="mt-6 overflow-hidden rounded-3xl" style={{ height: 400, border: `1px solid ${T.border}` }}>
         <iframe
           title="ARIA Resort Casino Las Vegas"
           src="https://maps.google.com/maps?q=ARIA+Resort+Casino+Las+Vegas&output=embed&z=15"
@@ -108,7 +133,7 @@ function DestinationMapCard() {
 }
 
 // ── NALU demo panel ───────────────────────────────────────────
-function NaluPanel() {
+function NaluPanel({ T }: { T: Theme }) {
   const [query, setQuery] = useState("Where should I eat near ARIA after the NCORE keynote?");
   const answer = useMemo(() => {
     if (query.toLowerCase().includes("aria"))     return "NALU can answer venue logistics, room block guidance, meeting locations, attendee flow, dining near ARIA, transportation, accessibility, entertainment, and curated Las Vegas options.";
@@ -118,31 +143,28 @@ function NaluPanel() {
   }, [query]);
 
   return (
-    <div
-      className="rounded-[2rem] border p-6 shadow-2xl"
-      style={{ borderColor: `${C.teal}40`, background: `${C.teal}18` }}
-    >
+    <div className="rounded-[2rem] p-6 shadow-2xl" style={{ background: `${A.teal}18`, border: `1px solid ${A.teal}40` }}>
       <div className="flex items-center gap-3">
-        <div className="rounded-2xl p-3" style={{ background: `${C.teal}28`, color: C.teal }}>
+        <div className="rounded-2xl p-3" style={{ background: `${A.teal}28`, color: A.teal }}>
           <Bot className="h-6 w-6" />
         </div>
         <div>
-          <p className="text-xs uppercase tracking-[0.3em]" style={{ color: C.teal }}>NALU Query Engine</p>
-          <h3 className="text-2xl font-semibold text-white">Ask anything about NCORE 2027</h3>
+          <p className="text-xs uppercase tracking-[0.3em]" style={{ color: A.teal }}>NALU Query Engine</p>
+          <h3 className="text-2xl font-semibold" style={{ color: T.text }}>Ask anything about NCORE 2027</h3>
         </div>
       </div>
-      <div className="mt-6 flex gap-3 rounded-2xl border border-white/10 p-3" style={{ background: C.bg }}>
-        <Search className="mt-3 h-5 w-5 shrink-0 text-slate-400" />
+      <div className="mt-6 flex gap-3 rounded-2xl p-3" style={{ background: T.bg, border: `1px solid ${T.border}` }}>
+        <Search className="mt-3 h-5 w-5 shrink-0" style={{ color: T.subtleMuted }} />
         <textarea
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          className="min-h-24 w-full resize-none bg-transparent p-2 text-sm text-white outline-none placeholder:text-slate-500"
+          className="min-h-24 w-full resize-none bg-transparent p-2 text-sm outline-none"
+          style={{ color: T.text }}
           placeholder="Ask NALU about NCORE, ARIA, Las Vegas, dining, entertainment, sports, travel, or the 2027 program…"
         />
       </div>
-      <div className="mt-4 rounded-2xl bg-white/5 p-4 text-sm leading-6 text-slate-200">
-        <span className="font-semibold" style={{ color: C.teal }}>NALU Response Preview:</span>{" "}
-        {answer}
+      <div className="mt-4 rounded-2xl p-4 text-sm leading-6" style={{ background: T.glassBg, color: T.muted }}>
+        <span className="font-semibold" style={{ color: A.teal }}>NALU Response Preview:</span>{" "}{answer}
       </div>
     </div>
   );
@@ -150,97 +172,130 @@ function NaluPanel() {
 
 // ── Main export ───────────────────────────────────────────────
 export default function Ncore2027Microsite() {
+  const [dark, setDark] = useState(true);
+
+  // Read saved preference on mount
+  useEffect(() => {
+    const saved = localStorage.getItem("ncore-theme");
+    if (saved === "light") setDark(false);
+  }, []);
+
+  const toggleTheme = () => {
+    const next = !dark;
+    setDark(next);
+    localStorage.setItem("ncore-theme", next ? "dark" : "light");
+  };
+
+  const T = dark ? DARK : LIGHT;
+
   return (
-    <div className="min-h-screen text-white" style={{ background: C.bg }}>
+    <div className="min-h-screen transition-colors duration-300" style={{ background: T.bg, color: T.text }}>
 
       {/* ── Sticky nav ──────────────────────────────────────── */}
       <header
-        className="sticky top-0 z-50 border-b border-white/10 backdrop-blur-xl"
-        style={{ background: `${C.panel}e8` }}
+        className="sticky top-0 z-50 backdrop-blur-xl transition-colors duration-300"
+        style={{ background: T.navBg, borderBottom: `1px solid ${T.border}` }}
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
           <div className="flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white font-black text-slate-950">N</div>
+            <div
+              className="flex h-11 w-11 items-center justify-center rounded-2xl font-black text-sm"
+              style={{ background: A.teal, color: "#ffffff" }}
+            >
+              N
+            </div>
             <div>
-              <p className="text-sm font-bold tracking-wide">NCORE 2027</p>
-              <p className="text-xs text-slate-400">TPG Worldwide Destination Platform</p>
+              <p className="text-sm font-bold tracking-wide" style={{ color: T.text }}>NCORE 2027</p>
+              <p className="text-xs" style={{ color: T.subtleMuted }}>TPG Worldwide Destination Platform</p>
             </div>
           </div>
-          <nav className="hidden items-center gap-6 text-sm text-slate-300 lg:flex">
+
+          <nav className="hidden items-center gap-6 text-sm lg:flex" style={{ color: T.muted }}>
             {nav.map((item) => (
               <a
                 key={item}
                 href={`#${item.toLowerCase().replaceAll(" ", "-")}`}
-                className="transition-colors hover:text-white"
+                className="transition-colors hover:opacity-80"
+                style={{ color: T.muted }}
               >
                 {item}
               </a>
             ))}
           </nav>
-          <a
-            href="#nalu"
-            className="rounded-full px-5 py-2 text-sm font-semibold text-white shadow-lg transition-opacity hover:opacity-90"
-            style={{ background: C.teal }}
-          >
-            Ask NALU
-          </a>
+
+          <div className="flex items-center gap-3">
+            {/* Day / Night toggle */}
+            <button
+              onClick={toggleTheme}
+              aria-label={dark ? "Switch to day mode" : "Switch to night mode"}
+              className="flex h-9 w-9 items-center justify-center rounded-full transition-all hover:opacity-80"
+              style={{ background: T.glassBg, border: `1px solid ${T.border}`, color: T.text }}
+            >
+              {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            </button>
+
+            <a
+              href="#nalu"
+              className="rounded-full px-5 py-2 text-sm font-semibold text-white shadow-lg transition-opacity hover:opacity-90"
+              style={{ background: A.teal }}
+            >
+              Ask NALU
+            </a>
+          </div>
         </div>
       </header>
 
       <main>
 
-        {/* ── Hero — ARIA photo background ────────────────────── */}
+        {/* ── Hero — actual ARIA building photo ───────────────── */}
         <section id="overview" className="relative overflow-hidden">
 
-          {/* ARIA Las Vegas photo fill */}
+          {/* ARIA Las Vegas building — Wikimedia Commons CC-BY-SA 3.0 */}
           <div className="absolute inset-0">
             <img
-              src="https://images.unsplash.com/photo-1605833556294-ea5c2a2d36f2?auto=format&fit=crop&w=1920&q=80"
-              alt="ARIA Resort Las Vegas"
+              src="https://upload.wikimedia.org/wikipedia/commons/c/c6/Aria_Las_Vegas.JPG"
+              alt="ARIA Resort & Casino Las Vegas"
               className="h-full w-full object-cover object-center"
             />
-            {/* gradient: strong dark on left for text legibility, fades right, full bleed to bg at bottom */}
+            {/* gradient: strong dark left for text legibility, lighter right, full fade to bg at bottom */}
             <div
-              className="absolute inset-0"
+              className="absolute inset-0 transition-colors duration-300"
               style={{
-                background: `linear-gradient(to right, ${C.panel}f2 30%, ${C.panel}b0 60%, ${C.panel}70 100%), linear-gradient(to bottom, transparent 50%, ${C.bg} 100%)`,
+                background: `linear-gradient(to right, ${T.heroL} 25%, ${T.heroR} 65%, transparent 100%), linear-gradient(to bottom, transparent 55%, ${T.heroFade} 100%)`,
               }}
             />
           </div>
 
-          {/* Bubble cluster — right edge decoration from PPTX */}
-          <BubbleCluster className="pointer-events-none absolute -right-12 top-0 h-full w-auto max-w-xs opacity-85 lg:max-w-sm" />
+          {/* Bubble cluster — right-edge PPTX decoration, always on dark overlay area */}
+          <BubbleCluster className="pointer-events-none absolute -right-10 top-0 h-full w-auto max-w-[280px] opacity-80 lg:max-w-sm" />
 
           {/* Hero content */}
           <div className="relative z-10 mx-auto grid min-h-[78vh] max-w-7xl items-center gap-10 px-6 py-28 lg:grid-cols-[1.15fr_.85fr]">
             <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .6 }}>
               <div
-                className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm backdrop-blur-sm"
-                style={{ color: C.teal }}
+                className="mb-6 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm backdrop-blur-sm"
+                style={{ background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.20)", color: A.teal }}
               >
                 <Calendar className="h-4 w-4" />
                 No 2026 conference • Next expected event: 2027
               </div>
-              <h1 className="text-5xl font-black tracking-tight md:text-7xl">
+
+              <h1 className="text-5xl font-black tracking-tight text-white md:text-7xl">
                 NCORE 2027 at{" "}
-                <span
-                  style={{
-                    background: `linear-gradient(to right, ${C.teal}, ${C.orange})`,
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                  }}
-                >
+                <span style={{ background: `linear-gradient(to right, ${A.teal}, ${A.orange})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
                   ARIA Las Vegas
                 </span>
               </h1>
+
               <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-200">
                 A TPG Worldwide microsite for general NCORE information, Las Vegas destination readiness, ARIA venue support, future venue holds, TPG Live event programming, and NALU-powered attendee intelligence.
               </p>
+
               <div className="mt-8 flex flex-wrap gap-4">
                 <a
                   href="#destination"
                   className="inline-flex items-center gap-2 rounded-full px-6 py-3 font-semibold text-white shadow-lg transition-opacity hover:opacity-90"
-                  style={{ background: C.teal }}
+                  style={{ background: A.teal }}
                 >
                   Explore Destination <ArrowRight className="h-4 w-4" />
                 </a>
@@ -257,11 +312,12 @@ export default function Ncore2027Microsite() {
               initial={{ opacity: 0, scale: .95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: .7, delay: .12 }}
-              className="grid gap-4 rounded-[2rem] border border-white/10 bg-white/10 p-4 shadow-2xl backdrop-blur-sm"
+              className="grid gap-4 rounded-[2rem] p-4 shadow-2xl backdrop-blur-sm"
+              style={{ background: T.glassBg, border: `1px solid ${T.glassBorder}` }}
             >
               {venueStack.map((item) => (
-                <div key={item.label} className="rounded-3xl p-5" style={{ background: `${C.panel}cc` }}>
-                  <p className="text-xs uppercase tracking-[0.25em] text-slate-400">{item.label}</p>
+                <div key={item.label} className="rounded-3xl p-5" style={{ background: T.cardInner }}>
+                  <p className="text-xs uppercase tracking-[0.25em]" style={{ color: T.subtleMuted }}>{item.label}</p>
                   <p className="mt-2 text-2xl font-bold text-white">{item.value}</p>
                 </div>
               ))}
@@ -271,29 +327,23 @@ export default function Ncore2027Microsite() {
 
         {/* ── Destination map ──────────────────────────────────── */}
         <section id="destination" className="mx-auto max-w-7xl px-6 py-12">
-          <DestinationMapCard />
+          <DestinationMapCard T={T} />
         </section>
 
         {/* ── Program tiles ────────────────────────────────────── */}
         <section id="program" className="mx-auto max-w-7xl px-6 py-16">
           <div className="mb-8">
-            <p className="text-xs uppercase tracking-[0.3em]" style={{ color: C.orange }}>
-              General NCORE Information
-            </p>
-            <h2 className="mt-2 text-4xl font-bold">Conference positioning</h2>
+            <p className="text-xs uppercase tracking-[0.3em]" style={{ color: A.orange }}>General NCORE Information</p>
+            <h2 className="mt-2 text-4xl font-bold" style={{ color: T.text }}>Conference positioning</h2>
           </div>
           <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
             {programTiles.map(({ icon: Icon, title, copy }, idx) => {
-              const accent = [C.teal, C.orange, C.red, C.lime][idx];
+              const accent = [A.teal, A.orange, A.red, A.lime][idx];
               return (
-                <div
-                  key={title}
-                  className="rounded-[2rem] border border-white/10 p-6"
-                  style={{ background: C.panel }}
-                >
+                <div key={title} className="rounded-[2rem] p-6" style={{ background: T.panel, border: `1px solid ${T.border}` }}>
                   <Icon className="h-8 w-8" style={{ color: accent }} />
-                  <h3 className="mt-5 text-xl font-semibold">{title}</h3>
-                  <p className="mt-3 text-sm leading-6 text-slate-300">{copy}</p>
+                  <h3 className="mt-5 text-xl font-semibold" style={{ color: T.text }}>{title}</h3>
+                  <p className="mt-3 text-sm leading-6" style={{ color: T.muted }}>{copy}</p>
                 </div>
               );
             })}
@@ -302,31 +352,28 @@ export default function Ncore2027Microsite() {
 
         {/* ── Venue ────────────────────────────────────────────── */}
         <section id="venue" className="mx-auto grid max-w-7xl gap-6 px-6 py-16 lg:grid-cols-3">
-          <div
-            className="rounded-[2rem] border border-white/10 p-7 lg:col-span-2"
-            style={{ background: C.panel }}
-          >
-            <div className="flex items-center gap-3" style={{ color: C.teal }}>
+          <div className="rounded-[2rem] p-7 lg:col-span-2" style={{ background: T.panel, border: `1px solid ${T.border}` }}>
+            <div className="flex items-center gap-3" style={{ color: A.teal }}>
               <Hotel className="h-6 w-6" />
               <p className="text-xs uppercase tracking-[0.3em]">ARIA Venue Hold</p>
             </div>
-            <h2 className="mt-4 text-4xl font-bold">Premium convention platform on the Las Vegas Strip</h2>
-            <p className="mt-4 leading-7 text-slate-300">
+            <h2 className="mt-4 text-4xl font-bold" style={{ color: T.text }}>Premium convention platform on the Las Vegas Strip</h2>
+            <p className="mt-4 leading-7" style={{ color: T.muted }}>
               The ARIA layer should function as the anchor for rooms, meetings, breakouts, VIP activations, partner hospitality, private receptions, sponsor lounges, speaker support, and TPG-managed event overlays.
             </p>
             <div className="mt-6 grid gap-4 sm:grid-cols-3">
               {["Convention + Ballrooms", "Breakout Sessions", "VIP Hospitality"].map((x) => (
-                <div key={x} className="rounded-2xl p-4 text-sm font-semibold" style={{ background: `${C.bg}dd` }}>{x}</div>
+                <div key={x} className="rounded-2xl p-4 text-sm font-semibold" style={{ background: T.panelAlt, color: T.text }}>{x}</div>
               ))}
             </div>
           </div>
           <div
-            className="rounded-[2rem] border p-7"
-            style={{ background: `linear-gradient(135deg, ${C.red}28, ${C.orange}14)`, borderColor: `${C.orange}35` }}
+            className="rounded-[2rem] p-7"
+            style={{ background: `linear-gradient(135deg, ${A.red}28, ${A.orange}14)`, border: `1px solid ${A.orange}35` }}
           >
-            <Building2 className="h-8 w-8" style={{ color: C.orange }} />
-            <h3 className="mt-4 text-2xl font-bold">Future Venue Holds</h3>
-            <p className="mt-3 text-sm leading-6 text-slate-300">
+            <Building2 className="h-8 w-8" style={{ color: A.orange }} />
+            <h3 className="mt-4 text-2xl font-bold" style={{ color: T.text }}>Future Venue Holds</h3>
+            <p className="mt-3 text-sm leading-6" style={{ color: T.muted }}>
               Build the AEG Live-style inventory pipeline: venue holds, room blocks, sponsor inventory, branded activations, ticketing, destination programming, and event monetization.
             </p>
           </div>
@@ -334,21 +381,19 @@ export default function Ncore2027Microsite() {
 
         {/* ── NCORE Live ───────────────────────────────────────── */}
         <section id="ncore-live" className="mx-auto max-w-7xl px-6 py-16">
-          <div className="rounded-[2.5rem] border border-white/10 p-8 shadow-2xl" style={{ background: C.panel }}>
-            <p className="text-xs uppercase tracking-[0.3em]" style={{ color: C.teal }}>
-              TPG / AEG Live Style + TPG-LiveNation Event Side
-            </p>
-            <h2 className="mt-3 text-4xl font-bold">NCORE Live facilitated by Majestra</h2>
+          <div className="rounded-[2.5rem] p-8 shadow-2xl" style={{ background: T.panel, border: `1px solid ${T.border}` }}>
+            <p className="text-xs uppercase tracking-[0.3em]" style={{ color: A.teal }}>TPG / AEG Live Style + TPG-LiveNation Event Side</p>
+            <h2 className="mt-3 text-4xl font-bold" style={{ color: T.text }}>NCORE Live facilitated by Majestra</h2>
             <div className="mt-8 grid gap-5 md:grid-cols-3">
               {[
-                { icon: Mic2,      title: "Speaker + Mainstage", copy: "Keynotes, panels, plenaries, sponsored sessions, fireside chats, and cultural programming.",                                                                   color: C.teal   },
-                { icon: Ticket,    title: "Event Monetization",  copy: "Partner packages, venue inventory, hospitality, premium access, sponsorship, exhibit, and curated experience revenue.",                                         color: C.orange },
-                { icon: Handshake, title: "Partner Pipeline",    copy: "Majestra-facilitated production, venue procurement, brand activation, artist/live event alignment, and institutional sponsorship.", color: C.red    },
+                { icon: Mic2,      title: "Speaker + Mainstage", copy: "Keynotes, panels, plenaries, sponsored sessions, fireside chats, and cultural programming.",                                                        color: A.teal   },
+                { icon: Ticket,    title: "Event Monetization",  copy: "Partner packages, venue inventory, hospitality, premium access, sponsorship, exhibit, and curated experience revenue.",                              color: A.orange },
+                { icon: Handshake, title: "Partner Pipeline",    copy: "Majestra-facilitated production, venue procurement, brand activation, artist/live event alignment, and institutional sponsorship.",                  color: A.red    },
               ].map(({ icon: Icon, title, copy, color }) => (
-                <div key={title} className="rounded-[2rem] p-6" style={{ background: C.bg }}>
+                <div key={title} className="rounded-[2rem] p-6" style={{ background: T.panelAlt }}>
                   <Icon className="h-7 w-7" style={{ color }} />
-                  <h3 className="mt-4 text-xl font-semibold">{title}</h3>
-                  <p className="mt-3 text-sm leading-6 text-slate-300">{copy}</p>
+                  <h3 className="mt-4 text-xl font-semibold" style={{ color: T.text }}>{title}</h3>
+                  <p className="mt-3 text-sm leading-6" style={{ color: T.muted }}>{copy}</p>
                 </div>
               ))}
             </div>
@@ -358,33 +403,29 @@ export default function Ncore2027Microsite() {
         {/* ── NALU section ─────────────────────────────────────── */}
         <section id="nalu" className="mx-auto grid max-w-7xl gap-6 px-6 py-16 lg:grid-cols-[.9fr_1.1fr]">
           <div>
-            <p className="text-xs uppercase tracking-[0.3em]" style={{ color: C.teal }}>Attendee Intelligence</p>
-            <h2 className="mt-3 text-4xl font-bold">NALU becomes the always-on NCORE concierge.</h2>
-            <p className="mt-4 leading-7 text-slate-300">
+            <p className="text-xs uppercase tracking-[0.3em]" style={{ color: A.teal }}>Attendee Intelligence</p>
+            <h2 className="mt-3 text-4xl font-bold" style={{ color: T.text }}>NALU becomes the always-on NCORE concierge.</h2>
+            <p className="mt-4 leading-7" style={{ color: T.muted }}>
               NALU should sit across the microsite as a persistent assistant: answering event questions, routing attendees, explaining program details, surfacing Vegas recommendations, and supporting partners, sponsors, students, faculty, exhibitors, and executives.
             </p>
             <div className="mt-6 grid gap-3">
               {[Plane, Utensils, Trophy, Music].map((Icon, i) => (
-                <div
-                  key={i}
-                  className="flex items-center gap-3 rounded-2xl border border-white/10 p-4"
-                  style={{ background: C.panel }}
-                >
-                  <Icon className="h-5 w-5" style={{ color: C.teal }} />
-                  <span className="text-sm text-slate-200">Travel, dining, sports, entertainment, and destination guidance</span>
+                <div key={i} className="flex items-center gap-3 rounded-2xl p-4" style={{ background: T.panel, border: `1px solid ${T.border}` }}>
+                  <Icon className="h-5 w-5" style={{ color: A.teal }} />
+                  <span className="text-sm" style={{ color: T.muted }}>Travel, dining, sports, entertainment, and destination guidance</span>
                 </div>
               ))}
             </div>
           </div>
-          <NaluPanel />
+          <NaluPanel T={T} />
         </section>
 
         {/* ── Partners + FAQ ───────────────────────────────────── */}
         <section id="partners" className="mx-auto max-w-7xl px-6 py-16">
           <div className="grid gap-6 lg:grid-cols-2">
-            <div className="rounded-[2rem] border border-white/10 p-7" style={{ background: C.panel }}>
-              <h2 className="text-3xl font-bold">Revenue + alignment opportunities</h2>
-              <div className="mt-6 grid gap-3 text-sm text-slate-300">
+            <div className="rounded-[2rem] p-7" style={{ background: T.panel, border: `1px solid ${T.border}` }}>
+              <h2 className="text-3xl font-bold" style={{ color: T.text }}>Revenue + alignment opportunities</h2>
+              <div className="mt-6 grid gap-3 text-sm">
                 {[
                   "Official housing and room block management",
                   "Destination sponsorship packages",
@@ -395,17 +436,17 @@ export default function Ncore2027Microsite() {
                   "Future venue hold pipeline with TPG Live / Majestra",
                   "Media, content, recap, and streaming-lite programming",
                 ].map((x) => (
-                  <div key={x} className="rounded-2xl p-4" style={{ background: C.bg }}>{x}</div>
+                  <div key={x} className="rounded-2xl p-4" style={{ background: T.panelAlt, color: T.muted }}>{x}</div>
                 ))}
               </div>
             </div>
-            <div className="rounded-[2rem] border border-white/10 p-7" style={{ background: C.panel }}>
-              <h2 className="text-3xl font-bold">FAQ preview</h2>
+            <div className="rounded-[2rem] p-7" style={{ background: T.panel, border: `1px solid ${T.border}` }}>
+              <h2 className="text-3xl font-bold" style={{ color: T.text }}>FAQ preview</h2>
               <div className="mt-6 space-y-3">
                 {faqs.map((item) => (
-                  <details key={item.q} className="rounded-2xl p-4" style={{ background: C.bg }}>
-                    <summary className="cursor-pointer font-semibold text-white">{item.q}</summary>
-                    <p className="mt-3 text-sm leading-6 text-slate-300">{item.a}</p>
+                  <details key={item.q} className="rounded-2xl p-4" style={{ background: T.panelAlt }}>
+                    <summary className="cursor-pointer font-semibold" style={{ color: T.text }}>{item.q}</summary>
+                    <p className="mt-3 text-sm leading-6" style={{ color: T.muted }}>{item.a}</p>
                   </details>
                 ))}
               </div>
@@ -415,8 +456,13 @@ export default function Ncore2027Microsite() {
 
       </main>
 
-      <footer className="border-t border-white/10 px-6 py-10 text-center text-sm text-slate-400">
-        <p>NCORE 2027 Destination Microsite Concept • TPG Worldwide • ARIA Las Vegas • NALU Query Engine • Majestra-Facilitated Live Event Layer</p>
+      <footer style={{ borderTop: `1px solid ${T.border}` }} className="px-6 py-10 text-center text-sm" >
+        <p style={{ color: T.subtleMuted }}>
+          NCORE 2027 Destination Microsite Concept • TPG Worldwide • ARIA Las Vegas • NALU Query Engine • Majestra-Facilitated Live Event Layer
+        </p>
+        <p className="mt-1 text-xs" style={{ color: T.subtleMuted, opacity: 0.5 }}>
+          ARIA photo: Wikimedia Commons / CC-BY-SA 3.0
+        </p>
       </footer>
     </div>
   );
