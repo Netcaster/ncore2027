@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
+import { NeuralWidget } from "./NeuralWidget";
 import {
   Search, MapPin, Calendar, Hotel, Music, Utensils, Trophy,
   Users, ShieldCheck, Building2, Sparkles, ArrowRight, Mic2,
@@ -455,6 +456,8 @@ export default function Ncore2027Microsite() {
         </section>
 
       </main>
+
+      <NeuralWidget />
 
       <footer style={{ borderTop: `1px solid ${T.border}` }} className="px-6 py-10 text-center text-sm" >
         <p style={{ color: T.subtleMuted }}>
