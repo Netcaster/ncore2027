@@ -4,7 +4,7 @@ import { ArrowRight, X, Zap, Send } from "lucide-react";
 
 const BUBBLE_COLOR = "#6366f1";
 const BUBBLE_DARK  = "#4f46e5";
-const API_KEY      = "tp_k_2026_trueperspective";
+const API_KEY      = "ncore_k_2026_tpg";
 const API_URL      = "https://naluask.com/api/embed/query";
 
 const NEURAL_SVG = (
