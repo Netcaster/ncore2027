@@ -306,6 +306,15 @@ export default function Ncore2027Microsite() {
                 >
                   TPG Live Layer <Music className="h-4 w-4" />
                 </a>
+                <a
+                  href="https://dev.vibe-platform-vpj.pages.dev/ncore-vibe.html"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-full px-6 py-3 font-semibold text-white shadow-lg transition-opacity hover:opacity-90"
+                  style={{ background: `linear-gradient(135deg, ${A.orange}, #c47a00)` }}
+                >
+                  NCORE on VIBE <ArrowRight className="h-4 w-4" />
+                </a>
               </div>
             </motion.div>
 
