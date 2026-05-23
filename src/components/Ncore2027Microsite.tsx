@@ -4,7 +4,7 @@ import { NeuralWidget } from "./NeuralWidget";
 import {
   Search, MapPin, Calendar, Hotel, Music, Utensils, Trophy,
   Users, ShieldCheck, Building2, Sparkles, ArrowRight, Mic2,
-  Globe2, Bot, Handshake, Ticket, Plane, Sun, Moon,
+  Globe2, Bot, Handshake, Ticket, Plane, Sun, Moon, WalletCards,
 } from "lucide-react";
 
 // ── PPTX accent colours (same in both modes) ─────────────────
@@ -53,7 +53,16 @@ const LIGHT = {
 
 type Theme = typeof DARK;
 
-const nav = ["Overview", "Destination", "Program", "Venue", "NCORE Live", "NALU", "Partners"];
+const nav = [
+  { label: "Overview",    href: "#overview"     },
+  { label: "Destination", href: "#destination"  },
+  { label: "Program",     href: "#program"      },
+  { label: "Concierge",   href: "#concierge"    },
+  { label: "H.A.N.D.S.",  href: "#hands"        },
+  { label: "H.A.N.D.",    href: "#hand"         },
+  { label: "NALU",        href: "#nalu"         },
+  { label: "Partners",    href: "#partners"     },
+];
 
 const faqs = [
   { q: "Is there an NCORE conference in 2026?",    a: "No. The current positioning states there will be no NCORE conference held in 2026, with the next expected conference in 2027." },
@@ -75,6 +84,35 @@ const venueStack = [
   { label: "Host City",      value: "Las Vegas, Nevada" },
   { label: "Program Year",   value: "2027" },
   { label: "Platform Layer", value: "TPG Worldwide + NALU" },
+];
+
+// ── Concierge data ────────────────────────────────────────────
+const conciergeOffers = [
+  { icon: Music,       title: "Entertainment Access",  copy: "Curated ticket links, concierge referrals, sponsor-hosted receptions, artist showcases, cultural events, comedy, concerts, residencies, and NCORE Live experiences." },
+  { icon: Utensils,    title: "Food + Beverage",        copy: "Preferred dining windows, group dinner options, reception menus, chef partnerships, ARIA vendor spotlights, and off-site participating restaurant offers." },
+  { icon: Trophy,      title: "Golf + Recreation",      copy: "Preferred tee-time coordination, group golf outings, sponsor-hosted foursomes, executive networking rounds, and destination leisure packages." },
+  { icon: WalletCards, title: "Discount Marketplace",   copy: "Vendor offers, attendee perks, promotional codes, sponsor bundles, group savings, and NALU-routed recommendations for participating merchants." },
+];
+
+const vendorCategories = [
+  "ARIA restaurants", "ARIA nightlife and lounges", "Off-site restaurants",
+  "Golf clubs", "Entertainment venues", "Retail and wellness", "Transportation", "Tourism operators",
+];
+
+// ── H.A.N.D.S. data ───────────────────────────────────────────
+const handsPillars = [
+  { title: "Affordable Housing Access",  copy: "Connect participants to housing education, rental readiness, affordable housing navigation, and community-based intake pathways." },
+  { title: "Mortgage Readiness",         copy: "Support qualified families with education around credit, income documentation, lending pathways, mortgage products, and sustainable homeownership." },
+  { title: "Down Payment Support",       copy: "Route users toward down payment assistance, grants, employer-assisted housing models, local programs, and lender-partner resources." },
+  { title: "Resource Navigation",        copy: "Use NALU and TPG partner systems to simplify intake, triage, referrals, eligibility, and follow-up across public, private, and nonprofit channels." },
+];
+
+// ── H.A.N.D. data ─────────────────────────────────────────────
+const handPillars = [
+  { title: "Humanity First",               copy: "Treat asylum seekers as people navigating crisis, trauma, uncertainty, language barriers, and displacement — not merely as case files or statistics." },
+  { title: "Resource Allocation",          copy: "Coordinate housing, food, clothing, translation, transportation, communication, legal referrals, workforce readiness, and community placement support." },
+  { title: "Navigation + Stabilization",   copy: "Help families understand where to go, who to contact, what documents matter, and how to access lawful, practical, and local support pathways." },
+  { title: "Community Integration",        copy: "Support receiving communities with better coordination, reduced confusion, partner accountability, and compassionate service delivery." },
 ];
 
 // ── Bubble cluster — replicates PPTX slide 3/4 visual ────────
@@ -175,7 +213,6 @@ function NaluPanel({ T }: { T: Theme }) {
 export default function Ncore2027Microsite() {
   const [dark, setDark] = useState(true);
 
-  // Read saved preference on mount
   useEffect(() => {
     const saved = localStorage.getItem("ncore-theme");
     if (saved === "light") setDark(false);
@@ -211,21 +248,20 @@ export default function Ncore2027Microsite() {
             </div>
           </div>
 
-          <nav className="hidden items-center gap-6 text-sm lg:flex" style={{ color: T.muted }}>
+          <nav className="hidden items-center gap-5 text-sm lg:flex" style={{ color: T.muted }}>
             {nav.map((item) => (
               <a
-                key={item}
-                href={`#${item.toLowerCase().replaceAll(" ", "-")}`}
+                key={item.label}
+                href={item.href}
                 className="transition-colors hover:opacity-80"
                 style={{ color: T.muted }}
               >
-                {item}
+                {item.label}
               </a>
             ))}
           </nav>
 
           <div className="flex items-center gap-3">
-            {/* Day / Night toggle */}
             <button
               onClick={toggleTheme}
               aria-label={dark ? "Switch to day mode" : "Switch to night mode"}
@@ -250,15 +286,12 @@ export default function Ncore2027Microsite() {
 
         {/* ── Hero — actual ARIA building photo ───────────────── */}
         <section id="overview" className="relative overflow-hidden">
-
-          {/* ARIA Las Vegas building — Wikimedia Commons CC-BY-SA 3.0 */}
           <div className="absolute inset-0">
             <img
               src="https://upload.wikimedia.org/wikipedia/commons/c/c6/Aria_Las_Vegas.JPG"
               alt="ARIA Resort & Casino Las Vegas"
               className="h-full w-full object-cover object-center"
             />
-            {/* gradient: strong dark left for text legibility, lighter right, full fade to bg at bottom */}
             <div
               className="absolute inset-0 transition-colors duration-300"
               style={{
@@ -267,10 +300,8 @@ export default function Ncore2027Microsite() {
             />
           </div>
 
-          {/* Bubble cluster — right-edge PPTX decoration, always on dark overlay area */}
           <BubbleCluster className="pointer-events-none absolute -right-10 top-0 h-full w-auto max-w-[280px] opacity-80 lg:max-w-sm" />
 
-          {/* Hero content */}
           <div className="relative z-10 mx-auto grid min-h-[78vh] max-w-7xl items-center gap-10 px-6 py-28 lg:grid-cols-[1.15fr_.85fr]">
             <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .6 }}>
               <div
@@ -332,6 +363,30 @@ export default function Ncore2027Microsite() {
                 </div>
               ))}
             </motion.div>
+          </div>
+        </section>
+
+        {/* ── Chairman Welcome Letter ──────────────────────────── */}
+        <section id="welcome" className="mx-auto max-w-7xl px-6 py-16">
+          <div className="rounded-[2.5rem] p-8 md:p-12 shadow-2xl" style={{ background: T.panel, border: `1px solid ${T.border}` }}>
+            <div className="grid gap-8 lg:grid-cols-[.8fr_1.2fr] lg:items-start">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.3em]" style={{ color: A.lime }}>Chairman Welcome</p>
+                <h2 className="mt-3 text-5xl font-black" style={{ color: T.text }}>A Letter from Jeff Williams</h2>
+                <p className="mt-4 text-lg font-semibold" style={{ color: A.teal }}>Chairman, TPG Worldwide</p>
+                <p className="mt-5 text-sm leading-7" style={{ color: T.muted }}>
+                  Designed as the formal welcome page for guests, vendors, sponsors, hospitality partners, and participating Las Vegas businesses.
+                </p>
+              </div>
+              <div className="rounded-[2rem] p-7 text-sm leading-7" style={{ background: T.panelAlt, border: `1px solid ${T.border}`, color: T.muted }}>
+                <p className="font-bold" style={{ color: T.text }}>Dear NCORE 2027 Guests, Vendors, Sponsors, and Community Partners,</p>
+                <p className="mt-4">On behalf of TPG Worldwide, welcome to the NCORE 2027 Las Vegas destination experience. We are honored to help shape a platform that brings together higher education, cultural dialogue, hospitality, tourism, entertainment, business, and community impact in one of the most dynamic cities in the world.</p>
+                <p className="mt-4">Our goal is simple: create an environment where attendees feel informed, supported, welcomed, and connected. For participating vendors and partners, this platform is designed to create responsible visibility, meaningful engagement, and commercial opportunity while respecting the mission-driven spirit of NCORE.</p>
+                <p className="mt-4">Through ARIA Las Vegas, NALU concierge intelligence, Majestra-facilitated live programming, and TPG Worldwide's destination infrastructure, we intend to build more than a conference website. We intend to build a living ecosystem where guests can learn, gather, dine, celebrate, explore, and access resources with confidence.</p>
+                <p className="mt-4">We welcome every vendor, guest, institution, sponsor, and community stakeholder into this experience and look forward to working together to make NCORE 2027 a thoughtful, productive, and unforgettable Las Vegas destination event.</p>
+                <p className="mt-6 font-bold" style={{ color: T.text }}>Respectfully,<br />Jeff Williams<br />Chairman, TPG Worldwide</p>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -410,6 +465,107 @@ export default function Ncore2027Microsite() {
           </div>
         </section>
 
+        {/* ── NCORE Vegas Concierge ─────────────────────────────── */}
+        <section id="concierge" className="mx-auto max-w-7xl px-6 py-16">
+          <div className="relative overflow-hidden rounded-[2.5rem] p-8 md:p-12 shadow-2xl" style={{ background: T.panel, border: `1px solid ${T.border}` }}>
+            <div className="absolute -right-24 -top-24 h-72 w-72 rounded-full blur-3xl" style={{ background: `${A.orange}22` }} />
+            <div className="absolute -left-24 bottom-0 h-72 w-72 rounded-full blur-3xl" style={{ background: `${A.teal}22` }} />
+            <div className="relative z-10 grid gap-10 lg:grid-cols-[.9fr_1.1fr] lg:items-center">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.3em]" style={{ color: A.orange }}>NCORE Vegas Concierge</p>
+                <h2 className="mt-3 text-5xl font-black" style={{ color: T.text }}>NCORE Vegas Concierge</h2>
+                <p className="mt-5 text-base leading-8" style={{ color: T.muted }}>
+                  A colorful attendee marketplace inspired by the deck's unity artwork: entertainment, dining, golf, discount offers, ARIA vendor locations, and off-site participating vendors routed through NALU.
+                </p>
+                <div className="mt-7 flex flex-wrap gap-2">
+                  {vendorCategories.map((item) => (
+                    <span key={item} className="rounded-full px-4 py-2 text-xs font-bold" style={{ background: T.panelAlt, border: `1px solid ${T.border}`, color: T.muted }}>{item}</span>
+                  ))}
+                </div>
+              </div>
+              <div className="grid gap-4 sm:grid-cols-2">
+                {conciergeOffers.map(({ icon: Icon, title, copy }) => (
+                  <div key={title} className="rounded-[2rem] p-6" style={{ background: T.panelAlt, border: `1px solid ${T.border}` }}>
+                    <Icon className="h-8 w-8" style={{ color: A.orange }} />
+                    <h3 className="mt-5 text-xl font-black" style={{ color: T.text }}>{title}</h3>
+                    <p className="mt-3 text-sm leading-6" style={{ color: T.muted }}>{copy}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── H.A.N.D.S. Housing Access ────────────────────────── */}
+        <section id="hands" className="mx-auto max-w-7xl px-6 py-16">
+          <div className="rounded-[2.5rem] p-8 md:p-12 shadow-2xl" style={{ background: T.panel, border: `1px solid ${T.border}` }}>
+            <div className="grid gap-10 lg:grid-cols-[.9fr_1.1fr] lg:items-center">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.3em]" style={{ color: A.orange }}>H.A.N.D.S.</p>
+                <h2 className="mt-3 text-4xl font-black leading-tight" style={{ color: T.text }}>Helping Americans Negotiate Dwelling Shortages</h2>
+                <p className="mt-5 text-base leading-8" style={{ color: T.muted }}>
+                  H.A.N.D.S. positions NCORE 2027 as more than an academic gathering. It creates a public-facing resource path for Americans seeking affordable housing access, sustainable mortgage education, responsible lending pathways, and down payment assistance navigation.
+                </p>
+                <div className="mt-7 rounded-[2rem] p-5" style={{ background: T.panelAlt, border: `1px solid ${T.border}` }}>
+                  <p className="text-sm leading-7" style={{ color: T.muted }}>
+                    <span className="font-bold" style={{ color: T.text }}>Positioning:</span>{" "}
+                    This page should not promise loan approval, subsidy availability, or government benefit access. It should route users to education, participating lenders, housing nonprofits, municipal resources, and verified assistance channels.
+                  </p>
+                </div>
+              </div>
+              <div className="grid gap-4 sm:grid-cols-2">
+                {handsPillars.map((item, idx) => (
+                  <div key={item.title} className="rounded-[2rem] p-6" style={{ background: T.panelAlt, border: `1px solid ${T.border}` }}>
+                    <div
+                      className="flex h-11 w-11 items-center justify-center rounded-full text-lg font-black"
+                      style={{ background: A.orange, color: "#000" }}
+                    >
+                      {idx + 1}
+                    </div>
+                    <h3 className="mt-5 text-xl font-black" style={{ color: T.text }}>{item.title}</h3>
+                    <p className="mt-3 text-sm leading-6" style={{ color: T.muted }}>{item.copy}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── H.A.N.D. Asylum Displacement ─────────────────────── */}
+        <section id="hand" className="mx-auto max-w-7xl px-6 py-16">
+          <div className="rounded-[2.5rem] p-8 md:p-12 shadow-2xl" style={{ background: T.panel, border: `1px solid ${T.border}` }}>
+            <div className="grid gap-10 lg:grid-cols-[1.1fr_.9fr] lg:items-center">
+              <div className="grid gap-4 sm:grid-cols-2">
+                {handPillars.map((item, idx) => (
+                  <div key={item.title} className="rounded-[2rem] p-6" style={{ background: T.panelAlt, border: `1px solid ${T.border}` }}>
+                    <div
+                      className="flex h-11 w-11 items-center justify-center rounded-full text-lg font-black text-white"
+                      style={{ background: A.blue }}
+                    >
+                      {idx + 1}
+                    </div>
+                    <h3 className="mt-5 text-xl font-black" style={{ color: T.text }}>{item.title}</h3>
+                    <p className="mt-3 text-sm leading-6" style={{ color: T.muted }}>{item.copy}</p>
+                  </div>
+                ))}
+              </div>
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.3em]" style={{ color: A.blue }}>H.A.N.D.</p>
+                <h2 className="mt-3 text-4xl font-black leading-tight" style={{ color: T.text }}>Helping Asylum Seekers Navigate Displacement</h2>
+                <p className="mt-5 text-base leading-8" style={{ color: T.muted }}>
+                  H.A.N.D. frames displacement as a humanity issue and a resource allocation challenge. The page should support compassionate navigation while organizing real-world pathways for communication, housing, food, legal referral, transportation, clothing, and integration support.
+                </p>
+                <div className="mt-7 rounded-[2rem] p-5" style={{ background: T.panelAlt, border: `1px solid ${T.border}` }}>
+                  <p className="text-sm leading-7" style={{ color: T.muted }}>
+                    <span className="font-bold" style={{ color: T.text }}>Operating principle:</span>{" "}
+                    Help people understand available resources without making immigration, legal, benefit, housing, or financial promises. NALU should direct users to verified partners, official sources, and approved service providers.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* ── NALU section ─────────────────────────────────────── */}
         <section id="nalu" className="mx-auto grid max-w-7xl gap-6 px-6 py-16 lg:grid-cols-[.9fr_1.1fr]">
           <div>
@@ -468,7 +624,7 @@ export default function Ncore2027Microsite() {
 
       <NeuralWidget />
 
-      <footer style={{ borderTop: `1px solid ${T.border}` }} className="px-6 py-10 text-center text-sm" >
+      <footer style={{ borderTop: `1px solid ${T.border}` }} className="px-6 py-10 text-center text-sm">
         <p style={{ color: T.subtleMuted }}>
           NCORE 2027 Destination Microsite Concept • TPG Worldwide • ARIA Las Vegas • NALU Query Engine • Majestra-Facilitated Live Event Layer
         </p>
