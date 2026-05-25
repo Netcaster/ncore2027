@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
   ArrowRight,
@@ -27,6 +27,9 @@ import {
   WalletCards,
   Landmark,
   PartyPopper,
+  Volume2,
+  Loader2,
+  Languages,
 } from "lucide-react";
 
 const nav = [
@@ -155,8 +158,41 @@ const handPillars = [
   { title: "Community Integration", copy: "Support receiving communities with better coordination, reduced confusion, partner accountability, and compassionate service delivery." },
 ];
 
+const WWTC_KEY = "95a35451.30ece979-c4bd-447b-8b1e-fd9a6c77418b";
+const WWTC_BASE = "https://api.worldwidetechconnections.com/services/tts";
+
+const LANGUAGES = [
+  { code: "english-united-states",   label: "English (US)" },
+  { code: "spanish-international",   label: "Español" },
+  { code: "french-france",           label: "Français" },
+  { code: "portuguese-brazil",       label: "Português (BR)" },
+  { code: "chinese-mandarin",        label: "中文 (Mandarin)" },
+  { code: "arabic",                  label: "العربية" },
+  { code: "hindi",                   label: "हिन्दी" },
+  { code: "japanese",                label: "日本語" },
+  { code: "korean",                  label: "한국어" },
+  { code: "german",                  label: "Deutsch" },
+  { code: "italian",                 label: "Italiano" },
+  { code: "russian",                 label: "Русский" },
+  { code: "swahili",                 label: "Kiswahili" },
+  { code: "vietnamese",              label: "Tiếng Việt" },
+  { code: "tagalog",                 label: "Filipino" },
+  { code: "haitian-creole",          label: "Kreyòl Ayisyen" },
+  { code: "polish",                  label: "Polski" },
+  { code: "dutch",                   label: "Nederlands" },
+  { code: "turkish",                 label: "Türkçe" },
+  { code: "thai",                    label: "ภาษาไทย" },
+];
+
 function NaluWidget() {
-  const [query, setQuery] = useState("What should I know before planning my NCORE 2027 trip to Las Vegas?");
+  const [query, setQuery]         = useState("What should I know before planning my NCORE 2027 trip to Las Vegas?");
+  const [language, setLanguage]   = useState("english-united-states");
+  const [translated, setTranslated] = useState<{ text: string; audio: string } | null>(null);
+  const [loading, setLoading]     = useState(false);
+  const [error, setError]         = useState<string | null>(null);
+  const [playing, setPlaying]     = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
   const response = useMemo(() => {
     const q = query.toLowerCase();
     if (q.includes("aria")) return "ARIA is positioned as the venue-hold anchor for NCORE 2027, supporting meetings, lodging, hospitality, breakouts, receptions, and attendee destination flow.";
@@ -166,17 +202,79 @@ function NaluWidget() {
     return "NALU will function as the NCORE 2027 information concierge for conference questions, Las Vegas planning, ARIA logistics, dining, entertainment, sports, travel, group coordination, and partner experiences.";
   }, [query]);
 
+  // Reset translation when query or language changes
+  useEffect(() => {
+    setTranslated(null);
+    setError(null);
+    if (audioRef.current) { audioRef.current.pause(); audioRef.current = null; }
+    setPlaying(false);
+  }, [query, language]);
+
+  async function handleTranslate() {
+    if (language === "english-united-states") return;
+    setLoading(true);
+    setError(null);
+    setTranslated(null);
+    try {
+      const url = `${WWTC_BASE}/english-united-states/${language}?text=${encodeURIComponent(response)}&serviceCode=ttt&sourceLanguageCode=english-united-states&targetLanguageCode=${language}`;
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { accept: "application/json", "api-authorization": WWTC_KEY },
+      });
+      if (!res.ok) throw new Error(`API error ${res.status}`);
+      const data = await res.json();
+      setTranslated({ text: data.translated_text, audio: data.audio });
+    } catch (e: any) {
+      setError("Translation unavailable — please try again.");
+    }
+    setLoading(false);
+  }
+
+  function playAudio() {
+    if (!translated?.audio) return;
+    if (audioRef.current) { audioRef.current.pause(); audioRef.current = null; }
+    const bytes = atob(translated.audio);
+    const arr = new Uint8Array(bytes.length);
+    for (let i = 0; i < bytes.length; i++) arr[i] = bytes.charCodeAt(i);
+    const blob = new Blob([arr], { type: "audio/wav" });
+    const url = URL.createObjectURL(blob);
+    const audio = new Audio(url);
+    audioRef.current = audio;
+    audio.onended = () => setPlaying(false);
+    audio.play();
+    setPlaying(true);
+  }
+
+  const isEnglish = language === "english-united-states";
+
   return (
     <div className="rounded-[2rem] border border-cyan-300/30 bg-black/50 p-5 shadow-2xl shadow-cyan-500/10 backdrop-blur-xl">
-      <div className="flex items-center gap-3">
-        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-cyan-300 text-black shadow-lg shadow-cyan-300/20">
-          <Bot className="h-6 w-6" />
+      {/* Header */}
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-cyan-300 text-black shadow-lg shadow-cyan-300/20">
+            <Bot className="h-6 w-6" />
+          </div>
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.3em] text-cyan-200">NALU</p>
+            <h3 className="text-xl font-black text-white">Ask the NCORE Concierge</h3>
+          </div>
         </div>
-        <div>
-          <p className="text-xs font-bold uppercase tracking-[0.3em] text-cyan-200">NALU</p>
-          <h3 className="text-xl font-black text-white">Ask the NCORE Concierge</h3>
+        <div className="flex items-center gap-2 rounded-xl border border-white/10 bg-slate-950/80 px-3 py-2">
+          <Languages className="h-4 w-4 shrink-0 text-cyan-300" />
+          <select
+            value={language}
+            onChange={(e) => setLanguage(e.target.value)}
+            className="bg-transparent text-xs font-bold text-white outline-none"
+          >
+            {LANGUAGES.map((l) => (
+              <option key={l.code} value={l.code} className="bg-slate-900 text-white">{l.label}</option>
+            ))}
+          </select>
         </div>
       </div>
+
+      {/* Query input */}
       <div className="mt-5 flex gap-3 rounded-2xl border border-white/10 bg-slate-950/80 p-3">
         <Search className="mt-3 h-5 w-5 shrink-0 text-cyan-200" />
         <textarea
@@ -186,9 +284,47 @@ function NaluWidget() {
           placeholder="Ask about NCORE, ARIA, Las Vegas, restaurants, sports, entertainment, registration, or hotels..."
         />
       </div>
+
+      {/* English response */}
       <div className="mt-4 rounded-2xl border border-cyan-300/20 bg-cyan-300/10 p-4 text-sm leading-6 text-slate-100">
-        <span className="font-bold text-cyan-100">Preview answer:</span> {response}
+        <span className="font-bold text-cyan-100">NALU:</span> {response}
       </div>
+
+      {/* Translate button */}
+      {!isEnglish && !translated && (
+        <button
+          onClick={handleTranslate}
+          disabled={loading}
+          className="mt-3 flex w-full items-center justify-center gap-2 rounded-2xl bg-cyan-300 py-3 text-sm font-black text-black disabled:opacity-60"
+        >
+          {loading ? (
+            <><Loader2 className="h-4 w-4 animate-spin" /> Translating…</>
+          ) : (
+            <><Languages className="h-4 w-4" /> Translate &amp; Listen</>
+          )}
+        </button>
+      )}
+
+      {/* Error */}
+      {error && <p className="mt-3 text-center text-xs text-red-400">{error}</p>}
+
+      {/* Translated response + audio */}
+      {translated && (
+        <div className="mt-3 rounded-2xl border border-teal-300/30 bg-teal-300/10 p-4">
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-teal-200 mb-2">
+            {LANGUAGES.find(l => l.code === language)?.label} Translation
+          </p>
+          <p className="text-sm leading-6 text-slate-100">{translated.text}</p>
+          <button
+            onClick={playAudio}
+            disabled={playing}
+            className="mt-3 flex items-center gap-2 rounded-full border border-teal-300/30 bg-teal-300/10 px-4 py-2 text-xs font-bold text-teal-100 disabled:opacity-50"
+          >
+            <Volume2 className="h-4 w-4" />
+            {playing ? "Playing…" : "▶ Play Audio"}
+          </button>
+        </div>
+      )}
     </div>
   );
 }
