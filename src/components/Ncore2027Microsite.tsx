@@ -1,11 +1,58 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { NeuralWidget } from "./NeuralWidget";
 import {
   Search, MapPin, Calendar, Hotel, Music, Utensils, Trophy,
   Users, ShieldCheck, Building2, Sparkles, ArrowRight, Mic2,
-  Globe2, Bot, Handshake, Ticket, Plane, Sun, Moon, WalletCards,
+  Globe2, Handshake, Ticket, Plane, Sun, Moon, WalletCards,
+  Volume2, Loader2, Languages,
 } from "lucide-react";
+
+const WWTC_KEY  = "95a35451.30ece979-c4bd-447b-8b1e-fd9a6c77418b";
+const WWTC_BASE = "https://api.worldwidetechconnections.com/services/tts";
+
+const LANGUAGES = [
+  { code: "english-united-states", label: "English (US)" },
+  { code: "spanish-international", label: "Español" },
+  { code: "french-france",         label: "Français" },
+  { code: "portuguese-brazil",     label: "Português (BR)" },
+  { code: "chinese-mandarin",      label: "中文 (Mandarin)" },
+  { code: "arabic",                label: "العربية" },
+  { code: "hindi",                 label: "हिन्दी" },
+  { code: "japanese",              label: "日本語" },
+  { code: "korean",                label: "한국어" },
+  { code: "german",                label: "Deutsch" },
+  { code: "italian",               label: "Italiano" },
+  { code: "russian",               label: "Русский" },
+  { code: "swahili",               label: "Kiswahili" },
+  { code: "vietnamese",            label: "Tiếng Việt" },
+  { code: "tagalog",               label: "Filipino" },
+  { code: "haitian-creole",        label: "Kreyòl Ayisyen" },
+  { code: "polish",                label: "Polski" },
+  { code: "dutch",                 label: "Nederlands" },
+  { code: "turkish",               label: "Türkçe" },
+  { code: "thai",                  label: "ภาษาไทย" },
+];
+
+const NeuralIcon = ({ size = 24 }: { size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="15" cy="15" r="3.5" fill="white"/>
+    <circle cx="15" cy="5"  r="2.2" fill="white" opacity="0.85"/>
+    <circle cx="23.5" cy="10" r="2.2" fill="white" opacity="0.85"/>
+    <circle cx="23.5" cy="20" r="2.2" fill="white" opacity="0.85"/>
+    <circle cx="15" cy="25" r="2.2" fill="white" opacity="0.85"/>
+    <circle cx="6.5" cy="20" r="2.2" fill="white" opacity="0.85"/>
+    <circle cx="6.5" cy="10" r="2.2" fill="white" opacity="0.85"/>
+    <line x1="15" y1="7.2"   x2="15"   y2="11.5" stroke="white" strokeWidth="1" opacity="0.45"/>
+    <line x1="21.7" y1="11.2" x2="18.2" y2="13.2" stroke="white" strokeWidth="1" opacity="0.45"/>
+    <line x1="21.7" y1="18.8" x2="18.2" y2="16.8" stroke="white" strokeWidth="1" opacity="0.45"/>
+    <line x1="15" y1="22.8"  x2="15"   y2="18.5" stroke="white" strokeWidth="1" opacity="0.45"/>
+    <line x1="8.3" y1="18.8" x2="11.8" y2="16.8" stroke="white" strokeWidth="1" opacity="0.45"/>
+    <line x1="8.3" y1="11.2" x2="11.8" y2="13.2" stroke="white" strokeWidth="1" opacity="0.45"/>
+    <circle cx="15" cy="15" r="7"  stroke="white" strokeWidth="0.5" opacity="0.15"/>
+    <circle cx="15" cy="15" r="12" stroke="white" strokeWidth="0.4" opacity="0.08"/>
+  </svg>
+);
 
 // ── PPTX accent colours (same in both modes) ─────────────────
 const A = {
@@ -173,7 +220,14 @@ function DestinationMapCard({ T }: { T: Theme }) {
 
 // ── NALU demo panel ───────────────────────────────────────────
 function NaluPanel({ T }: { T: Theme }) {
-  const [query, setQuery] = useState("Where should I eat near ARIA after the NCORE keynote?");
+  const [query, setQuery]     = useState("Where should I eat near ARIA after the NCORE keynote?");
+  const [language, setLanguage] = useState("english-united-states");
+  const [translated, setTranslated] = useState<{ text: string; audio: string } | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError]     = useState<string | null>(null);
+  const [playing, setPlaying] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
   const answer = useMemo(() => {
     if (query.toLowerCase().includes("aria"))     return "NALU can answer venue logistics, room block guidance, meeting locations, attendee flow, dining near ARIA, transportation, accessibility, entertainment, and curated Las Vegas options.";
     if (query.toLowerCase().includes("register")) return "NALU can route users to official registration information when released, explain deadlines, application steps, travel planning, and attendee support pathways.";
@@ -181,30 +235,102 @@ function NaluPanel({ T }: { T: Theme }) {
     return "NALU will be trained as the NCORE 2027 information concierge: event Q&A, ARIA venue support, Las Vegas destination intelligence, travel, food, sports, entertainment, and TPG partner activations.";
   }, [query]);
 
+  useEffect(() => {
+    setTranslated(null); setError(null);
+    if (audioRef.current) { audioRef.current.pause(); audioRef.current = null; }
+    setPlaying(false);
+  }, [query, language]);
+
+  async function handleTranslate() {
+    if (language === "english-united-states") return;
+    setLoading(true); setError(null); setTranslated(null);
+    try {
+      const url = `${WWTC_BASE}/english-united-states/${language}?text=${encodeURIComponent(answer)}&serviceCode=ttt&sourceLanguageCode=english-united-states&targetLanguageCode=${language}`;
+      const res = await fetch(url, { method: "POST", headers: { accept: "application/json", "api-authorization": WWTC_KEY } });
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+      setTranslated({ text: data.translated_text, audio: data.audio });
+    } catch { setError("Translation unavailable — please try again."); }
+    setLoading(false);
+  }
+
+  function playAudio() {
+    if (!translated?.audio) return;
+    if (audioRef.current) { audioRef.current.pause(); audioRef.current = null; }
+    const bytes = atob(translated.audio);
+    const arr = new Uint8Array(bytes.length);
+    for (let i = 0; i < bytes.length; i++) arr[i] = bytes.charCodeAt(i);
+    const blob = new Blob([arr], { type: "audio/wav" });
+    const audio = new Audio(URL.createObjectURL(blob));
+    audioRef.current = audio;
+    audio.onended = () => setPlaying(false);
+    audio.play(); setPlaying(true);
+  }
+
+  const isEnglish = language === "english-united-states";
+
   return (
     <div className="rounded-[2rem] p-6 shadow-2xl" style={{ background: `${A.teal}18`, border: `1px solid ${A.teal}40` }}>
-      <div className="flex items-center gap-3">
-        <div className="rounded-2xl p-3" style={{ background: `${A.teal}28`, color: A.teal }}>
-          <Bot className="h-6 w-6" />
+      {/* Header */}
+      <div className="flex items-center justify-between gap-3 flex-wrap">
+        <div className="flex items-center gap-3">
+          <div className="flex h-11 w-11 items-center justify-center rounded-2xl" style={{ background: "linear-gradient(135deg,#6366f1,#4f46e5)", boxShadow: "0 4px 16px rgba(99,102,241,0.35)" }}>
+            <NeuralIcon size={24} />
+          </div>
+          <div>
+            <p className="text-xs uppercase tracking-[0.3em]" style={{ color: A.teal }}>NALU Query Engine</p>
+            <h3 className="text-2xl font-semibold" style={{ color: T.text }}>Ask anything about NCORE 2027</h3>
+          </div>
         </div>
-        <div>
-          <p className="text-xs uppercase tracking-[0.3em]" style={{ color: A.teal }}>NALU Query Engine</p>
-          <h3 className="text-2xl font-semibold" style={{ color: T.text }}>Ask anything about NCORE 2027</h3>
+        {/* Language selector */}
+        <div className="flex items-center gap-2 rounded-xl px-3 py-2" style={{ background: T.glassBg, border: `1px solid ${T.border}` }}>
+          <Languages className="h-4 w-4 shrink-0" style={{ color: A.teal }} />
+          <select value={language} onChange={(e) => setLanguage(e.target.value)}
+            className="bg-transparent text-xs font-bold outline-none" style={{ color: T.text }}>
+            {LANGUAGES.map((l) => <option key={l.code} value={l.code}>{l.label}</option>)}
+          </select>
         </div>
       </div>
+
+      {/* Query input */}
       <div className="mt-6 flex gap-3 rounded-2xl p-3" style={{ background: T.bg, border: `1px solid ${T.border}` }}>
         <Search className="mt-3 h-5 w-5 shrink-0" style={{ color: T.subtleMuted }} />
-        <textarea
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          className="min-h-24 w-full resize-none bg-transparent p-2 text-sm outline-none"
-          style={{ color: T.text }}
-          placeholder="Ask NALU about NCORE, ARIA, Las Vegas, dining, entertainment, sports, travel, or the 2027 program…"
-        />
+        <textarea value={query} onChange={(e) => setQuery(e.target.value)}
+          className="min-h-24 w-full resize-none bg-transparent p-2 text-sm outline-none" style={{ color: T.text }}
+          placeholder="Ask NALU about NCORE, ARIA, Las Vegas, dining, entertainment, sports, travel, or the 2027 program…" />
       </div>
+
+      {/* English answer */}
       <div className="mt-4 rounded-2xl p-4 text-sm leading-6" style={{ background: T.glassBg, color: T.muted }}>
         <span className="font-semibold" style={{ color: A.teal }}>NALU Response Preview:</span>{" "}{answer}
       </div>
+
+      {/* Translate button */}
+      {!isEnglish && !translated && (
+        <button onClick={handleTranslate} disabled={loading}
+          className="mt-3 flex w-full items-center justify-center gap-2 rounded-2xl py-3 text-sm font-bold disabled:opacity-60"
+          style={{ background: A.teal, color: "#fff" }}>
+          {loading ? <><Loader2 className="h-4 w-4 animate-spin" /> Translating…</> : <><Languages className="h-4 w-4" /> Translate &amp; Listen</>}
+        </button>
+      )}
+
+      {error && <p className="mt-3 text-center text-xs" style={{ color: A.red }}>{error}</p>}
+
+      {/* Translated result + audio */}
+      {translated && (
+        <div className="mt-3 rounded-2xl p-4" style={{ background: `${A.teal}15`, border: `1px solid ${A.teal}35` }}>
+          <p className="text-xs font-bold uppercase tracking-[0.2em] mb-2" style={{ color: A.teal }}>
+            {LANGUAGES.find(l => l.code === language)?.label} Translation
+          </p>
+          <p className="text-sm leading-6" style={{ color: T.text }}>{translated.text}</p>
+          <button onClick={playAudio} disabled={playing}
+            className="mt-3 flex items-center gap-2 rounded-full px-4 py-2 text-xs font-bold disabled:opacity-50"
+            style={{ border: `1px solid ${A.teal}50`, color: A.teal, background: `${A.teal}12` }}>
+            <Volume2 className="h-4 w-4" />
+            {playing ? "Playing…" : "▶ Play Audio"}
+          </button>
+        </div>
+      )}
     </div>
   );
 }
