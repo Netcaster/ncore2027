@@ -2,7 +2,6 @@ import { useMemo, useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
   ArrowRight,
-  Bot,
   Building2,
   CheckCircle2,
   ChevronRight,
@@ -22,7 +21,6 @@ import {
   HeartHandshake,
   BadgeCheck,
   Compass,
-  Headphones,
   MessageCircle,
   WalletCards,
   Landmark,
@@ -31,6 +29,26 @@ import {
   Loader2,
   Languages,
 } from "lucide-react";
+
+const NeuralIcon = ({ size = 28 }: { size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="15" cy="15" r="3.5" fill="white"/>
+    <circle cx="15" cy="5"  r="2.2" fill="white" opacity="0.85"/>
+    <circle cx="23.5" cy="10" r="2.2" fill="white" opacity="0.85"/>
+    <circle cx="23.5" cy="20" r="2.2" fill="white" opacity="0.85"/>
+    <circle cx="15" cy="25" r="2.2" fill="white" opacity="0.85"/>
+    <circle cx="6.5" cy="20" r="2.2" fill="white" opacity="0.85"/>
+    <circle cx="6.5" cy="10" r="2.2" fill="white" opacity="0.85"/>
+    <line x1="15" y1="7.2"   x2="15"   y2="11.5" stroke="white" strokeWidth="1" opacity="0.45"/>
+    <line x1="21.7" y1="11.2" x2="18.2" y2="13.2" stroke="white" strokeWidth="1" opacity="0.45"/>
+    <line x1="21.7" y1="18.8" x2="18.2" y2="16.8" stroke="white" strokeWidth="1" opacity="0.45"/>
+    <line x1="15" y1="22.8"  x2="15"   y2="18.5" stroke="white" strokeWidth="1" opacity="0.45"/>
+    <line x1="8.3" y1="18.8" x2="11.8" y2="16.8" stroke="white" strokeWidth="1" opacity="0.45"/>
+    <line x1="8.3" y1="11.2" x2="11.8" y2="13.2" stroke="white" strokeWidth="1" opacity="0.45"/>
+    <circle cx="15" cy="15" r="7"  stroke="white" strokeWidth="0.5" opacity="0.15"/>
+    <circle cx="15" cy="15" r="12" stroke="white" strokeWidth="0.4" opacity="0.08"/>
+  </svg>
+);
 
 const nav = [
   { label: "Experience", href: "#experience" },
@@ -252,11 +270,11 @@ function NaluWidget() {
       {/* Header */}
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-3">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-cyan-300 text-black shadow-lg shadow-cyan-300/20">
-            <Bot className="h-6 w-6" />
+          <div className="flex h-12 w-12 items-center justify-center rounded-2xl shadow-lg shadow-indigo-500/30" style={{background:"linear-gradient(135deg,#6366f1,#4f46e5)"}}>
+            <NeuralIcon size={26} />
           </div>
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.3em] text-cyan-200">NALU</p>
+            <p className="text-xs font-bold uppercase tracking-[0.3em] text-indigo-300">NALU</p>
             <h3 className="text-xl font-black text-white">Ask the NCORE Concierge</h3>
           </div>
         </div>
@@ -415,7 +433,7 @@ export default function NcoreCommercialAttendeeSite() {
               </p>
               <div className="mt-9 flex flex-wrap gap-4">
                 <a href="#waitlist" className="inline-flex items-center gap-2 rounded-full bg-white px-7 py-4 text-sm font-black text-black shadow-xl shadow-cyan-500/10">Join Attendee Waitlist <ArrowRight className="h-4 w-4" /></a>
-                <a href="#nalu" className="inline-flex items-center gap-2 rounded-full border border-cyan-300/30 bg-cyan-300/10 px-7 py-4 text-sm font-black text-cyan-100">Ask NALU <Bot className="h-4 w-4" /></a>
+                <a href="#nalu" className="inline-flex items-center gap-2 rounded-full border border-indigo-400/40 bg-indigo-500/10 px-7 py-4 text-sm font-black text-indigo-200">Ask NALU <NeuralIcon size={16} /></a>
               </div>
               <div className="mt-10 grid max-w-2xl grid-cols-3 gap-3">
                 {["ARIA", "2027", "Vegas"].map((item) => (
@@ -756,8 +774,8 @@ export default function NcoreCommercialAttendeeSite() {
         </section>
       </main>
 
-      <a href="#nalu" className="fixed bottom-6 right-6 z-50 flex h-16 w-16 items-center justify-center rounded-full bg-cyan-300 text-black shadow-2xl shadow-cyan-500/30 ring-4 ring-cyan-300/20">
-        <Headphones className="h-7 w-7" />
+      <a href="#nalu" className="fixed bottom-6 right-6 z-50 flex h-16 w-16 items-center justify-center rounded-full shadow-2xl shadow-indigo-500/40 ring-4 ring-indigo-400/20" style={{background:"linear-gradient(135deg,#6366f1,#4f46e5)"}}>
+        <NeuralIcon size={30} />
       </a>
 
       <footer className="border-t border-white/10 px-6 py-10 text-center text-sm text-slate-500">
