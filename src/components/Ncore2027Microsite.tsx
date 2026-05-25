@@ -5,7 +5,7 @@ import {
   Search, MapPin, Calendar, Hotel, Music, Utensils, Trophy,
   Users, ShieldCheck, Building2, Sparkles, ArrowRight, Mic2,
   Globe2, Handshake, Ticket, Plane, Sun, Moon, WalletCards,
-  Volume2, Loader2, Languages,
+  Headphones, Loader2, Languages,
   GraduationCap, BadgeCheck, Landmark, CheckCircle2,
   Compass, HeartHandshake, PartyPopper,
 } from "lucide-react";
@@ -351,7 +351,7 @@ function NaluPanel({ T }: { T: Theme }) {
           <button onClick={playAudio} disabled={playing}
             className="mt-3 flex items-center gap-2 rounded-full px-4 py-2 text-xs font-bold disabled:opacity-50"
             style={{ border: `1px solid ${A.teal}50`, color: A.teal, background: `${A.teal}12` }}>
-            <Volume2 className="h-4 w-4" />
+            <Headphones className="h-4 w-4" />
             {playing ? "Playing…" : "▶ Play Audio"}
           </button>
         </div>
