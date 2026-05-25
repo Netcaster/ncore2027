@@ -6,6 +6,8 @@ import {
   Users, ShieldCheck, Building2, Sparkles, ArrowRight, Mic2,
   Globe2, Handshake, Ticket, Plane, Sun, Moon, WalletCards,
   Volume2, Loader2, Languages,
+  GraduationCap, BadgeCheck, Landmark, CheckCircle2,
+  Compass, HeartHandshake, PartyPopper,
 } from "lucide-react";
 
 const WWTC_KEY  = "95a35451.30ece979-c4bd-447b-8b1e-fd9a6c77418b";
@@ -109,6 +111,7 @@ const nav = [
   { label: "H.A.N.D.",    href: "#hand"         },
   { label: "NALU",        href: "#nalu"         },
   { label: "Partners",    href: "#partners"     },
+  { label: "Waitlist",    href: "#waitlist"     },
 ];
 
 const faqs = [
@@ -160,6 +163,28 @@ const handPillars = [
   { title: "Resource Allocation",          copy: "Coordinate housing, food, clothing, translation, transportation, communication, legal referrals, workforce readiness, and community placement support." },
   { title: "Navigation + Stabilization",   copy: "Help families understand where to go, who to contact, what documents matter, and how to access lawful, practical, and local support pathways." },
   { title: "Community Integration",        copy: "Support receiving communities with better coordination, reduced confusion, partner accountability, and compassionate service delivery." },
+];
+
+// ── Audience gateway cards ────────────────────────────────────
+const audienceCards = [
+  { icon: GraduationCap, title: "Students",           copy: "Find sessions, cultural activations, networking pathways, mentor moments, and Las Vegas experiences curated around learning and belonging." },
+  { icon: Users,         title: "Faculty + Staff",    copy: "Access professional development, institutional collaboration, dialogue tracks, and destination support built around NCORE's academic mission." },
+  { icon: Landmark,      title: "Institutions",       copy: "Coordinate group attendance, official housing, sponsorship, visibility, recruitment, alumni engagement, and executive receptions." },
+  { icon: BadgeCheck,    title: "Sponsors + Partners", copy: "Connect through hospitality, exhibit packages, brand activations, content, media, dining, tourism, sports, and live event inventory." },
+];
+
+// ── 10-slide program deck ──────────────────────────────────────
+const slideDeck = [
+  { eyebrow: "Slide 01", title: "NCORE 2027 • Las Vegas",       subtitle: "A TPG Worldwide destination platform anchored at ARIA Las Vegas.",                          bullets: ["Official 2027 destination positioning", "Higher education + culture + hospitality", "Integrated live-event and sponsor architecture"] },
+  { eyebrow: "Slide 02", title: "Why NCORE Matters",            subtitle: "A national forum for identity, access, opportunity, dialogue, and institutional growth.",    bullets: ["Race, ethnicity, culture, and human identity", "Student success and inclusive academic pathways", "Faculty, staff, executive, and student engagement"] },
+  { eyebrow: "Slide 03", title: "Why Las Vegas",                subtitle: "A global convention, tourism, dining, sports, and entertainment engine.",                   bullets: ["Premium hospitality infrastructure", "World-class destination experiences", "Scalable room block and sponsor inventory"] },
+  { eyebrow: "Slide 04", title: "ARIA Venue Hold",              subtitle: "A luxury conference environment built for high-touch programming and attendee flow.",        bullets: ["Ballrooms, breakouts, receptions", "Integrated lodging and amenities", "VIP hospitality and partner events"] },
+  { eyebrow: "Slide 05", title: "TPG Worldwide Platform",       subtitle: "The commercial layer around the conference, destination, audience, and experience.",         bullets: ["Travel + hospitality + entertainment + sports", "Sponsor, exhibitor, and content monetization", "Future venue-hold pipeline"] },
+  { eyebrow: "Slide 06", title: "NALU AI Concierge",            subtitle: "The always-on information engine for attendees, partners, and institutions.",                bullets: ["NCORE and ARIA questions", "Dining, tourism, sports, and entertainment", "Multilingual support and real-time guidance"] },
+  { eyebrow: "Slide 07", title: "NCORE Live by Majestra",       subtitle: "A live programming and activation layer for culture, media, and premium experiences.",      bullets: ["Mainstage and cultural activations", "Private receptions and sponsor events", "Production, venue, and artist alignment"] },
+  { eyebrow: "Slide 08", title: "Destination Experiences",      subtitle: "Conference attendance connected to a full Las Vegas attendee journey.",                      bullets: ["Curated dining and entertainment", "Sports and nightlife recommendations", "Student, faculty, and executive tracks"] },
+  { eyebrow: "Slide 09", title: "Partner Revenue Architecture", subtitle: "Commercial participation without losing the mission-driven center of NCORE.",               bullets: ["Official housing and room blocks", "Exhibitor and sponsor packages", "Media, content, VIP, and tourism overlays"] },
+  { eyebrow: "Slide 10", title: "The Road to 2027",             subtitle: "A national conference platform with Las Vegas as the first destination anchor.",            bullets: ["Attendee acquisition site", "Institutional partner portal", "Future cities and venue holds"] },
 ];
 
 // ── Bubble cluster — replicates PPTX slide 3/4 visual ────────
@@ -516,6 +541,26 @@ export default function Ncore2027Microsite() {
           </div>
         </section>
 
+        {/* ── Audience Gateway ────────────────────────────────────── */}
+        <section id="audience" className="mx-auto max-w-7xl px-6 py-16">
+          <div className="mb-8 flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.3em]" style={{ color: A.teal }}>Attendee Gateway</p>
+              <h2 className="mt-2 text-4xl font-bold md:text-5xl" style={{ color: T.text }}>One front door for every NCORE journey.</h2>
+            </div>
+            <p className="max-w-xl text-sm leading-6" style={{ color: T.muted }}>This platform sits in front of the institutional microsite, driving attendees, groups, sponsors, and partners into the right pathway.</p>
+          </div>
+          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+            {audienceCards.map(({ icon: Icon, title, copy }) => (
+              <div key={title} className="rounded-[2rem] p-6" style={{ background: T.panel, border: `1px solid ${T.border}` }}>
+                <Icon className="h-8 w-8" style={{ color: A.teal }} />
+                <h3 className="mt-5 text-xl font-semibold" style={{ color: T.text }}>{title}</h3>
+                <p className="mt-3 text-sm leading-6" style={{ color: T.muted }}>{copy}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
         {/* ── Destination map ──────────────────────────────────── */}
         <section id="destination" className="mx-auto max-w-7xl px-6 py-12">
           <DestinationMapCard T={T} />
@@ -538,6 +583,31 @@ export default function Ncore2027Microsite() {
                 </div>
               );
             })}
+          </div>
+        </section>
+
+        {/* ── 10-Slide Program Deck ────────────────────────────── */}
+        <section id="slide-deck" className="mx-auto max-w-7xl px-6 py-16">
+          <div className="mb-9">
+            <p className="text-xs font-bold uppercase tracking-[0.3em]" style={{ color: A.teal }}>Integrated Slide Narrative</p>
+            <h2 className="mt-2 text-4xl font-bold" style={{ color: T.text }}>TPG / NCORE commercial story blocks.</h2>
+          </div>
+          <div className="grid gap-6 lg:grid-cols-2">
+            {slideDeck.map((slide) => (
+              <div key={slide.title} className="rounded-[2rem] p-7" style={{ background: T.panel, border: `1px solid ${T.border}` }}>
+                <p className="text-xs font-black uppercase tracking-[0.3em]" style={{ color: A.teal }}>{slide.eyebrow}</p>
+                <h3 className="mt-4 text-3xl font-bold" style={{ color: T.text }}>{slide.title}</h3>
+                <p className="mt-2 text-base leading-7" style={{ color: A.orange }}>{slide.subtitle}</p>
+                <div className="mt-6 space-y-3">
+                  {slide.bullets.map((bullet) => (
+                    <div key={bullet} className="flex items-start gap-3 rounded-2xl p-4 text-sm leading-6" style={{ background: T.panelAlt, color: T.muted }}>
+                      <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0" style={{ color: A.teal }} />
+                      {bullet}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
         </section>
 
@@ -567,6 +637,63 @@ export default function Ncore2027Microsite() {
             <p className="mt-3 text-sm leading-6" style={{ color: T.muted }}>
               Build the AEG Live-style inventory pipeline: venue holds, room blocks, sponsor inventory, branded activations, ticketing, destination programming, and event monetization.
             </p>
+          </div>
+        </section>
+
+        {/* ── NCORE Unite ──────────────────────────────────────── */}
+        <section id="ncore-unite" className="mx-auto max-w-7xl px-6 py-16">
+          <div className="relative overflow-hidden rounded-[2.5rem] p-8 md:p-12 shadow-2xl" style={{ background: T.panel, border: `1px solid ${T.border}` }}>
+            <div className="absolute -left-24 top-0 h-72 w-72 rounded-full blur-3xl" style={{ background: `${A.teal}20` }} />
+            <div className="absolute bottom-0 right-0 h-72 w-72 rounded-full blur-3xl" style={{ background: `${A.orange}15` }} />
+            <div className="relative z-10 grid gap-10 lg:grid-cols-[.95fr_1.05fr] lg:items-start">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.3em]" style={{ color: A.teal }}>About NCORE Unite</p>
+                <h2 className="mt-3 text-5xl font-black leading-tight" style={{ color: T.text }}>Preserving the legacy. Expanding the future.</h2>
+                <p className="mt-6 text-base leading-8" style={{ color: T.muted }}>NCORE Unite is positioned as the next evolution of the NCORE ecosystem — a platform designed to honor the conference's decades-long legacy while expanding its reach through independent infrastructure, destination experiences, industry alignment, digital systems, and next-generation attendee engagement.</p>
+                <div className="mt-8 rounded-[2rem] p-6" style={{ background: T.panelAlt, border: `1px solid ${T.border}` }}>
+                  <p className="text-sm leading-7" style={{ color: T.muted }}>
+                    <span className="font-bold" style={{ color: T.text }}>Historical foundation:</span> The National Conference on Race and Ethnicity in Higher Education has operated for decades as a national forum organized through the Southwest Center for Human Relations Studies at the University of Oklahoma, fostering equity, inclusion, cross-cultural dialogue, and professional development in higher education. The conference has grown into a trusted national gathering for educators, students, administrators, and advocates.
+                  </p>
+                </div>
+              </div>
+              <div className="grid gap-4">
+                <div className="rounded-[2rem] p-6" style={{ background: `${A.teal}15`, border: `1px solid ${A.teal}35` }}>
+                  <div className="flex items-center gap-3">
+                    <Compass className="h-7 w-7" style={{ color: A.teal }} />
+                    <h3 className="text-2xl font-black" style={{ color: T.text }}>Infrastructure Autonomy</h3>
+                  </div>
+                  <p className="mt-4 text-sm leading-7" style={{ color: T.muted }}>NCORE Unite introduces the concept of independent systems infrastructure — including autonomous digital publishing, CEU distribution pathways, attendee intelligence systems, destination services, and long-term organizational scalability.</p>
+                </div>
+                <div className="rounded-[2rem] p-6" style={{ background: T.panelAlt, border: `1px solid ${T.border}` }}>
+                  <div className="flex items-center gap-3">
+                    <Globe2 className="h-7 w-7" style={{ color: A.blue }} />
+                    <h3 className="text-2xl font-black" style={{ color: T.text }}>A National + Global Gathering</h3>
+                  </div>
+                  <p className="mt-4 text-sm leading-7" style={{ color: T.muted }}>NCORE Unite expands the experience beyond a traditional conference by integrating hospitality, tourism, entertainment, sports, culture, workforce pathways, technology, and multilingual attendee support through the NALU concierge system.</p>
+                </div>
+                <div className="rounded-[2rem] p-6" style={{ background: T.panelAlt, border: `1px solid ${T.border}` }}>
+                  <div className="flex items-center gap-3">
+                    <HeartHandshake className="h-7 w-7" style={{ color: A.orange }} />
+                    <h3 className="text-2xl font-black" style={{ color: T.text }}>Unity Through Transition</h3>
+                  </div>
+                  <p className="mt-4 text-sm leading-7" style={{ color: T.muted }}>The NCORE Unite framework is designed to preserve the conference's historical influence while opening new pathways for institutions, students, sponsors, practitioners, workforce leaders, and community stakeholders to collaborate around equity, access, belonging, and opportunity.</p>
+                </div>
+              </div>
+            </div>
+            <div className="relative z-10 mt-10 grid gap-5 lg:grid-cols-4">
+              {[
+                { icon: Users,         title: "Community",              copy: "A trusted gathering place for educators, students, administrators, and change-makers.",                                       color: A.teal   },
+                { icon: GraduationCap, title: "Education",              copy: "Professional development, CEU pathways, workshops, journals, and collaborative learning.",                                    color: A.orange },
+                { icon: PartyPopper,   title: "Destination Experience", copy: "Las Vegas hospitality, dining, entertainment, sports, culture, and immersive attendee engagement.",                           color: A.lime   },
+                { icon: ShieldCheck,   title: "Future Infrastructure",  copy: "Independent systems, attendee intelligence, publishing evolution, and scalable partner architecture.",                        color: A.teal   },
+              ].map(({ icon: Icon, title, copy, color }) => (
+                <div key={title} className="rounded-[2rem] p-6" style={{ background: T.panelAlt, border: `1px solid ${T.border}` }}>
+                  <Icon className="h-8 w-8" style={{ color }} />
+                  <h3 className="mt-5 text-xl font-semibold" style={{ color: T.text }}>{title}</h3>
+                  <p className="mt-3 text-sm leading-6" style={{ color: T.muted }}>{copy}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </section>
 
@@ -742,6 +869,56 @@ export default function Ncore2027Microsite() {
                   </details>
                 ))}
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── Commercial Pathways ──────────────────────────────── */}
+        <section id="commercial" className="mx-auto max-w-7xl px-6 py-16">
+          <div className="grid gap-6 lg:grid-cols-3">
+            <div className="rounded-[2rem] p-7 lg:col-span-2" style={{ background: T.panel, border: `1px solid ${T.border}` }}>
+              <p className="text-xs font-bold uppercase tracking-[0.3em]" style={{ color: A.teal }}>Commercial Pathways</p>
+              <h2 className="mt-3 text-4xl font-bold" style={{ color: T.text }}>The site converts attention into action.</h2>
+              <div className="mt-7 grid gap-3 sm:grid-cols-2">
+                {["Attendee waitlist", "Institutional group interest", "Official housing inquiries", "Sponsor and exhibitor interest", "Media and cultural activations", "Future venue-hold partnerships", "Dining and tourism packages", "VIP hospitality requests"].map((item) => (
+                  <div key={item} className="rounded-2xl p-4 text-sm font-bold" style={{ background: T.panelAlt, color: T.muted }}>{item}</div>
+                ))}
+              </div>
+            </div>
+            <div className="rounded-[2rem] p-7" style={{ background: `${A.teal}15`, border: `1px solid ${A.teal}35` }}>
+              <Building2 className="h-8 w-8" style={{ color: A.teal }} />
+              <h3 className="mt-5 text-3xl font-bold" style={{ color: T.text }}>Institutional Micro-Site Linkage</h3>
+              <p className="mt-4 text-sm leading-7" style={{ color: T.muted }}>This consumer attendee site should sit in front of the existing institutional microsite. Consumer users see the event experience first; universities, sponsors, venues, and partners route deeper into the TPG/NCORE platform architecture.</p>
+              <a href="#slide-deck" className="mt-6 inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-black text-white" style={{ background: A.teal }}>View Platform Story <ArrowRight className="h-4 w-4" /></a>
+            </div>
+          </div>
+        </section>
+
+        {/* ── Waitlist ─────────────────────────────────────────── */}
+        <section id="waitlist" className="mx-auto max-w-7xl px-6 py-16 pb-28">
+          <div className="relative overflow-hidden rounded-[2.5rem] p-8 md:p-12 shadow-2xl" style={{ background: `linear-gradient(135deg, ${A.teal}22, ${T.panel})`, border: `1px solid ${A.teal}40` }}>
+            <div className="absolute right-0 top-0 h-64 w-64 rounded-full blur-3xl" style={{ background: `${A.teal}28` }} />
+            <div className="relative z-10 grid gap-10 lg:grid-cols-[1fr_.9fr] lg:items-center">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.3em]" style={{ color: A.teal }}>Join the 2027 Interest List</p>
+                <h2 className="mt-3 text-5xl font-black" style={{ color: T.text }}>Be first in line for NCORE Las Vegas updates.</h2>
+                <p className="mt-5 max-w-2xl text-base leading-8" style={{ color: T.muted }}>Use this section as the conversion block for attendees, institutions, sponsors, exhibitors, hotel partners, dining partners, entertainment partners, sports partners, and future venue-hold conversations.</p>
+              </div>
+              <form className="rounded-[2rem] p-5 shadow-2xl" style={{ background: T.panel, border: `1px solid ${T.border}` }} onSubmit={(e) => e.preventDefault()}>
+                <div className="grid gap-3">
+                  <input className="rounded-2xl px-4 py-4 text-sm outline-none" style={{ background: T.panelAlt, border: `1px solid ${T.border}`, color: T.text }} placeholder="Full name" />
+                  <input className="rounded-2xl px-4 py-4 text-sm outline-none" style={{ background: T.panelAlt, border: `1px solid ${T.border}`, color: T.text }} placeholder="Email address" />
+                  <select className="rounded-2xl px-4 py-4 text-sm outline-none" style={{ background: T.panelAlt, border: `1px solid ${T.border}`, color: T.text }}>
+                    <option>Attendee</option>
+                    <option>Institution / University</option>
+                    <option>Sponsor / Brand Partner</option>
+                    <option>Hotel / Venue / Tourism Partner</option>
+                    <option>Media / Entertainment Partner</option>
+                  </select>
+                  <button className="rounded-2xl px-5 py-4 text-sm font-black text-white" style={{ background: A.teal }}>Request Priority Updates</button>
+                </div>
+                <p className="mt-4 text-xs leading-5" style={{ color: T.subtleMuted }}>Form is a front-end placeholder for CRM, ticketing, email campaign, and NALU routing integration.</p>
+              </form>
             </div>
           </div>
         </section>
