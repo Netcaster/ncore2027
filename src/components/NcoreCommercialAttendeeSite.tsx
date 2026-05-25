@@ -350,30 +350,22 @@ function NaluWidget() {
 function MiniMap() {
   return (
     <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-slate-950 p-6">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_24%_54%,rgba(34,211,238,.25),transparent_18%),radial-gradient(circle_at_40%_20%,rgba(20,184,166,.13),transparent_28%)]" />
-      <div className="relative z-10">
-        <p className="text-xs font-bold uppercase tracking-[0.3em] text-teal-200">United States Destination Map</p>
-        <h3 className="mt-2 text-3xl font-black text-white">Las Vegas designated for 2027</h3>
+      <div className="mb-4">
+        <p className="text-xs font-bold uppercase tracking-[0.3em] text-teal-200">Las Vegas Destination Map</p>
+        <h3 className="mt-2 text-2xl font-black text-white">ARIA Resort &amp; Casino, Las Vegas</h3>
+        <p className="mt-2 text-sm leading-6 text-slate-400">NCORE 2027 is positioned at the ARIA Resort &amp; Casino on the Las Vegas Strip — a AAA Five Diamond property anchoring conference programming, hospitality, and TPG Live activations.</p>
       </div>
-      <svg viewBox="0 0 900 500" className="relative z-10 mt-6 h-auto w-full">
-        <defs>
-          <linearGradient id="ncoreMap" x1="0" x2="1" y1="0" y2="1">
-            <stop offset="0%" stopColor="#111827" />
-            <stop offset="100%" stopColor="#334155" />
-          </linearGradient>
-          <filter id="cyanGlow"><feGaussianBlur stdDeviation="5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-        </defs>
-        <path d="M100 185 C190 90 300 105 385 130 C465 152 525 105 620 130 C735 160 800 220 805 300 C710 340 620 352 515 335 C405 318 315 358 220 330 C145 308 90 260 100 185Z" fill="url(#ncoreMap)" stroke="#64748b" strokeWidth="3" />
-        <circle cx="248" cy="275" r="11" fill="#22d3ee" filter="url(#cyanGlow)" />
-        <circle cx="248" cy="275" r="30" fill="none" stroke="#22d3ee" strokeWidth="3" opacity=".55">
-          <animate attributeName="r" from="22" to="48" dur="1.9s" repeatCount="indefinite" />
-          <animate attributeName="opacity" from=".7" to="0" dur="1.9s" repeatCount="indefinite" />
-        </circle>
-        <text x="280" y="268" fill="#ffffff" fontSize="28" fontWeight="800">Las Vegas</text>
-        <text x="280" y="300" fill="#5eead4" fontSize="17">NCORE 2027 Destination</text>
-        <path d="M248 275 C390 180 520 195 670 250" stroke="#22d3ee" strokeWidth="3" strokeDasharray="8 10" fill="none" opacity=".7" />
-        <path d="M248 275 C350 340 495 375 660 326" stroke="#14b8a6" strokeWidth="3" strokeDasharray="8 10" fill="none" opacity=".65" />
-      </svg>
+      <div className="overflow-hidden rounded-2xl border border-white/10" style={{ height: 360 }}>
+        <iframe
+          title="ARIA Resort Casino Las Vegas"
+          src="https://maps.google.com/maps?q=ARIA+Resort+Casino+Las+Vegas&output=embed&z=15"
+          width="100%"
+          height="100%"
+          className="border-0"
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+        />
+      </div>
     </div>
   );
 }
