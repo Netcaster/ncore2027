@@ -269,49 +269,49 @@ function SlideVisualBackground({ type = "hand" }: { type?: "hand" | "foot" }) {
         </svg>
       ) : (
         /*
-         * H.A.N.D. — Footprint shape
-         * 5 toes (big→pinky, left→right) → wide ball pad → narrow arch → wide heel
-         * Brand colors: red=big toe, teal=ball, lime=mid-arch accent, orange=arch, blue=heel
-         * Ghost scatter circles trail to the right
+         * H.A.N.D. — Right-foot anatomical footprint
+         * Toes arc naturally (big toe inner/lower, 2nd highest, pinky outer/lower)
+         * Wide elliptical ball → narrow inner arch (ghost only) → wide elliptical heel
+         * NCORE brand colors; ghost scatter trail on outer (right) side
          */
-        <svg viewBox="0 0 500 900" className="absolute right-[3%] top-[1%] h-[92%] w-[22%] opacity-[0.32]" aria-hidden="true">
+        <svg viewBox="0 0 420 860" className="absolute right-[2%] top-[0%] h-[95%] w-[24%] opacity-[0.35]" aria-hidden="true">
 
-          {/* ── Toes (top) — 5 circles, big toe left → pinky right ── */}
-          {/* Big toe */}
-          <circle cx="148" cy="62"  r="42" fill="#c13a2c"/>
-          {/* 2nd toe */}
-          <circle cx="210" cy="48"  r="34" fill="#f39e14"/>
-          {/* 3rd toe */}
-          <circle cx="268" cy="44"  r="30" fill="#17a186"/>
-          {/* 4th toe */}
-          <circle cx="320" cy="54"  r="25" fill="#95b84e"/>
-          {/* Pinky */}
-          <circle cx="364" cy="72"  r="19" fill="#2a81ba"/>
+          {/* ── 5 Toes — natural arc, big toe inner-left, pinky outer-right ── */}
+          {/* Big toe — largest, sits lowest in the arc */}
+          <circle cx="112" cy="96"  r="46" fill="#c13a2c"/>
+          {/* 2nd toe — tallest point of arc */}
+          <circle cx="180" cy="64"  r="37" fill="#f39e14"/>
+          {/* 3rd toe — near peak */}
+          <circle cx="244" cy="58"  r="33" fill="#17a186"/>
+          {/* 4th toe — descending */}
+          <circle cx="304" cy="70"  r="27" fill="#95b84e"/>
+          {/* Pinky — smallest, sits lowest on outer edge */}
+          <circle cx="354" cy="96"  r="20" fill="#2a81ba"/>
 
-          {/* ── Ball of foot (wide pad just below toes) ── */}
-          <circle cx="240" cy="190" r="100" fill="#17a186"/>
+          {/* ── Ball of foot — wide ellipse spanning inner→outer ── */}
+          <ellipse cx="228" cy="225" rx="128" ry="88" fill="#17a186"/>
 
-          {/* ── Arch (narrow — ghost circles only) ── */}
-          <circle cx="175" cy="318" r="24" fill={ghost}/>
-          <circle cx="168" cy="372" r="18" fill={ghost}/>
-          <circle cx="172" cy="420" r="14" fill={ghost}/>
+          {/* ── Arch — narrow, only on inner (left) side; ghost circles ── */}
+          <circle cx="142" cy="340" r="28" fill={ghost}/>
+          <circle cx="132" cy="398" r="22" fill={ghost}/>
+          <circle cx="128" cy="450" r="16" fill={ghost}/>
 
-          {/* ── Heel (wide) ── */}
-          <circle cx="225" cy="560" r="105" fill="#2a81ba"/>
+          {/* ── Heel — large wide ellipse, centered slightly inner ── */}
+          <ellipse cx="210" cy="590" rx="108" ry="92" fill="#2a81ba"/>
 
-          {/* ── Ghost scatter trail (right side) ── */}
-          <circle cx="390" cy="100" r="18" fill={ghost}/>
-          <circle cx="418" cy="168" r="22" fill={ghost}/>
-          <circle cx="430" cy="240" r="17" fill={ghost}/>
-          <circle cx="415" cy="310" r="20" fill={ghost}/>
-          <circle cx="408" cy="380" r="15" fill={ghost}/>
-          <circle cx="395" cy="445" r="18" fill={ghost}/>
-          <circle cx="380" cy="510" r="14" fill={ghost}/>
+          {/* ── Ghost scatter trail — outer (right) side ── */}
+          <circle cx="400" cy="118" r="15" fill={ghost}/>
+          <circle cx="414" cy="192" r="20" fill={ghost}/>
+          <circle cx="406" cy="268" r="16" fill={ghost}/>
+          <circle cx="398" cy="340" r="19" fill={ghost}/>
+          <circle cx="390" cy="415" r="14" fill={ghost}/>
+          <circle cx="376" cy="484" r="17" fill={ghost}/>
+          <circle cx="358" cy="550" r="13" fill={ghost}/>
 
-          {/* ── Pointer lines ── */}
-          <line x1="60"  y1="62"  x2="106" y2="62"  stroke="white" strokeWidth="1.2" opacity="0.5"/>
-          <line x1="50"  y1="190" x2="140" y2="190" stroke="white" strokeWidth="1.2" opacity="0.5"/>
-          <line x1="50"  y1="560" x2="120" y2="560" stroke="white" strokeWidth="1.2" opacity="0.5"/>
+          {/* ── Pointer annotation lines ── */}
+          <line x1="30"  y1="96"  x2="66"  y2="96"  stroke="white" strokeWidth="1.2" opacity="0.5"/>
+          <line x1="30"  y1="225" x2="100" y2="225" stroke="white" strokeWidth="1.2" opacity="0.5"/>
+          <line x1="30"  y1="590" x2="102" y2="590" stroke="white" strokeWidth="1.2" opacity="0.5"/>
         </svg>
       )}
 
