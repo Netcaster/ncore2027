@@ -577,8 +577,8 @@ export default function Ncore2027Microsite() {
         {/* ── Program tiles ────────────────────────────────────── */}
         <section id="program" className="mx-auto max-w-7xl px-6 py-16">
           <div className="mb-8">
-            <p className="text-xs uppercase tracking-[0.3em]" style={{ color: A.orange }}>General NCORE Information</p>
-            <h2 className="mt-2 text-4xl font-bold" style={{ color: T.text }}>Conference positioning</h2>
+            <p className="text-xs uppercase tracking-[0.3em]" style={{ color: A.orange }}>NCORE 2027 Conference</p>
+            <h2 className="mt-2 text-4xl font-bold" style={{ color: T.text }}>What to expect at NCORE</h2>
           </div>
           <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
             {programTiles.map(({ icon: Icon, title, copy }, idx) => {
@@ -597,8 +597,8 @@ export default function Ncore2027Microsite() {
         {/* ── 10-Slide Program Deck ────────────────────────────── */}
         <section id="slide-deck" className="mx-auto max-w-7xl px-6 py-16">
           <div className="mb-9">
-            <p className="text-xs font-bold uppercase tracking-[0.3em]" style={{ color: A.teal }}>Integrated Slide Narrative</p>
-            <h2 className="mt-2 text-4xl font-bold" style={{ color: T.text }}>TPG / NCORE commercial story blocks.</h2>
+            <p className="text-xs font-bold uppercase tracking-[0.3em]" style={{ color: A.teal }}>Platform Overview</p>
+            <h2 className="mt-2 text-4xl font-bold" style={{ color: T.text }}>The NCORE 2027 story — from vision to venue.</h2>
           </div>
           <div className="grid gap-6 lg:grid-cols-2">
             {slideDeck.map((slide) => (
@@ -628,7 +628,7 @@ export default function Ncore2027Microsite() {
             </div>
             <h2 className="mt-4 text-4xl font-bold" style={{ color: T.text }}>Premium convention platform on the Las Vegas Strip</h2>
             <p className="mt-4 leading-7" style={{ color: T.muted }}>
-              The ARIA layer should function as the anchor for rooms, meetings, breakouts, VIP activations, partner hospitality, private receptions, sponsor lounges, speaker support, and TPG-managed event overlays.
+              ARIA serves as the anchor for rooms, meetings, breakouts, VIP activations, partner hospitality, private receptions, sponsor lounges, speaker support, and TPG-managed event overlays.
             </p>
             <div className="mt-6 grid gap-4 sm:grid-cols-3">
               {["Convention + Ballrooms", "Breakout Sessions", "VIP Hospitality"].map((x) => (
@@ -643,7 +643,7 @@ export default function Ncore2027Microsite() {
             <Building2 className="h-8 w-8" style={{ color: A.orange }} />
             <h3 className="mt-4 text-2xl font-bold" style={{ color: T.text }}>Future Venue Holds</h3>
             <p className="mt-3 text-sm leading-6" style={{ color: T.muted }}>
-              Build the AEG Live-style inventory pipeline: venue holds, room blocks, sponsor inventory, branded activations, ticketing, destination programming, and event monetization.
+              An AEG Live-style event infrastructure pipeline covering venue holds, room blocks, sponsor inventory, branded activations, ticketing, destination programming, and event monetization.
             </p>
           </div>
         </section>
@@ -708,7 +708,7 @@ export default function Ncore2027Microsite() {
         {/* ── NCORE Live ───────────────────────────────────────── */}
         <section id="ncore-live" className="mx-auto max-w-7xl px-6 py-16">
           <div className="rounded-[2.5rem] p-8 shadow-2xl" style={{ background: T.panel, border: `1px solid ${T.border}` }}>
-            <p className="text-xs uppercase tracking-[0.3em]" style={{ color: A.teal }}>TPG / AEG Live Style + TPG-LiveNation Event Side</p>
+            <p className="text-xs uppercase tracking-[0.3em]" style={{ color: A.teal }}>Live Event Programming</p>
             <h2 className="mt-3 text-4xl font-bold" style={{ color: T.text }}>NCORE Live facilitated by Majestra</h2>
             <div className="mt-8 grid gap-5 md:grid-cols-3">
               {[
@@ -736,7 +736,7 @@ export default function Ncore2027Microsite() {
                 <p className="text-xs font-bold uppercase tracking-[0.3em]" style={{ color: A.orange }}>NCORE Vegas Concierge</p>
                 <h2 className="mt-3 text-5xl font-black" style={{ color: T.text }}>NCORE Vegas Concierge</h2>
                 <p className="mt-5 text-base leading-8" style={{ color: T.muted }}>
-                  A colorful attendee marketplace inspired by the deck's unity artwork: entertainment, dining, golf, discount offers, ARIA vendor locations, and off-site participating vendors routed through NALU.
+                  Entertainment, dining, golf, discount offers, ARIA vendor locations, and off-site participating vendors — all connected and routed through NALU for a seamless attendee experience.
                 </p>
                 <div className="mt-7 flex flex-wrap gap-2">
                   {vendorCategories.map((item) => (
@@ -769,8 +769,8 @@ export default function Ncore2027Microsite() {
                 </p>
                 <div className="mt-7 rounded-[2rem] p-5" style={{ background: T.panelAlt, border: `1px solid ${T.border}` }}>
                   <p className="text-sm leading-7" style={{ color: T.muted }}>
-                    <span className="font-bold" style={{ color: T.text }}>Positioning:</span>{" "}
-                    This page should not promise loan approval, subsidy availability, or government benefit access. It should route users to education, participating lenders, housing nonprofits, municipal resources, and verified assistance channels.
+                    <span className="font-bold" style={{ color: T.text }}>Our commitment:</span>{" "}
+                    We connect people to education, participating lenders, housing nonprofits, municipal resources, and verified assistance channels — providing guidance without making loan, subsidy, or benefit promises.
                   </p>
                 </div>
               </div>
@@ -814,12 +814,12 @@ export default function Ncore2027Microsite() {
                 <p className="text-xs font-bold uppercase tracking-[0.3em]" style={{ color: A.blue }}>H.A.N.D.</p>
                 <h2 className="mt-3 text-4xl font-black leading-tight" style={{ color: T.text }}>Helping Asylum Seekers Navigate Displacement</h2>
                 <p className="mt-5 text-base leading-8" style={{ color: T.muted }}>
-                  H.A.N.D. frames displacement as a humanity issue and a resource allocation challenge. The page should support compassionate navigation while organizing real-world pathways for communication, housing, food, legal referral, transportation, clothing, and integration support.
+                  H.A.N.D. frames displacement as a humanity issue and a resource coordination challenge. We support compassionate navigation and organize real-world pathways for communication, housing, food, legal referral, transportation, clothing, and community integration.
                 </p>
                 <div className="mt-7 rounded-[2rem] p-5" style={{ background: T.panelAlt, border: `1px solid ${T.border}` }}>
                   <p className="text-sm leading-7" style={{ color: T.muted }}>
-                    <span className="font-bold" style={{ color: T.text }}>Operating principle:</span>{" "}
-                    Help people understand available resources without making immigration, legal, benefit, housing, or financial promises. NALU should direct users to verified partners, official sources, and approved service providers.
+                    <span className="font-bold" style={{ color: T.text }}>Our approach:</span>{" "}
+                    NALU connects people to verified partners, official sources, and approved service providers — helping families understand available resources without making immigration, legal, benefit, or financial promises.
                   </p>
                 </div>
               </div>
@@ -833,13 +833,18 @@ export default function Ncore2027Microsite() {
             <p className="text-xs uppercase tracking-[0.3em]" style={{ color: A.teal }}>Attendee Intelligence</p>
             <h2 className="mt-3 text-4xl font-bold" style={{ color: T.text }}>NALU becomes the always-on NCORE concierge.</h2>
             <p className="mt-4 leading-7" style={{ color: T.muted }}>
-              NALU should sit across the microsite as a persistent assistant: answering event questions, routing attendees, explaining program details, surfacing Vegas recommendations, and supporting partners, sponsors, students, faculty, exhibitors, and executives.
+              NALU is your always-on NCORE concierge — answering event questions, routing attendees, surfacing Las Vegas recommendations, and supporting partners, sponsors, students, faculty, exhibitors, and executives around the clock.
             </p>
             <div className="mt-6 grid gap-3">
-              {[Plane, Utensils, Trophy, Music].map((Icon, i) => (
-                <div key={i} className="flex items-center gap-3 rounded-2xl p-4" style={{ background: T.panel, border: `1px solid ${T.border}` }}>
+              {[
+                { Icon: Plane,    label: "Flight, hotel, and travel planning guidance" },
+                { Icon: Utensils, label: "Dining, group meals, and ARIA restaurant recommendations" },
+                { Icon: Trophy,   label: "Sports, golf, and recreation experiences in Las Vegas" },
+                { Icon: Music,    label: "Entertainment, concerts, residencies, and NCORE Live events" },
+              ].map(({ Icon, label }) => (
+                <div key={label} className="flex items-center gap-3 rounded-2xl p-4" style={{ background: T.panel, border: `1px solid ${T.border}` }}>
                   <Icon className="h-5 w-5" style={{ color: A.teal }} />
-                  <span className="text-sm" style={{ color: T.muted }}>Travel, dining, sports, entertainment, and destination guidance</span>
+                  <span className="text-sm" style={{ color: T.muted }}>{label}</span>
                 </div>
               ))}
             </div>
@@ -868,7 +873,7 @@ export default function Ncore2027Microsite() {
               </div>
             </div>
             <div className="rounded-[2rem] p-7" style={{ background: T.panel, border: `1px solid ${T.border}` }}>
-              <h2 className="text-3xl font-bold" style={{ color: T.text }}>FAQ preview</h2>
+              <h2 className="text-3xl font-bold" style={{ color: T.text }}>Frequently Asked Questions</h2>
               <div className="mt-6 space-y-3">
                 {faqs.map((item) => (
                   <details key={item.q} className="rounded-2xl p-4" style={{ background: T.panelAlt }}>
@@ -886,7 +891,7 @@ export default function Ncore2027Microsite() {
           <div className="grid gap-6 lg:grid-cols-3">
             <div className="rounded-[2rem] p-7 lg:col-span-2" style={{ background: T.panel, border: `1px solid ${T.border}` }}>
               <p className="text-xs font-bold uppercase tracking-[0.3em]" style={{ color: A.teal }}>Commercial Pathways</p>
-              <h2 className="mt-3 text-4xl font-bold" style={{ color: T.text }}>The site converts attention into action.</h2>
+              <h2 className="mt-3 text-4xl font-bold" style={{ color: T.text }}>How to get involved with NCORE 2027.</h2>
               <div className="mt-7 grid gap-3 sm:grid-cols-2">
                 {["Attendee waitlist", "Institutional group interest", "Official housing inquiries", "Sponsor and exhibitor interest", "Media and cultural activations", "Future venue-hold partnerships", "Dining and tourism packages", "VIP hospitality requests"].map((item) => (
                   <div key={item} className="rounded-2xl p-4 text-sm font-bold" style={{ background: T.panelAlt, color: T.muted }}>{item}</div>
@@ -896,7 +901,7 @@ export default function Ncore2027Microsite() {
             <div className="rounded-[2rem] p-7" style={{ background: `${A.teal}15`, border: `1px solid ${A.teal}35` }}>
               <Building2 className="h-8 w-8" style={{ color: A.teal }} />
               <h3 className="mt-5 text-3xl font-bold" style={{ color: T.text }}>Institutional Micro-Site Linkage</h3>
-              <p className="mt-4 text-sm leading-7" style={{ color: T.muted }}>This consumer attendee site should sit in front of the existing institutional microsite. Consumer users see the event experience first; universities, sponsors, venues, and partners route deeper into the TPG/NCORE platform architecture.</p>
+              <p className="mt-4 text-sm leading-7" style={{ color: T.muted }}>Universities, sponsors, venues, and partners connect through the TPG/NCORE institutional platform — designed for group attendance, sponsorship packages, official housing coordination, and full event architecture access.</p>
               <a href="#slide-deck" className="mt-6 inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-black text-white" style={{ background: A.teal }}>View Platform Story <ArrowRight className="h-4 w-4" /></a>
             </div>
           </div>
@@ -910,7 +915,7 @@ export default function Ncore2027Microsite() {
               <div>
                 <p className="text-xs font-bold uppercase tracking-[0.3em]" style={{ color: A.teal }}>Join the 2027 Interest List</p>
                 <h2 className="mt-3 text-5xl font-black" style={{ color: T.text }}>Be first in line for NCORE Las Vegas updates.</h2>
-                <p className="mt-5 max-w-2xl text-base leading-8" style={{ color: T.muted }}>Use this section as the conversion block for attendees, institutions, sponsors, exhibitors, hotel partners, dining partners, entertainment partners, sports partners, and future venue-hold conversations.</p>
+                <p className="mt-5 max-w-2xl text-base leading-8" style={{ color: T.muted }}>Whether you're an attendee, institution, sponsor, hotel, dining, media, or entertainment partner — join the interest list now and be first to receive registration details, partner opportunities, and NCORE 2027 updates.</p>
               </div>
               <form className="rounded-[2rem] p-5 shadow-2xl" style={{ background: T.panel, border: `1px solid ${T.border}` }} onSubmit={(e) => e.preventDefault()}>
                 <div className="grid gap-3">
@@ -925,7 +930,7 @@ export default function Ncore2027Microsite() {
                   </select>
                   <button className="rounded-2xl px-5 py-4 text-sm font-black text-white" style={{ background: A.teal }}>Request Priority Updates</button>
                 </div>
-                <p className="mt-4 text-xs leading-5" style={{ color: T.subtleMuted }}>Form is a front-end placeholder for CRM, ticketing, email campaign, and NALU routing integration.</p>
+                <p className="mt-4 text-xs leading-5" style={{ color: T.subtleMuted }}>Your information will only be used to send NCORE 2027 updates and relevant partner communications.</p>
               </form>
             </div>
           </div>
