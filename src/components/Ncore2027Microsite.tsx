@@ -305,14 +305,15 @@ function NaluPanel({ T }: { T: Theme }) {
           const blob = new Blob(chunksRef.current, { type: recorder.mimeType || "audio/webm" });
           const form = new FormData();
           form.append("audio", blob, "recording.webm");
-          const sttUrl = `https://api.worldwidetechconnections.com/services/stt/${language}/${language}?serviceCode=stt`;
+          // WWTC uses /services/tts/{source}/{target} for all service codes
+          const sttUrl = `${WWTC_BASE}/${language}/${language}?serviceCode=stt&sourceLanguageCode=${language}&targetLanguageCode=${language}`;
           const res = await fetch(sttUrl, { method: "POST", headers: { "api-authorization": WWTC_KEY }, body: form });
-          if (!res.ok) throw new Error();
           const data = await res.json();
-          const text = data.transcribed_text ?? data.source_text ?? data.text ?? "";
+          if (!res.ok) throw new Error(`WWTC ${res.status}: ${JSON.stringify(data)}`);
+          const text = data.transcribed_text ?? data.source_text ?? data.text ?? data.translated_text ?? "";
           if (text) setQuery(text);
-          else throw new Error();
-        } catch { setError("Speech recognition unavailable — please type your question."); }
+          else throw new Error(`Empty response: ${JSON.stringify(data)}`);
+        } catch (e: any) { setError(`STT: ${e.message ?? "unavailable"}`); }
         setTranscribing(false);
       };
       mediaRecorderRef.current = recorder;
