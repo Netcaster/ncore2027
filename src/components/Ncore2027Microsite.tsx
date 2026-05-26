@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { NeuralWidget } from "./NeuralWidget";
 import {
@@ -243,42 +243,59 @@ function DestinationMapCard({ T }: { T: Theme }) {
   );
 }
 
-// ── NALU demo panel ───────────────────────────────────────────
+// ── NALU panel ────────────────────────────────────────────────
+const NALU_API = "https://naluask.com/api/embed/query";
+const NALU_KEY = "ncore_k_2026_tpg";
+
 function NaluPanel({ T }: { T: Theme }) {
-  const [query, setQuery]     = useState("Where should I eat near ARIA after the NCORE keynote?");
+  const [query, setQuery]       = useState("Where should I eat near ARIA after the NCORE keynote?");
   const [language, setLanguage] = useState("english-united-states");
+  const [answer, setAnswer]     = useState<string | null>(null);
+  const [asking, setAsking]     = useState(false);
   const [translated, setTranslated] = useState<{ text: string; audio: string } | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError]     = useState<string | null>(null);
-  const [playing, setPlaying] = useState(false);
+  const [loading, setLoading]   = useState(false);
+  const [error, setError]       = useState<string | null>(null);
+  const [playing, setPlaying]   = useState(false);
   const [recording, setRecording] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const recognitionRef = useRef<any>(null);
 
-  const answer = useMemo(() => {
-    if (query.toLowerCase().includes("aria"))     return "NALU can answer venue logistics, room block guidance, meeting locations, attendee flow, dining near ARIA, transportation, accessibility, entertainment, and curated Las Vegas options.";
-    if (query.toLowerCase().includes("register")) return "NALU can route users to official registration information when released, explain deadlines, application steps, travel planning, and attendee support pathways.";
-    if (query.toLowerCase().includes("program"))  return "NALU can explain expected program tracks, speakers, sessions, partner activations, student/faculty engagement, and NCORE Live updates as they become available.";
-    return "NALU will be trained as the NCORE 2027 information concierge: event Q&A, ARIA venue support, Las Vegas destination intelligence, travel, food, sports, entertainment, and TPG partner activations.";
+  useEffect(() => {
+    setAnswer(null); setTranslated(null); setError(null);
+    if (audioRef.current) { audioRef.current.pause(); audioRef.current = null; }
+    setPlaying(false);
   }, [query]);
 
   useEffect(() => {
     setTranslated(null); setError(null);
     if (audioRef.current) { audioRef.current.pause(); audioRef.current = null; }
     setPlaying(false);
-  }, [query, language]);
+  }, [language]);
+
+  async function handleAsk() {
+    if (!query.trim() || asking) return;
+    setAsking(true); setAnswer(null); setTranslated(null); setError(null);
+    try {
+      const res = await fetch(NALU_API, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ key: NALU_KEY, query: query.trim() }),
+      });
+      const data = await res.json();
+      setAnswer(data.response || data.error || "No response from NALU.");
+    } catch { setError("NALU unavailable — please try again."); }
+    setAsking(false);
+  }
 
   async function handleTranslate() {
-    if (language === "english-united-states") return;
+    if (language === "english-united-states" || !answer) return;
     setLoading(true); setError(null); setTranslated(null);
     try {
-      // Step 1: translate NALU's English answer into the target language
       const tttUrl = `${WWTC_BASE}/english-united-states/${language}?text=${encodeURIComponent(answer)}&serviceCode=ttt&sourceLanguageCode=english-united-states&targetLanguageCode=${language}`;
       const tttRes = await fetch(tttUrl, { method: "POST", headers: { accept: "application/json", "api-authorization": WWTC_KEY } });
       if (!tttRes.ok) throw new Error();
       const { translated_text } = await tttRes.json();
 
-      // Step 2: get audio of the translated answer spoken in the target language
       const ttsUrl = `${WWTC_BASE}/${language}/${language}?text=${encodeURIComponent(translated_text)}&serviceCode=tts&sourceLanguageCode=${language}&targetLanguageCode=${language}`;
       const ttsRes = await fetch(ttsUrl, { method: "POST", headers: { accept: "application/json", "api-authorization": WWTC_KEY } });
       if (!ttsRes.ok) throw new Error();
@@ -388,13 +405,22 @@ function NaluPanel({ T }: { T: Theme }) {
         <p className="mt-2 text-center text-xs animate-pulse" style={{ color: "#ef4444" }}>● Listening — speak now, tap to stop</p>
       )}
 
-      {/* English answer */}
-      <div className="mt-4 rounded-2xl p-4 text-sm leading-6" style={{ background: T.glassBg, color: T.muted }}>
-        <span className="font-semibold" style={{ color: A.teal }}>NALU Response Preview:</span>{" "}{answer}
-      </div>
+      {/* Ask NALU button */}
+      <button onClick={handleAsk} disabled={asking || !query.trim()}
+        className="mt-3 flex w-full items-center justify-center gap-2 rounded-2xl py-3 text-sm font-bold disabled:opacity-60"
+        style={{ background: A.teal, color: "#fff" }}>
+        {asking ? <><Loader2 className="h-4 w-4 animate-spin" /> Asking NALU…</> : <>Ask NALU</>}
+      </button>
 
-      {/* Translate button */}
-      {!isEnglish && !translated && (
+      {/* NALU answer */}
+      {answer && (
+        <div className="mt-4 rounded-2xl p-4 text-sm leading-6" style={{ background: T.glassBg, color: T.muted }}>
+          <span className="font-semibold" style={{ color: A.teal }}>NALU:</span>{" "}{answer}
+        </div>
+      )}
+
+      {/* Translate button — only after we have an answer */}
+      {answer && !isEnglish && !translated && (
         <button onClick={handleTranslate} disabled={loading}
           className="mt-3 flex w-full items-center justify-center gap-2 rounded-2xl py-3 text-sm font-bold disabled:opacity-60"
           style={{ background: A.teal, color: "#fff" }}>
