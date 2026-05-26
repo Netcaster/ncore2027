@@ -288,29 +288,59 @@ function SlideVisualBackground({ type = "hand" }: { type?: "hand" | "foot" }) {
           {/* Pinky — smallest, sits lowest on outer edge */}
           <circle cx="354" cy="96"  r="20" fill="#2a81ba"/>
 
-          {/* ── Ball of foot — wide ellipse spanning inner→outer ── */}
-          <ellipse cx="228" cy="225" rx="128" ry="88" fill="#17a186"/>
+          {/* ── Ball of foot — 50% of original size ── */}
+          <ellipse cx="228" cy="225" rx="64" ry="44" fill="#17a186"/>
 
-          {/* ── Arch — narrow, only on inner (left) side; ghost circles ── */}
-          <circle cx="142" cy="340" r="28" fill={ghost}/>
-          <circle cx="132" cy="398" r="22" fill={ghost}/>
-          <circle cx="128" cy="450" r="16" fill={ghost}/>
-
-          {/* ── Heel — large wide ellipse, centered slightly inner ── */}
+          {/* ── Heel — wide ellipse ── */}
           <ellipse cx="210" cy="590" rx="108" ry="92" fill="#2a81ba"/>
 
-          {/* ── Ghost scatter trail — outer (right) side ── */}
-          <circle cx="400" cy="118" r="15" fill={ghost}/>
-          <circle cx="414" cy="192" r="20" fill={ghost}/>
-          <circle cx="406" cy="268" r="16" fill={ghost}/>
-          <circle cx="398" cy="340" r="19" fill={ghost}/>
-          <circle cx="390" cy="415" r="14" fill={ghost}/>
-          <circle cx="376" cy="484" r="17" fill={ghost}/>
-          <circle cx="358" cy="550" r="13" fill={ghost}/>
+          {/* ── Ghost outline circles — trace the foot perimeter clockwise ── */}
+          {/* Top of toes arc */}
+          <circle cx="105" cy="42"  r="10" fill={ghost}/>
+          <circle cx="148" cy="22"  r="10" fill={ghost}/>
+          <circle cx="185" cy="16"  r="10" fill={ghost}/>
+          <circle cx="225" cy="18"  r="10" fill={ghost}/>
+          <circle cx="248" cy="18"  r="10" fill={ghost}/>
+          <circle cx="283" cy="28"  r="10" fill={ghost}/>
+          <circle cx="310" cy="36"  r="10" fill={ghost}/>
+          <circle cx="338" cy="55"  r="10" fill={ghost}/>
+          <circle cx="360" cy="68"  r="10" fill={ghost}/>
+
+          {/* Outer (right) side — pinky down to heel */}
+          <circle cx="380" cy="98"  r="10" fill={ghost}/>
+          <circle cx="388" cy="140" r="10" fill={ghost}/>
+          <circle cx="378" cy="185" r="10" fill={ghost}/>
+          <circle cx="360" cy="228" r="10" fill={ghost}/>
+          <circle cx="350" cy="275" r="10" fill={ghost}/>
+          <circle cx="342" cy="330" r="10" fill={ghost}/>
+          <circle cx="336" cy="390" r="10" fill={ghost}/>
+          <circle cx="330" cy="450" r="10" fill={ghost}/>
+          <circle cx="325" cy="510" r="10" fill={ghost}/>
+          <circle cx="318" cy="560" r="10" fill={ghost}/>
+
+          {/* Bottom of heel */}
+          <circle cx="300" cy="658" r="10" fill={ghost}/>
+          <circle cx="255" cy="690" r="10" fill={ghost}/>
+          <circle cx="210" cy="696" r="10" fill={ghost}/>
+          <circle cx="164" cy="690" r="10" fill={ghost}/>
+          <circle cx="118" cy="658" r="10" fill={ghost}/>
+
+          {/* Inner (left) side — heel up to big toe */}
+          <circle cx="102" cy="610" r="10" fill={ghost}/>
+          <circle cx="98"  cy="555" r="10" fill={ghost}/>
+          <circle cx="96"  cy="500" r="10" fill={ghost}/>
+          <circle cx="95"  cy="445" r="10" fill={ghost}/>
+          <circle cx="98"  cy="390" r="10" fill={ghost}/>
+          <circle cx="104" cy="335" r="10" fill={ghost}/>
+          <circle cx="118" cy="285" r="10" fill={ghost}/>
+          <circle cx="140" cy="248" r="10" fill={ghost}/>
+          <circle cx="158" cy="208" r="10" fill={ghost}/>
+          <circle cx="150" cy="162" r="10" fill={ghost}/>
+          <circle cx="68"  cy="98"  r="10" fill={ghost}/>
 
           {/* ── Pointer annotation lines ── */}
-          <line x1="30"  y1="96"  x2="66"  y2="96"  stroke="white" strokeWidth="1.2" opacity="0.5"/>
-          <line x1="30"  y1="225" x2="100" y2="225" stroke="white" strokeWidth="1.2" opacity="0.5"/>
+          <line x1="30"  y1="80"  x2="66"  y2="80"  stroke="white" strokeWidth="1.2" opacity="0.5"/>
+          <line x1="30"  y1="225" x2="164" y2="225" stroke="white" strokeWidth="1.2" opacity="0.5"/>
           <line x1="30"  y1="590" x2="102" y2="590" stroke="white" strokeWidth="1.2" opacity="0.5"/>
         </svg>
       )}
@@ -336,19 +366,23 @@ function MiniMap() {
         <h3 className="mt-2 text-2xl font-black text-white">Las Vegas designated for 2027</h3>
       </div>
       <div className="relative z-10 mt-4">
-        <img
-          src="/ncore-regional-map.png"
-          alt="NCORE 2027 National Regional Map"
-          className="w-full h-auto block"
-        />
-      </div>
-      {/* Las Vegas callout */}
-      <div className="relative z-10 mt-4 flex items-center gap-3">
-        <span className="flex h-3 w-3 shrink-0">
-          <span className="animate-ping absolute inline-flex h-3 w-3 rounded-full bg-cyan-400 opacity-75"></span>
-          <span className="relative inline-flex rounded-full h-3 w-3 bg-cyan-300"></span>
-        </span>
-        <p className="text-xs font-bold" style={{ color: "#5eead4" }}>Las Vegas · NCORE 2027 · Western Region</p>
+        <div className="relative">
+          <img
+            src="/ncore-regional-map.png"
+            alt="NCORE 2027 National Regional Map"
+            className="w-full h-auto block"
+          />
+          {/* Las Vegas pin — positioned at southern Nevada (~17% from left, ~55% from top) */}
+          <div className="absolute pointer-events-none" style={{ left: "17%", top: "55%", transform: "translate(-50%, -100%)" }}>
+            <svg width="32" height="40" viewBox="0 0 32 42" fill="none" xmlns="http://www.w3.org/2000/svg"
+              style={{ filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.7))" }}>
+              <path d="M16 0C7.163 0 0 7.163 0 16c0 5.516 2.85 10.366 7.163 13.22L16 42l8.837-12.78C29.15 26.366 32 21.516 32 16 32 7.163 24.837 0 16 0z" fill="#f39e14"/>
+              <circle cx="16" cy="16" r="7" fill="#1a2f3d" stroke="#f39e14" strokeWidth="1.5"/>
+            </svg>
+            <p className="text-center text-[9px] font-black uppercase tracking-wide whitespace-nowrap mt-0.5"
+              style={{ color: "#f39e14", textShadow: "0 1px 4px rgba(0,0,0,0.9)" }}>Las Vegas</p>
+          </div>
+        </div>
       </div>
     </div>
   );
