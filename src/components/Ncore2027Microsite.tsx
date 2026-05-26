@@ -394,7 +394,7 @@ export default function Ncore2027Microsite() {
         style={{ background: T.navBg, borderBottom: `1px solid ${T.border}` }}
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-          <div className="flex items-center gap-3">
+          <a href="#overview" className="flex items-center gap-3 transition-opacity hover:opacity-80">
             <div
               className="flex h-11 w-11 items-center justify-center rounded-2xl font-black text-sm"
               style={{ background: A.teal, color: "#ffffff" }}
@@ -405,7 +405,7 @@ export default function Ncore2027Microsite() {
               <p className="text-sm font-bold tracking-wide" style={{ color: T.text }}>NCORE 2027</p>
               <p className="text-xs" style={{ color: T.subtleMuted }}>TPG Worldwide Destination Platform</p>
             </div>
-          </div>
+          </a>
 
           <nav className="hidden items-center gap-5 text-sm lg:flex" style={{ color: T.muted }}>
             {nav.map((item) => (
@@ -534,7 +534,7 @@ export default function Ncore2027Microsite() {
                 <h2 className="mt-3 text-5xl font-black" style={{ color: T.text }}>A Letter from Jeff Williams</h2>
                 <p className="mt-4 text-lg font-semibold" style={{ color: A.teal }}>Chairman, TPG Worldwide</p>
                 <p className="mt-5 text-sm leading-7" style={{ color: T.muted }}>
-                  Designed as the formal welcome page for guests, vendors, sponsors, hospitality partners, and participating Las Vegas businesses.
+                  Jeff Williams brings decades of experience in event infrastructure, destination programming, and institutional partnership to NCORE 2027 — welcoming every guest, vendor, sponsor, and community partner into the Las Vegas experience.
                 </p>
               </div>
               <div className="rounded-[2rem] p-7 text-sm leading-7" style={{ background: T.panelAlt, border: `1px solid ${T.border}`, color: T.muted }}>
@@ -556,7 +556,7 @@ export default function Ncore2027Microsite() {
               <p className="text-xs font-bold uppercase tracking-[0.3em]" style={{ color: A.teal }}>Attendee Gateway</p>
               <h2 className="mt-2 text-4xl font-bold md:text-5xl" style={{ color: T.text }}>One front door for every NCORE journey.</h2>
             </div>
-            <p className="max-w-xl text-sm leading-6" style={{ color: T.muted }}>This platform sits in front of the institutional microsite, driving attendees, groups, sponsors, and partners into the right pathway.</p>
+            <p className="max-w-xl text-sm leading-6" style={{ color: T.muted }}>Every attendee, institution, sponsor, and partner has a place at NCORE 2027. Find your pathway and connect to the right experience.</p>
           </div>
           <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
             {audienceCards.map(({ icon: Icon, title, copy }) => (
