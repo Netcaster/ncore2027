@@ -269,55 +269,49 @@ function SlideVisualBackground({ type = "hand" }: { type?: "hand" | "foot" }) {
         </svg>
       ) : (
         /*
-         * H.A.N.D. — Slide 2 PNG
-         * Footprint shape: circles arranged top→bottom = big-toe→heel
-         * Red (top) → Teal → Lime-green → [ghost arch] → Orange → Blue (largest, heel)
-         * Ghost gray circles scatter to the right side (like the bubble trail in the PNG)
-         * Thin pointer lines extend left from each colored circle
-         * viewBox 400×820 — tall to show the full footprint vertically
+         * H.A.N.D. — Footprint shape
+         * 5 toes (big→pinky, left→right) → wide ball pad → narrow arch → wide heel
+         * Brand colors: red=big toe, teal=ball, lime=mid-arch accent, orange=arch, blue=heel
+         * Ghost scatter circles trail to the right
          */
-        <svg viewBox="0 0 500 820" className="absolute right-[3%] top-[2%] h-[90%] w-[22%] opacity-[0.30]" aria-hidden="true">
-          {/* ── pointer lines (thin white, extending left) */}
-          <line x1="50"  y1="68"  x2="188" y2="68"  stroke="white" strokeWidth="1.2" opacity="0.5"/>
-          <line x1="40"  y1="185" x2="175" y2="188" stroke="white" strokeWidth="1.2" opacity="0.5"/>
-          <line x1="340" y1="258" x2="490" y2="255" stroke="white" strokeWidth="1.2" opacity="0.5"/>
-          <line x1="360" y1="450" x2="490" y2="445" stroke="white" strokeWidth="1.2" opacity="0.5"/>
-          <line x1="40"  y1="640" x2="175" y2="645" stroke="white" strokeWidth="1.2" opacity="0.5"/>
+        <svg viewBox="0 0 500 900" className="absolute right-[3%] top-[1%] h-[92%] w-[22%] opacity-[0.32]" aria-hidden="true">
 
-          {/* ── Ghost scatter circles — right side trail (from PNG) */}
-          <circle cx="330" cy="42"  r="19" fill={ghost}/>
-          <circle cx="355" cy="108" r="24" fill={ghost}/>
-          <circle cx="360" cy="165" r="19" fill={ghost}/>
-          <circle cx="388" cy="222" r="18" fill={ghost}/>
-          <circle cx="378" cy="298" r="26" fill={ghost}/>
-          <circle cx="360" cy="360" r="19" fill={ghost}/>
-          <circle cx="375" cy="418" r="16" fill={ghost}/>
-          <circle cx="348" cy="478" r="22" fill={ghost}/>
-          <circle cx="340" cy="540" r="18" fill={ghost}/>
+          {/* ── Toes (top) — 5 circles, big toe left → pinky right ── */}
+          {/* Big toe */}
+          <circle cx="148" cy="62"  r="42" fill="#c13a2c"/>
+          {/* 2nd toe */}
+          <circle cx="210" cy="48"  r="34" fill="#f39e14"/>
+          {/* 3rd toe */}
+          <circle cx="268" cy="44"  r="30" fill="#17a186"/>
+          {/* 4th toe */}
+          <circle cx="320" cy="54"  r="25" fill="#95b84e"/>
+          {/* Pinky */}
+          <circle cx="364" cy="72"  r="19" fill="#2a81ba"/>
 
-          {/* ── Colored footprint circles (top = big toe, bottom = heel) */}
-          {/* Red — big toe — accent5 #C13A2C */}
-          <circle cx="230" cy="68"  r="55" fill="#c13a2c"/>
+          {/* ── Ball of foot (wide pad just below toes) ── */}
+          <circle cx="240" cy="190" r="100" fill="#17a186"/>
 
-          {/* Teal — 2nd toe / ball — accent2 #17A186 */}
-          <circle cx="218" cy="188" r="68" fill="#17a186"/>
+          {/* ── Arch (narrow — ghost circles only) ── */}
+          <circle cx="175" cy="318" r="24" fill={ghost}/>
+          <circle cx="168" cy="372" r="18" fill={ghost}/>
+          <circle cx="172" cy="420" r="14" fill={ghost}/>
 
-          {/* Lime green — #95B84E */}
-          <circle cx="294" cy="258" r="52" fill="#95b84e"/>
+          {/* ── Heel (wide) ── */}
+          <circle cx="225" cy="560" r="105" fill="#2a81ba"/>
 
-          {/* Arch gap — two small ghost circles */}
-          <circle cx="250" cy="338" r="30" fill={ghost}/>
-          <circle cx="280" cy="390" r="20" fill={ghost}/>
+          {/* ── Ghost scatter trail (right side) ── */}
+          <circle cx="390" cy="100" r="18" fill={ghost}/>
+          <circle cx="418" cy="168" r="22" fill={ghost}/>
+          <circle cx="430" cy="240" r="17" fill={ghost}/>
+          <circle cx="415" cy="310" r="20" fill={ghost}/>
+          <circle cx="408" cy="380" r="15" fill={ghost}/>
+          <circle cx="395" cy="445" r="18" fill={ghost}/>
+          <circle cx="380" cy="510" r="14" fill={ghost}/>
 
-          {/* Orange — arch/heel transition — accent4 #F39E14 */}
-          <circle cx="252" cy="450" r="62" fill="#f39e14"/>
-
-          {/* Small gray below orange */}
-          <circle cx="230" cy="542" r="26" fill={ghost}/>
-          <circle cx="210" cy="594" r="19" fill={ghost}/>
-
-          {/* Blue — heel (largest) — accent1 #2A81BA */}
-          <circle cx="228" cy="680" r="90" fill="#2a81ba"/>
+          {/* ── Pointer lines ── */}
+          <line x1="60"  y1="62"  x2="106" y2="62"  stroke="white" strokeWidth="1.2" opacity="0.5"/>
+          <line x1="50"  y1="190" x2="140" y2="190" stroke="white" strokeWidth="1.2" opacity="0.5"/>
+          <line x1="50"  y1="560" x2="120" y2="560" stroke="white" strokeWidth="1.2" opacity="0.5"/>
         </svg>
       )}
 
@@ -332,7 +326,7 @@ function SlideVisualBackground({ type = "hand" }: { type?: "hand" | "foot" }) {
   );
 }
 
-// ── Animated US mini-map ───────────────────────────────────────
+// ── NCORE Regional US Map ─────────────────────────────────────
 function MiniMap() {
   return (
     <div className="relative overflow-hidden rounded-[2rem] p-6" style={{ background: "#050f1e", border: "1px solid rgba(255,255,255,0.08)" }}>
@@ -341,51 +335,23 @@ function MiniMap() {
         <p className="text-xs font-bold uppercase tracking-[0.3em]" style={{ color: "#5eead4" }}>United States Destination Map</p>
         <h3 className="mt-2 text-2xl font-black text-white">Las Vegas designated for 2027</h3>
       </div>
-      <svg viewBox="0 0 920 530" className="relative z-10 mt-4 h-auto w-full">
-        <defs>
-          <linearGradient id="usMapGrad" x1="0" x2="1" y1="0" y2="1">
-            <stop offset="0%" stopColor="#1e3a4a"/><stop offset="100%" stopColor="#0d1b2a"/>
-          </linearGradient>
-          <filter id="lvGlow">
-            <feGaussianBlur stdDeviation="6" result="b"/>
-            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-          </filter>
-        </defs>
-
-        {/* Continental US — recognisable outline */}
-        <path strokeLinejoin="round" fill="url(#usMapGrad)" stroke="#334155" strokeWidth="2.5"
-          d="M160,95 L205,85 L295,74 L410,66 L520,63 L630,67 L728,73 L800,82
-             L832,97 L840,122 L830,148 L818,163 L824,182 L812,202 L806,222 L802,240
-             L798,258 L793,276 L792,294
-             L798,312 L796,332 L788,350
-             L793,370 L787,392 L776,418
-             L758,442 L738,456
-             L718,440 L708,416 L698,392 L688,372
-             L666,360 L638,354 L610,354 L582,359
-             L554,365 L526,370 L498,376
-             L470,383 L443,386 L418,379
-             L393,368 L370,354 L348,338
-             L328,320 L302,312 L275,310
-             L248,313 L220,317 L198,319
-             L183,314 L170,299 L161,276
-             L154,250 L150,222 L150,194
-             L152,166 L154,138 L157,116
-             L160,95 Z"/>
-
-        {/* Las Vegas pin — geographically correct (western US, mid-height) */}
-        <circle cx="245" cy="274" r="11" fill="#22d3ee" filter="url(#lvGlow)"/>
-        <circle cx="245" cy="274" r="18" fill="none" stroke="#22d3ee" strokeWidth="2" opacity=".55">
-          <animate attributeName="r" from="16" to="46" dur="2.2s" repeatCount="indefinite"/>
-          <animate attributeName="opacity" from=".75" to="0" dur="2.2s" repeatCount="indefinite"/>
-        </circle>
-
-        <text x="264" y="268" fill="#ffffff" fontSize="18" fontWeight="800" fontFamily="system-ui,sans-serif">Las Vegas</text>
-        <text x="264" y="290" fill="#5eead4" fontSize="12" fontFamily="system-ui,sans-serif">NCORE 2027 Destination</text>
-
-        {/* Dashed route lines east */}
-        <path d="M245,274 C420,200 580,215 725,260" stroke="#22d3ee" strokeWidth="2" strokeDasharray="8 10" fill="none" opacity=".48"/>
-        <path d="M245,274 C385,330 540,352 690,326" stroke="#14b8a6" strokeWidth="2" strokeDasharray="8 10" fill="none" opacity=".42"/>
-      </svg>
+      <div className="relative z-10 mt-4 rounded-xl overflow-hidden" style={{ background: "#fff", padding: "12px 12px 8px" }}>
+        <img
+          src="/ncore-regional-map.jpg"
+          alt="NCORE 2027 National Regional Map"
+          className="w-full h-auto block"
+          style={{ imageRendering: "auto" }}
+        />
+        <p className="text-center text-xs font-bold uppercase tracking-widest mt-2" style={{ color: "#274552" }}>NCORE National Regions</p>
+      </div>
+      {/* Las Vegas callout */}
+      <div className="relative z-10 mt-4 flex items-center gap-3">
+        <span className="flex h-3 w-3 shrink-0">
+          <span className="animate-ping absolute inline-flex h-3 w-3 rounded-full bg-cyan-400 opacity-75"></span>
+          <span className="relative inline-flex rounded-full h-3 w-3 bg-cyan-300"></span>
+        </span>
+        <p className="text-xs font-bold" style={{ color: "#5eead4" }}>Las Vegas · NCORE 2027 · Western Region</p>
+      </div>
     </div>
   );
 }
