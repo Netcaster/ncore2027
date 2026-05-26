@@ -5,7 +5,7 @@ import {
   Search, MapPin, Calendar, Hotel, Music, Utensils, Trophy,
   Users, ShieldCheck, Building2, Sparkles, ArrowRight, Mic2,
   Globe2, Handshake, Ticket, Plane, Sun, Moon, WalletCards,
-  Headphones, Loader2, Languages,
+  Headphones, Loader2, Languages, Mic, MicOff,
   GraduationCap, BadgeCheck, Landmark, CheckCircle2,
   Compass, HeartHandshake, PartyPopper,
 } from "lucide-react";
@@ -251,7 +251,11 @@ function NaluPanel({ T }: { T: Theme }) {
   const [loading, setLoading] = useState(false);
   const [error, setError]     = useState<string | null>(null);
   const [playing, setPlaying] = useState(false);
+  const [recording, setRecording] = useState(false);
+  const [transcribing, setTranscribing] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const chunksRef = useRef<Blob[]>([]);
 
   const answer = useMemo(() => {
     if (query.toLowerCase().includes("aria"))     return "NALU can answer venue logistics, room block guidance, meeting locations, attendee flow, dining near ARIA, transportation, accessibility, entertainment, and curated Las Vegas options.";
@@ -285,6 +289,41 @@ function NaluPanel({ T }: { T: Theme }) {
       setTranslated({ text: translated_text, audio });
     } catch { setError("Translation unavailable — please try again."); }
     setLoading(false);
+  }
+
+  async function startRecording() {
+    setError(null);
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const recorder = new MediaRecorder(stream);
+      chunksRef.current = [];
+      recorder.ondataavailable = (e) => { if (e.data.size > 0) chunksRef.current.push(e.data); };
+      recorder.onstop = async () => {
+        stream.getTracks().forEach((t) => t.stop());
+        setTranscribing(true);
+        try {
+          const blob = new Blob(chunksRef.current, { type: recorder.mimeType || "audio/webm" });
+          const form = new FormData();
+          form.append("audio", blob, "recording.webm");
+          const sttUrl = `https://api.worldwidetechconnections.com/services/stt/${language}/${language}?serviceCode=stt`;
+          const res = await fetch(sttUrl, { method: "POST", headers: { "api-authorization": WWTC_KEY }, body: form });
+          if (!res.ok) throw new Error();
+          const data = await res.json();
+          const text = data.transcribed_text ?? data.source_text ?? data.text ?? "";
+          if (text) setQuery(text);
+          else throw new Error();
+        } catch { setError("Speech recognition unavailable — please type your question."); }
+        setTranscribing(false);
+      };
+      mediaRecorderRef.current = recorder;
+      recorder.start();
+      setRecording(true);
+    } catch { setError("Microphone access denied — please allow mic permissions and try again."); }
+  }
+
+  function stopRecording() {
+    mediaRecorderRef.current?.stop();
+    setRecording(false);
   }
 
   function playAudio() {
@@ -331,7 +370,25 @@ function NaluPanel({ T }: { T: Theme }) {
         <textarea value={query} onChange={(e) => setQuery(e.target.value)}
           className="min-h-24 w-full resize-none bg-transparent p-2 text-sm outline-none" style={{ color: T.text }}
           placeholder="Ask NALU about NCORE, ARIA, Las Vegas, dining, entertainment, sports, travel, or the 2027 program…" />
+        <button
+          onClick={recording ? stopRecording : startRecording}
+          disabled={transcribing}
+          title={recording ? "Stop recording" : "Speak your question"}
+          className="mt-2 flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition-all disabled:opacity-50"
+          style={recording
+            ? { background: "#ef4444", boxShadow: "0 0 0 4px rgba(239,68,68,0.25)", color: "#fff" }
+            : { background: `${A.teal}22`, border: `1px solid ${A.teal}50`, color: A.teal }
+          }
+        >
+          {transcribing ? <Loader2 className="h-4 w-4 animate-spin" /> : recording ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
+        </button>
       </div>
+      {transcribing && (
+        <p className="mt-2 text-center text-xs" style={{ color: A.teal }}>Transcribing your voice…</p>
+      )}
+      {recording && (
+        <p className="mt-2 text-center text-xs animate-pulse" style={{ color: "#ef4444" }}>● Recording — tap to stop</p>
+      )}
 
       {/* English answer */}
       <div className="mt-4 rounded-2xl p-4 text-sm leading-6" style={{ background: T.glassBg, color: T.muted }}>
