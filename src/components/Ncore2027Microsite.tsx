@@ -688,8 +688,8 @@ export default function Ncore2027Microsite() {
             >
               {venueStack.map((item) => (
                 <div key={item.label} className="rounded-3xl p-5" style={{ background: T.cardInner }}>
-                  <p className="text-xs uppercase tracking-[0.25em]" style={{ color: T.subtleMuted }}>{item.label}</p>
-                  <p className="mt-2 text-2xl font-bold text-white">{item.value}</p>
+                  <p className="text-xs uppercase tracking-[0.25em]" style={{ color: T.muted }}>{item.label}</p>
+                  <p className="mt-2 text-2xl font-bold" style={{ color: T.text }}>{item.value}</p>
                 </div>
               ))}
             </motion.div>
