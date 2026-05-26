@@ -252,10 +252,8 @@ function NaluPanel({ T }: { T: Theme }) {
   const [error, setError]     = useState<string | null>(null);
   const [playing, setPlaying] = useState(false);
   const [recording, setRecording] = useState(false);
-  const [transcribing, setTranscribing] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
-  const chunksRef = useRef<Blob[]>([]);
+  const recognitionRef = useRef<any>(null);
 
   const answer = useMemo(() => {
     if (query.toLowerCase().includes("aria"))     return "NALU can answer venue logistics, room block guidance, meeting locations, attendee flow, dining near ARIA, transportation, accessibility, entertainment, and curated Las Vegas options.";
@@ -291,46 +289,37 @@ function NaluPanel({ T }: { T: Theme }) {
     setLoading(false);
   }
 
-  async function startRecording() {
+  const SPEECH_LANG: Record<string, string> = {
+    "english-united-states": "en-US", "spanish-international": "es-ES",
+    "french-france": "fr-FR",         "portuguese-brazil": "pt-BR",
+    "chinese-mandarin": "zh-CN",      "arabic": "ar-SA",
+    "hindi": "hi-IN",                 "japanese": "ja-JP",
+    "korean": "ko-KR",                "german": "de-DE",
+    "italian": "it-IT",               "russian": "ru-RU",
+    "swahili": "sw-KE",               "vietnamese": "vi-VN",
+    "tagalog": "tl-PH",               "haitian-creole": "fr-HT",
+    "polish": "pl-PL",                "dutch": "nl-NL",
+    "turkish": "tr-TR",               "thai": "th-TH",
+  };
+
+  function startListening() {
+    const SR = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!SR) { setError("Speech recognition requires Chrome, Edge, or Safari — or type your question."); return; }
     setError(null);
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const recorder = new MediaRecorder(stream);
-      chunksRef.current = [];
-      recorder.ondataavailable = (e) => { if (e.data.size > 0) chunksRef.current.push(e.data); };
-      recorder.onstop = async () => {
-        stream.getTracks().forEach((t) => t.stop());
-        setTranscribing(true);
-        try {
-          const blob = new Blob(chunksRef.current, { type: recorder.mimeType || "audio/webm" });
-          // Convert blob to base64 — matches the format WWTC uses to return audio
-          const base64 = await new Promise<string>((resolve) => {
-            const reader = new FileReader();
-            reader.onloadend = () => resolve((reader.result as string).split(",")[1]);
-            reader.readAsDataURL(blob);
-          });
-          const sttUrl = `${WWTC_BASE}/${language}/${language}?serviceCode=stt&sourceLanguageCode=${language}&targetLanguageCode=${language}`;
-          const res = await fetch(sttUrl, {
-            method: "POST",
-            headers: { "api-authorization": WWTC_KEY, "Content-Type": "application/json", accept: "application/json" },
-            body: JSON.stringify({ audio: base64 }),
-          });
-          const data = await res.json();
-          if (!res.ok) throw new Error(`WWTC ${res.status}: ${JSON.stringify(data)}`);
-          const text = data.transcribed_text ?? data.source_text ?? data.text ?? data.translated_text ?? "";
-          if (text) setQuery(text);
-          else throw new Error(`Empty: ${JSON.stringify(data)}`);
-        } catch (e: any) { setError(`STT: ${e.message ?? "unavailable"}`); }
-        setTranscribing(false);
-      };
-      mediaRecorderRef.current = recorder;
-      recorder.start();
-      setRecording(true);
-    } catch { setError("Microphone access denied — please allow mic permissions and try again."); }
+    const rec = new SR();
+    rec.lang = SPEECH_LANG[language] ?? "en-US";
+    rec.continuous = false;
+    rec.interimResults = false;
+    recognitionRef.current = rec;
+    rec.onresult = (e: any) => { setQuery(e.results[0][0].transcript); setRecording(false); };
+    rec.onerror = (e: any) => { setError(e.error === "not-allowed" ? "Mic access denied — check browser permissions." : `Mic error: ${e.error}`); setRecording(false); };
+    rec.onend = () => setRecording(false);
+    rec.start();
+    setRecording(true);
   }
 
-  function stopRecording() {
-    mediaRecorderRef.current?.stop();
+  function stopListening() {
+    recognitionRef.current?.stop();
     setRecording(false);
   }
 
@@ -379,23 +368,19 @@ function NaluPanel({ T }: { T: Theme }) {
           className="min-h-24 w-full resize-none bg-transparent p-2 text-sm outline-none" style={{ color: T.text }}
           placeholder="Ask NALU about NCORE, ARIA, Las Vegas, dining, entertainment, sports, travel, or the 2027 program…" />
         <button
-          onClick={recording ? stopRecording : startRecording}
-          disabled={transcribing}
-          title={recording ? "Stop recording" : "Speak your question"}
-          className="mt-2 flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition-all disabled:opacity-50"
+          onClick={recording ? stopListening : startListening}
+          title={recording ? "Stop listening" : "Speak your question"}
+          className="mt-2 flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition-all"
           style={recording
             ? { background: "#ef4444", boxShadow: "0 0 0 4px rgba(239,68,68,0.25)", color: "#fff" }
             : { background: `${A.teal}22`, border: `1px solid ${A.teal}50`, color: A.teal }
           }
         >
-          {transcribing ? <Loader2 className="h-4 w-4 animate-spin" /> : recording ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
+          {recording ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
         </button>
       </div>
-      {transcribing && (
-        <p className="mt-2 text-center text-xs" style={{ color: A.teal }}>Transcribing your voice…</p>
-      )}
       {recording && (
-        <p className="mt-2 text-center text-xs animate-pulse" style={{ color: "#ef4444" }}>● Recording — tap to stop</p>
+        <p className="mt-2 text-center text-xs animate-pulse" style={{ color: "#ef4444" }}>● Listening — speak now, tap to stop</p>
       )}
 
       {/* English answer */}
