@@ -302,12 +302,14 @@ function NaluPanel({ T }: { T: Theme }) {
         stream.getTracks().forEach((t) => t.stop());
         setTranscribing(true);
         try {
-          const blob = new Blob(chunksRef.current, { type: recorder.mimeType || "audio/webm" });
-          const form = new FormData();
-          form.append("audio", blob, "recording.webm");
-          // WWTC uses /services/tts/{source}/{target} for all service codes
+          const mimeType = recorder.mimeType || "audio/webm";
+          const blob = new Blob(chunksRef.current, { type: mimeType });
           const sttUrl = `${WWTC_BASE}/${language}/${language}?serviceCode=stt&sourceLanguageCode=${language}&targetLanguageCode=${language}`;
-          const res = await fetch(sttUrl, { method: "POST", headers: { "api-authorization": WWTC_KEY }, body: form });
+          const res = await fetch(sttUrl, {
+            method: "POST",
+            headers: { "api-authorization": WWTC_KEY, "Content-Type": mimeType },
+            body: blob,
+          });
           const data = await res.json();
           if (!res.ok) throw new Error(`WWTC ${res.status}: ${JSON.stringify(data)}`);
           const text = data.transcribed_text ?? data.source_text ?? data.text ?? data.translated_text ?? "";
