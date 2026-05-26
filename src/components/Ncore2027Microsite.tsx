@@ -204,8 +204,6 @@ function BubbleCluster({ className = "" }: { className?: string }) {
 // Slide 2 PNG → H.A.N.D. footprint bubble cluster (big toe top → heel bottom)
 function SlideVisualBackground({ type = "hand" }: { type?: "hand" | "foot" }) {
   const isHand = type === "hand";
-  // Ghost circle color — same gray-teal from slides
-  const ghost = "rgba(95,120,135,0.55)";
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-[2.5rem]">
       {/* Ambient glow pulses */}
@@ -214,135 +212,21 @@ function SlideVisualBackground({ type = "hand" }: { type?: "hand" | "foot" }) {
       <div className="absolute -bottom-20 right-0 h-80 w-80 rounded-full blur-3xl"
         style={{ background: isHand ? "rgba(23,161,134,0.14)" : "rgba(34,211,238,0.12)" }} />
 
+      {/* Actual PPTX slide PNG — screen blend makes dark bg transparent, colors glow through */}
       {isHand ? (
-        /*
-         * H.A.N.D.S. — Slide 1 PNG
-         * Five "finger" columns of gray ghost circles spread upward (index→pinky left→right)
-         * Four large colored circles at the palm: teal, lime-green, orange, red
-         * Thin pointer lines extending left from orange, and right from lime-green & red
-         * viewBox matches slide 16:9 ratio (1456×816 → scaled to 800×450)
-         */
-        <svg viewBox="0 0 800 450" className="absolute right-[-2%] bottom-[-2%] h-[62%] w-[42%] opacity-[0.20]" aria-hidden="true">
-          {/* ── pointer / label lines (thin white, like PPTX annotation lines) */}
-          <line x1="120" y1="278" x2="270" y2="310" stroke="white" strokeWidth="1.2" opacity="0.5"/>
-          <line x1="608" y1="258" x2="720" y2="252" stroke="white" strokeWidth="1.2" opacity="0.5"/>
-          <line x1="608" y1="378" x2="730" y2="390" stroke="white" strokeWidth="1.2" opacity="0.5"/>
-
-          {/* ── Ghost finger columns (gray circles, PPTX #274552-based) ── */}
-          {/* Column 1 — leftmost finger (index finger) */}
-          <circle cx="308" cy="36"  r="14" fill={ghost}/>
-          <circle cx="310" cy="78"  r="19" fill={ghost}/>
-          <circle cx="316" cy="130" r="24" fill={ghost}/>
-
-          {/* Column 2 — middle finger */}
-          <circle cx="395" cy="28"  r="16" fill={ghost}/>
-          <circle cx="398" cy="74"  r="20" fill={ghost}/>
-          <circle cx="400" cy="128" r="26" fill={ghost}/>
-
-          {/* Column 3 — ring finger */}
-          <circle cx="482" cy="32"  r="15" fill={ghost}/>
-          <circle cx="480" cy="76"  r="19" fill={ghost}/>
-          <circle cx="481" cy="128" r="24" fill={ghost}/>
-
-          {/* Column 4 — pinky */}
-          <circle cx="558" cy="44"  r="12" fill={ghost}/>
-          <circle cx="560" cy="84"  r="16" fill={ghost}/>
-          <circle cx="560" cy="128" r="21" fill={ghost}/>
-          <circle cx="558" cy="174" r="26" fill={ghost}/>
-
-          {/* Left thumb / palm ghost circles */}
-          <circle cx="242" cy="212" r="16" fill={ghost}/>
-          <circle cx="270" cy="268" r="21" fill={ghost}/>
-
-          {/* Small accent bottom */}
-          <circle cx="330" cy="400" r="13" fill={ghost}/>
-
-          {/* ── Large colored palm circles (from PNG) ── */}
-          {/* Teal — accent2 #17A186 */}
-          <circle cx="388" cy="258" r="62" fill="#17a186"/>
-          {/* Lime green — accent3 #95B84E */}
-          <circle cx="490" cy="296" r="52" fill="#95b84e"/>
-          {/* Orange — accent4 #F39E14 */}
-          <circle cx="300" cy="320" r="54" fill="#f39e14"/>
-          {/* Red — accent5 #C13A2C (largest, the heel/palm base) */}
-          <circle cx="412" cy="380" r="68" fill="#c13a2c"/>
-        </svg>
+        <img
+          src="/ncore-hands-cluster.png"
+          className="absolute bottom-[-4%] right-[-6%] w-[72%] opacity-[0.62]"
+          style={{ mixBlendMode: "screen" }}
+          aria-hidden="true"
+        />
       ) : (
-        /*
-         * H.A.N.D. — Right-foot anatomical footprint
-         * Toes arc naturally (big toe inner/lower, 2nd highest, pinky outer/lower)
-         * Wide elliptical ball → narrow inner arch (ghost only) → wide elliptical heel
-         * NCORE brand colors; ghost scatter trail on outer (right) side
-         */
-        <svg viewBox="0 0 420 860" className="absolute right-[2%] top-[0%] h-[95%] w-[24%] opacity-[0.35]" aria-hidden="true">
-
-          {/* ── 5 Toes — natural arc, big toe inner-left, pinky outer-right ── */}
-          {/* Big toe — largest, sits lowest in the arc */}
-          <circle cx="112" cy="96"  r="46" fill="#c13a2c"/>
-          {/* 2nd toe — tallest point of arc */}
-          <circle cx="180" cy="64"  r="37" fill="#f39e14"/>
-          {/* 3rd toe — near peak */}
-          <circle cx="244" cy="58"  r="33" fill="#17a186"/>
-          {/* 4th toe — descending */}
-          <circle cx="304" cy="70"  r="27" fill="#95b84e"/>
-          {/* Pinky — smallest, sits lowest on outer edge */}
-          <circle cx="354" cy="96"  r="20" fill="#2a81ba"/>
-
-          {/* ── Ball of foot — 50% of original size ── */}
-          <ellipse cx="228" cy="225" rx="64" ry="44" fill="#17a186"/>
-
-          {/* ── Heel — wide ellipse ── */}
-          <ellipse cx="210" cy="590" rx="108" ry="92" fill="#2a81ba"/>
-
-          {/* ── Ghost outline circles — trace the foot perimeter clockwise ── */}
-          {/* Top of toes arc */}
-          <circle cx="105" cy="42"  r="10" fill={ghost}/>
-          <circle cx="148" cy="22"  r="10" fill={ghost}/>
-          <circle cx="185" cy="16"  r="10" fill={ghost}/>
-          <circle cx="225" cy="18"  r="10" fill={ghost}/>
-          <circle cx="248" cy="18"  r="10" fill={ghost}/>
-          <circle cx="283" cy="28"  r="10" fill={ghost}/>
-          <circle cx="310" cy="36"  r="10" fill={ghost}/>
-          <circle cx="338" cy="55"  r="10" fill={ghost}/>
-          <circle cx="360" cy="68"  r="10" fill={ghost}/>
-
-          {/* Outer (right) side — pinky down to heel */}
-          <circle cx="380" cy="98"  r="10" fill={ghost}/>
-          <circle cx="388" cy="140" r="10" fill={ghost}/>
-          <circle cx="378" cy="185" r="10" fill={ghost}/>
-          <circle cx="360" cy="228" r="10" fill={ghost}/>
-          <circle cx="350" cy="275" r="10" fill={ghost}/>
-          <circle cx="342" cy="330" r="10" fill={ghost}/>
-          <circle cx="336" cy="390" r="10" fill={ghost}/>
-          <circle cx="330" cy="450" r="10" fill={ghost}/>
-          <circle cx="325" cy="510" r="10" fill={ghost}/>
-          <circle cx="318" cy="560" r="10" fill={ghost}/>
-
-          {/* Bottom of heel */}
-          <circle cx="300" cy="658" r="10" fill={ghost}/>
-          <circle cx="255" cy="690" r="10" fill={ghost}/>
-          <circle cx="210" cy="696" r="10" fill={ghost}/>
-          <circle cx="164" cy="690" r="10" fill={ghost}/>
-          <circle cx="118" cy="658" r="10" fill={ghost}/>
-
-          {/* Inner (left) side — heel up to big toe */}
-          <circle cx="102" cy="610" r="10" fill={ghost}/>
-          <circle cx="98"  cy="555" r="10" fill={ghost}/>
-          <circle cx="96"  cy="500" r="10" fill={ghost}/>
-          <circle cx="95"  cy="445" r="10" fill={ghost}/>
-          <circle cx="98"  cy="390" r="10" fill={ghost}/>
-          <circle cx="104" cy="335" r="10" fill={ghost}/>
-          <circle cx="118" cy="285" r="10" fill={ghost}/>
-          <circle cx="140" cy="248" r="10" fill={ghost}/>
-          <circle cx="158" cy="208" r="10" fill={ghost}/>
-          <circle cx="150" cy="162" r="10" fill={ghost}/>
-          <circle cx="68"  cy="98"  r="10" fill={ghost}/>
-
-          {/* ── Pointer annotation lines ── */}
-          <line x1="30"  y1="80"  x2="66"  y2="80"  stroke="white" strokeWidth="1.2" opacity="0.5"/>
-          <line x1="30"  y1="225" x2="164" y2="225" stroke="white" strokeWidth="1.2" opacity="0.5"/>
-          <line x1="30"  y1="590" x2="102" y2="590" stroke="white" strokeWidth="1.2" opacity="0.5"/>
-        </svg>
+        <img
+          src="/ncore-foot-cluster.png"
+          className="absolute top-[-2%] right-[-6%] h-[104%] w-auto opacity-[0.62]"
+          style={{ mixBlendMode: "screen" }}
+          aria-hidden="true"
+        />
       )}
 
       {/* Label watermark text */}
@@ -1045,7 +929,7 @@ export default function Ncore2027Microsite() {
             {/* Watermark image — hands photo behind content */}
             <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden rounded-[2.5rem]">
               <img
-                src="/hands-unity.jpg"
+                src="/ncore-hands-photo.png"
                 alt=""
                 aria-hidden="true"
                 className="absolute inset-0 h-full w-full object-cover object-center"
@@ -1249,7 +1133,7 @@ export default function Ncore2027Microsite() {
             {/* Watermark image — feet/footprints as more-visible watermark */}
             <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden rounded-[2.5rem]">
               <img
-                src="/hands-unity.jpg"
+                src="/ncore-hands-photo.png"
                 alt=""
                 aria-hidden="true"
                 className="absolute inset-0 h-full w-full object-cover object-bottom"
