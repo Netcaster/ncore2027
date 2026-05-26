@@ -214,6 +214,70 @@ function BubbleCluster({ className = "" }: { className?: string }) {
   );
 }
 
+// ── Slide visual background (H.A.N.D.S. / H.A.N.D.) ─────────
+function SlideVisualBackground({ type = "hand" }: { type?: "hand" | "foot" }) {
+  const isHand = type === "hand";
+  const palette = isHand
+    ? { glowA: "bg-[#f5a313]/30", glowB: "bg-[#20a68f]/20", accent: "#f5a313", accent2: "#20a68f", label: "H.A.N.D.S.", word: "HIGH TOUCH" }
+    : { glowA: "bg-[#2f8bc2]/30", glowB: "bg-cyan-300/20",  accent: "#2f8bc2", accent2: "#22d3ee", label: "H.A.N.D.",   word: "HIGH TECH"  };
+  return (
+    <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-[2.5rem]">
+      <div className={`absolute -left-20 -top-20 h-80 w-80 rounded-full ${palette.glowA} blur-3xl`} />
+      <div className={`absolute -bottom-24 right-0 h-96 w-96 rounded-full ${palette.glowB} blur-3xl`} />
+      <div className="absolute inset-0 opacity-[0.06]" style={{ backgroundImage: "linear-gradient(rgba(255,255,255,.35) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.35) 1px,transparent 1px)", backgroundSize: "42px 42px" }} />
+      <div className="absolute right-[-7%] top-[6%] h-[78%] w-[54%] opacity-[0.14]">
+        {isHand ? (
+          <svg viewBox="0 0 420 520" className="h-full w-full" fill="none">
+            <path d="M198 482c-54-32-90-83-91-151l-2-101c0-14 11-25 25-25s25 11 25 25v61V133c0-15 12-27 27-27s27 12 27 27v151V78c0-16 13-29 29-29s29 13 29 29v206V119c0-15 12-27 27-27s27 12 27 27v190l22-58c6-16 24-24 40-18s24 24 18 40l-48 129c-16 44-50 79-93 98-23 10-45 4-60-18Z" fill="url(#handGrad)" stroke={palette.accent} strokeWidth="6"/>
+            <defs><linearGradient id="handGrad" x1="105" y1="49" x2="391" y2="502"><stop stopColor={palette.accent}/><stop offset="1" stopColor={palette.accent2}/></linearGradient></defs>
+          </svg>
+        ) : (
+          <svg viewBox="0 0 420 520" className="h-full w-full" fill="none">
+            <path d="M169 74c49-34 123-12 139 48 12 44-4 98-34 148-26 44-20 74 14 100 26 20 43 46 35 78-9 37-43 59-85 54-61-7-119-45-151-102-35-62-30-144 9-212 20-35 38-88 73-114Z" fill="url(#footGrad)" stroke={palette.accent2} strokeWidth="6"/>
+            <circle cx="267" cy="54" r="23" fill={palette.accent}/><circle cx="219" cy="45" r="20" fill={palette.accent}/>
+            <circle cx="176" cy="56" r="18" fill={palette.accent}/><circle cx="143" cy="82" r="16" fill={palette.accent}/>
+            <circle cx="120" cy="117" r="14" fill={palette.accent}/>
+            <defs><linearGradient id="footGrad" x1="82" y1="39" x2="330" y2="502"><stop stopColor={palette.accent2}/><stop offset="1" stopColor="#0f172a"/></linearGradient></defs>
+          </svg>
+        )}
+      </div>
+      <div className="absolute left-8 top-8 -rotate-[4deg] text-[7rem] font-black leading-none text-white/[0.04] md:text-[10rem]">{palette.label}</div>
+      <div className="absolute bottom-10 left-10 rounded-full border border-white/10 bg-black/20 px-6 py-3 text-xs font-black uppercase tracking-[0.45em] text-white/20">{palette.word}</div>
+    </div>
+  );
+}
+
+// ── Animated US mini-map ───────────────────────────────────────
+function MiniMap() {
+  return (
+    <div className="relative overflow-hidden rounded-[2rem] p-6" style={{ background: "#050f1e", border: "1px solid rgba(255,255,255,0.08)" }}>
+      <div className="absolute inset-0" style={{ background: "radial-gradient(circle at 24% 54%,rgba(34,211,238,.22),transparent 20%),radial-gradient(circle at 40% 20%,rgba(20,184,166,.12),transparent 28%)" }} />
+      <div className="relative z-10">
+        <p className="text-xs font-bold uppercase tracking-[0.3em]" style={{ color: "#5eead4" }}>United States Destination Map</p>
+        <h3 className="mt-2 text-2xl font-black text-white">Las Vegas designated for 2027</h3>
+      </div>
+      <svg viewBox="0 0 900 500" className="relative z-10 mt-5 h-auto w-full">
+        <defs>
+          <linearGradient id="ncoreMapGrad" x1="0" x2="1" y1="0" y2="1">
+            <stop offset="0%" stopColor="#111827"/><stop offset="100%" stopColor="#1e3a4a"/>
+          </linearGradient>
+          <filter id="cyanGlow"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        </defs>
+        <path d="M100 185C190 90 300 105 385 130C465 152 525 105 620 130C735 160 800 220 805 300C710 340 620 352 515 335C405 318 315 358 220 330C145 308 90 260 100 185Z" fill="url(#ncoreMapGrad)" stroke="#334155" strokeWidth="2"/>
+        <circle cx="248" cy="275" r="11" fill="#22d3ee" filter="url(#cyanGlow)"/>
+        <circle cx="248" cy="275" r="30" fill="none" stroke="#22d3ee" strokeWidth="2" opacity=".5">
+          <animate attributeName="r" from="20" to="50" dur="2s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" from=".7" to="0" dur="2s" repeatCount="indefinite"/>
+        </circle>
+        <text x="278" y="268" fill="#ffffff" fontSize="22" fontWeight="800">Las Vegas</text>
+        <text x="278" y="296" fill="#5eead4" fontSize="14">NCORE 2027 Destination</text>
+        <path d="M248 275C390 180 520 195 670 250" stroke="#22d3ee" strokeWidth="2" strokeDasharray="8 10" fill="none" opacity=".6"/>
+        <path d="M248 275C350 340 495 375 660 326" stroke="#14b8a6" strokeWidth="2" strokeDasharray="8 10" fill="none" opacity=".55"/>
+      </svg>
+    </div>
+  );
+}
+
 // ── Google Maps embed ─────────────────────────────────────────
 function DestinationMapCard({ T }: { T: Theme }) {
   return (
@@ -652,7 +716,10 @@ export default function Ncore2027Microsite() {
 
         {/* ── Destination map ──────────────────────────────────── */}
         <section id="destination" className="mx-auto max-w-7xl px-6 py-12">
-          <DestinationMapCard T={T} />
+          <div className="grid gap-6 lg:grid-cols-[1fr_1fr] lg:items-stretch">
+            <DestinationMapCard T={T} />
+            <MiniMap />
+          </div>
         </section>
 
         {/* ── Program tiles ────────────────────────────────────── */}
@@ -840,8 +907,14 @@ export default function Ncore2027Microsite() {
 
         {/* ── H.A.N.D.S. Housing Access ────────────────────────── */}
         <section id="hands" className="mx-auto max-w-7xl px-6 py-16">
-          <div className="rounded-[2.5rem] p-8 md:p-12 shadow-2xl" style={{ background: T.panel, border: `1px solid ${T.border}` }}>
-            <div className="grid gap-10 lg:grid-cols-[.9fr_1.1fr] lg:items-center">
+          <div className="relative overflow-hidden rounded-[2.5rem] p-8 md:p-12 shadow-2xl" style={{ background: T.panel, border: `1px solid ${T.border}` }}>
+            <SlideVisualBackground type="hand" />
+            <div className="relative z-10 mb-8 overflow-hidden rounded-[2rem]" style={{ maxHeight: 260 }}>
+              <img src="/hands-unity.jpg" alt="Unity hands" className="w-full object-cover object-center" style={{ objectPosition: "center 30%" }} />
+              <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.65) 100%)" }} />
+              <p className="absolute bottom-4 left-6 text-lg font-black text-white drop-shadow">Many hands. One mission.</p>
+            </div>
+            <div className="relative z-10 grid gap-10 lg:grid-cols-[.9fr_1.1fr] lg:items-center">
               <div>
                 <p className="text-xs font-bold uppercase tracking-[0.3em]" style={{ color: A.orange }}>H.A.N.D.S.</p>
                 <h2 className="mt-3 text-4xl font-black leading-tight" style={{ color: T.text }}>Helping Americans Negotiate Dwelling Shortages</h2>
@@ -875,8 +948,9 @@ export default function Ncore2027Microsite() {
 
         {/* ── H.A.N.D. Asylum Displacement ─────────────────────── */}
         <section id="hand" className="mx-auto max-w-7xl px-6 py-16">
-          <div className="rounded-[2.5rem] p-8 md:p-12 shadow-2xl" style={{ background: T.panel, border: `1px solid ${T.border}` }}>
-            <div className="grid gap-10 lg:grid-cols-[1.1fr_.9fr] lg:items-center">
+          <div className="relative overflow-hidden rounded-[2.5rem] p-8 md:p-12 shadow-2xl" style={{ background: T.panel, border: `1px solid ${T.border}` }}>
+            <SlideVisualBackground type="foot" />
+            <div className="relative z-10 grid gap-10 lg:grid-cols-[1.1fr_.9fr] lg:items-center">
               <div className="grid gap-4 sm:grid-cols-2">
                 {handPillars.map((item, idx) => (
                   <div key={item.title} className="rounded-[2rem] p-6" style={{ background: T.panelAlt, border: `1px solid ${T.border}` }}>
