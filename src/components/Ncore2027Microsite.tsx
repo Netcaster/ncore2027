@@ -302,19 +302,24 @@ function NaluPanel({ T }: { T: Theme }) {
         stream.getTracks().forEach((t) => t.stop());
         setTranscribing(true);
         try {
-          const mimeType = recorder.mimeType || "audio/webm";
-          const blob = new Blob(chunksRef.current, { type: mimeType });
+          const blob = new Blob(chunksRef.current, { type: recorder.mimeType || "audio/webm" });
+          // Convert blob to base64 — matches the format WWTC uses to return audio
+          const base64 = await new Promise<string>((resolve) => {
+            const reader = new FileReader();
+            reader.onloadend = () => resolve((reader.result as string).split(",")[1]);
+            reader.readAsDataURL(blob);
+          });
           const sttUrl = `${WWTC_BASE}/${language}/${language}?serviceCode=stt&sourceLanguageCode=${language}&targetLanguageCode=${language}`;
           const res = await fetch(sttUrl, {
             method: "POST",
-            headers: { "api-authorization": WWTC_KEY, "Content-Type": mimeType },
-            body: blob,
+            headers: { "api-authorization": WWTC_KEY, "Content-Type": "application/json", accept: "application/json" },
+            body: JSON.stringify({ audio: base64 }),
           });
           const data = await res.json();
           if (!res.ok) throw new Error(`WWTC ${res.status}: ${JSON.stringify(data)}`);
           const text = data.transcribed_text ?? data.source_text ?? data.text ?? data.translated_text ?? "";
           if (text) setQuery(text);
-          else throw new Error(`Empty response: ${JSON.stringify(data)}`);
+          else throw new Error(`Empty: ${JSON.stringify(data)}`);
         } catch (e: any) { setError(`STT: ${e.message ?? "unavailable"}`); }
         setTranscribing(false);
       };
