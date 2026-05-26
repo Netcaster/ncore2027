@@ -270,11 +270,19 @@ function NaluPanel({ T }: { T: Theme }) {
     if (language === "english-united-states") return;
     setLoading(true); setError(null); setTranslated(null);
     try {
-      const url = `${WWTC_BASE}/english-united-states/${language}?text=${encodeURIComponent(answer)}&serviceCode=ttt&sourceLanguageCode=english-united-states&targetLanguageCode=${language}`;
-      const res = await fetch(url, { method: "POST", headers: { accept: "application/json", "api-authorization": WWTC_KEY } });
-      if (!res.ok) throw new Error();
-      const data = await res.json();
-      setTranslated({ text: data.translated_text, audio: data.audio });
+      // Step 1: translate NALU's English answer into the target language
+      const tttUrl = `${WWTC_BASE}/english-united-states/${language}?text=${encodeURIComponent(answer)}&serviceCode=ttt&sourceLanguageCode=english-united-states&targetLanguageCode=${language}`;
+      const tttRes = await fetch(tttUrl, { method: "POST", headers: { accept: "application/json", "api-authorization": WWTC_KEY } });
+      if (!tttRes.ok) throw new Error();
+      const { translated_text } = await tttRes.json();
+
+      // Step 2: get audio of the translated answer spoken in the target language
+      const ttsUrl = `${WWTC_BASE}/${language}/${language}?text=${encodeURIComponent(translated_text)}&serviceCode=tts&sourceLanguageCode=${language}&targetLanguageCode=${language}`;
+      const ttsRes = await fetch(ttsUrl, { method: "POST", headers: { accept: "application/json", "api-authorization": WWTC_KEY } });
+      if (!ttsRes.ok) throw new Error();
+      const { audio } = await ttsRes.json();
+
+      setTranslated({ text: translated_text, audio });
     } catch { setError("Translation unavailable — please try again."); }
     setLoading(false);
   }
