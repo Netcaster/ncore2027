@@ -149,21 +149,6 @@ const vendorCategories = [
   "Golf clubs", "Entertainment venues", "Retail and wellness", "Transportation", "Tourism operators",
 ];
 
-// ── H.A.N.D.S. data ───────────────────────────────────────────
-const handsPillars = [
-  { title: "Affordable Housing Access",  copy: "Connect participants to housing education, rental readiness, affordable housing navigation, and community-based intake pathways." },
-  { title: "Mortgage Readiness",         copy: "Support qualified families with education around credit, income documentation, lending pathways, mortgage products, and sustainable homeownership." },
-  { title: "Down Payment Support",       copy: "Route users toward down payment assistance, grants, employer-assisted housing models, local programs, and lender-partner resources." },
-  { title: "Resource Navigation",        copy: "Use NALU and TPG partner systems to simplify intake, triage, referrals, eligibility, and follow-up across public, private, and nonprofit channels." },
-];
-
-// ── H.A.N.D. data ─────────────────────────────────────────────
-const handPillars = [
-  { title: "Humanity First",               copy: "Treat asylum seekers as people navigating crisis, trauma, uncertainty, language barriers, and displacement — not merely as case files or statistics." },
-  { title: "Resource Allocation",          copy: "Coordinate housing, food, clothing, translation, transportation, communication, legal referrals, workforce readiness, and community placement support." },
-  { title: "Navigation + Stabilization",   copy: "Help families understand where to go, who to contact, what documents matter, and how to access lawful, practical, and local support pathways." },
-  { title: "Community Integration",        copy: "Support receiving communities with better coordination, reduced confusion, partner accountability, and compassionate service delivery." },
-];
 
 // ── Audience gateway cards ────────────────────────────────────
 const audienceCards = [
@@ -214,35 +199,135 @@ function BubbleCluster({ className = "" }: { className?: string }) {
   );
 }
 
-// ── Slide visual background (H.A.N.D.S. / H.A.N.D.) ─────────
+// ── Slide visual background — pixel-traced from PNG slides ────
+// Slide 1 PNG → H.A.N.D.S. hand-shaped bubble cluster (fingers spread upward)
+// Slide 2 PNG → H.A.N.D. footprint bubble cluster (big toe top → heel bottom)
 function SlideVisualBackground({ type = "hand" }: { type?: "hand" | "foot" }) {
   const isHand = type === "hand";
-  const palette = isHand
-    ? { glowA: "bg-[#f5a313]/30", glowB: "bg-[#20a68f]/20", accent: "#f5a313", accent2: "#20a68f", label: "H.A.N.D.S.", word: "HIGH TOUCH" }
-    : { glowA: "bg-[#2f8bc2]/30", glowB: "bg-cyan-300/20",  accent: "#2f8bc2", accent2: "#22d3ee", label: "H.A.N.D.",   word: "HIGH TECH"  };
+  // Ghost circle color — same gray-teal from slides
+  const ghost = "rgba(95,120,135,0.55)";
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-[2.5rem]">
-      <div className={`absolute -left-20 -top-20 h-80 w-80 rounded-full ${palette.glowA} blur-3xl`} />
-      <div className={`absolute -bottom-24 right-0 h-96 w-96 rounded-full ${palette.glowB} blur-3xl`} />
-      <div className="absolute inset-0 opacity-[0.06]" style={{ backgroundImage: "linear-gradient(rgba(255,255,255,.35) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.35) 1px,transparent 1px)", backgroundSize: "42px 42px" }} />
-      <div className="absolute right-[-7%] top-[6%] h-[78%] w-[54%] opacity-[0.14]">
-        {isHand ? (
-          <svg viewBox="0 0 420 520" className="h-full w-full" fill="none">
-            <path d="M198 482c-54-32-90-83-91-151l-2-101c0-14 11-25 25-25s25 11 25 25v61V133c0-15 12-27 27-27s27 12 27 27v151V78c0-16 13-29 29-29s29 13 29 29v206V119c0-15 12-27 27-27s27 12 27 27v190l22-58c6-16 24-24 40-18s24 24 18 40l-48 129c-16 44-50 79-93 98-23 10-45 4-60-18Z" fill="url(#handGrad)" stroke={palette.accent} strokeWidth="6"/>
-            <defs><linearGradient id="handGrad" x1="105" y1="49" x2="391" y2="502"><stop stopColor={palette.accent}/><stop offset="1" stopColor={palette.accent2}/></linearGradient></defs>
-          </svg>
-        ) : (
-          <svg viewBox="0 0 420 520" className="h-full w-full" fill="none">
-            <path d="M169 74c49-34 123-12 139 48 12 44-4 98-34 148-26 44-20 74 14 100 26 20 43 46 35 78-9 37-43 59-85 54-61-7-119-45-151-102-35-62-30-144 9-212 20-35 38-88 73-114Z" fill="url(#footGrad)" stroke={palette.accent2} strokeWidth="6"/>
-            <circle cx="267" cy="54" r="23" fill={palette.accent}/><circle cx="219" cy="45" r="20" fill={palette.accent}/>
-            <circle cx="176" cy="56" r="18" fill={palette.accent}/><circle cx="143" cy="82" r="16" fill={palette.accent}/>
-            <circle cx="120" cy="117" r="14" fill={palette.accent}/>
-            <defs><linearGradient id="footGrad" x1="82" y1="39" x2="330" y2="502"><stop stopColor={palette.accent2}/><stop offset="1" stopColor="#0f172a"/></linearGradient></defs>
-          </svg>
-        )}
+      {/* Ambient glow pulses */}
+      <div className="absolute -left-20 -top-20 h-72 w-72 rounded-full blur-3xl"
+        style={{ background: isHand ? "rgba(243,158,20,0.18)" : "rgba(42,129,186,0.16)" }} />
+      <div className="absolute -bottom-20 right-0 h-80 w-80 rounded-full blur-3xl"
+        style={{ background: isHand ? "rgba(23,161,134,0.14)" : "rgba(34,211,238,0.12)" }} />
+
+      {isHand ? (
+        /*
+         * H.A.N.D.S. — Slide 1 PNG
+         * Five "finger" columns of gray ghost circles spread upward (index→pinky left→right)
+         * Four large colored circles at the palm: teal, lime-green, orange, red
+         * Thin pointer lines extending left from orange, and right from lime-green & red
+         * viewBox matches slide 16:9 ratio (1456×816 → scaled to 800×450)
+         */
+        <svg viewBox="0 0 800 450" className="absolute right-[-2%] bottom-[-2%] h-[62%] w-[42%] opacity-[0.20]" aria-hidden="true">
+          {/* ── pointer / label lines (thin white, like PPTX annotation lines) */}
+          <line x1="120" y1="278" x2="270" y2="310" stroke="white" strokeWidth="1.2" opacity="0.5"/>
+          <line x1="608" y1="258" x2="720" y2="252" stroke="white" strokeWidth="1.2" opacity="0.5"/>
+          <line x1="608" y1="378" x2="730" y2="390" stroke="white" strokeWidth="1.2" opacity="0.5"/>
+
+          {/* ── Ghost finger columns (gray circles, PPTX #274552-based) ── */}
+          {/* Column 1 — leftmost finger (index finger) */}
+          <circle cx="308" cy="36"  r="14" fill={ghost}/>
+          <circle cx="310" cy="78"  r="19" fill={ghost}/>
+          <circle cx="316" cy="130" r="24" fill={ghost}/>
+
+          {/* Column 2 — middle finger */}
+          <circle cx="395" cy="28"  r="16" fill={ghost}/>
+          <circle cx="398" cy="74"  r="20" fill={ghost}/>
+          <circle cx="400" cy="128" r="26" fill={ghost}/>
+
+          {/* Column 3 — ring finger */}
+          <circle cx="482" cy="32"  r="15" fill={ghost}/>
+          <circle cx="480" cy="76"  r="19" fill={ghost}/>
+          <circle cx="481" cy="128" r="24" fill={ghost}/>
+
+          {/* Column 4 — pinky */}
+          <circle cx="558" cy="44"  r="12" fill={ghost}/>
+          <circle cx="560" cy="84"  r="16" fill={ghost}/>
+          <circle cx="560" cy="128" r="21" fill={ghost}/>
+          <circle cx="558" cy="174" r="26" fill={ghost}/>
+
+          {/* Left thumb / palm ghost circles */}
+          <circle cx="242" cy="212" r="16" fill={ghost}/>
+          <circle cx="270" cy="268" r="21" fill={ghost}/>
+
+          {/* Small accent bottom */}
+          <circle cx="330" cy="400" r="13" fill={ghost}/>
+
+          {/* ── Large colored palm circles (from PNG) ── */}
+          {/* Teal — accent2 #17A186 */}
+          <circle cx="388" cy="258" r="62" fill="#17a186"/>
+          {/* Lime green — accent3 #95B84E */}
+          <circle cx="490" cy="296" r="52" fill="#95b84e"/>
+          {/* Orange — accent4 #F39E14 */}
+          <circle cx="300" cy="320" r="54" fill="#f39e14"/>
+          {/* Red — accent5 #C13A2C (largest, the heel/palm base) */}
+          <circle cx="412" cy="380" r="68" fill="#c13a2c"/>
+        </svg>
+      ) : (
+        /*
+         * H.A.N.D. — Slide 2 PNG
+         * Footprint shape: circles arranged top→bottom = big-toe→heel
+         * Red (top) → Teal → Lime-green → [ghost arch] → Orange → Blue (largest, heel)
+         * Ghost gray circles scatter to the right side (like the bubble trail in the PNG)
+         * Thin pointer lines extend left from each colored circle
+         * viewBox 400×820 — tall to show the full footprint vertically
+         */
+        <svg viewBox="0 0 500 820" className="absolute right-[3%] top-[2%] h-[90%] w-[22%] opacity-[0.30]" aria-hidden="true">
+          {/* ── pointer lines (thin white, extending left) */}
+          <line x1="50"  y1="68"  x2="188" y2="68"  stroke="white" strokeWidth="1.2" opacity="0.5"/>
+          <line x1="40"  y1="185" x2="175" y2="188" stroke="white" strokeWidth="1.2" opacity="0.5"/>
+          <line x1="340" y1="258" x2="490" y2="255" stroke="white" strokeWidth="1.2" opacity="0.5"/>
+          <line x1="360" y1="450" x2="490" y2="445" stroke="white" strokeWidth="1.2" opacity="0.5"/>
+          <line x1="40"  y1="640" x2="175" y2="645" stroke="white" strokeWidth="1.2" opacity="0.5"/>
+
+          {/* ── Ghost scatter circles — right side trail (from PNG) */}
+          <circle cx="330" cy="42"  r="19" fill={ghost}/>
+          <circle cx="355" cy="108" r="24" fill={ghost}/>
+          <circle cx="360" cy="165" r="19" fill={ghost}/>
+          <circle cx="388" cy="222" r="18" fill={ghost}/>
+          <circle cx="378" cy="298" r="26" fill={ghost}/>
+          <circle cx="360" cy="360" r="19" fill={ghost}/>
+          <circle cx="375" cy="418" r="16" fill={ghost}/>
+          <circle cx="348" cy="478" r="22" fill={ghost}/>
+          <circle cx="340" cy="540" r="18" fill={ghost}/>
+
+          {/* ── Colored footprint circles (top = big toe, bottom = heel) */}
+          {/* Red — big toe — accent5 #C13A2C */}
+          <circle cx="230" cy="68"  r="55" fill="#c13a2c"/>
+
+          {/* Teal — 2nd toe / ball — accent2 #17A186 */}
+          <circle cx="218" cy="188" r="68" fill="#17a186"/>
+
+          {/* Lime green — #95B84E */}
+          <circle cx="294" cy="258" r="52" fill="#95b84e"/>
+
+          {/* Arch gap — two small ghost circles */}
+          <circle cx="250" cy="338" r="30" fill={ghost}/>
+          <circle cx="280" cy="390" r="20" fill={ghost}/>
+
+          {/* Orange — arch/heel transition — accent4 #F39E14 */}
+          <circle cx="252" cy="450" r="62" fill="#f39e14"/>
+
+          {/* Small gray below orange */}
+          <circle cx="230" cy="542" r="26" fill={ghost}/>
+          <circle cx="210" cy="594" r="19" fill={ghost}/>
+
+          {/* Blue — heel (largest) — accent1 #2A81BA */}
+          <circle cx="228" cy="680" r="90" fill="#2a81ba"/>
+        </svg>
+      )}
+
+      {/* Label watermark text */}
+      <div className="absolute left-8 top-8 -rotate-[4deg] text-[6rem] font-black leading-none text-white/[0.04] md:text-[9rem]">
+        {isHand ? "H.A.N.D.S." : "H.A.N.D."}
       </div>
-      <div className="absolute left-8 top-8 -rotate-[4deg] text-[7rem] font-black leading-none text-white/[0.04] md:text-[10rem]">{palette.label}</div>
-      <div className="absolute bottom-10 left-10 rounded-full border border-white/10 bg-black/20 px-6 py-3 text-xs font-black uppercase tracking-[0.45em] text-white/20">{palette.word}</div>
+      <div className="absolute bottom-10 left-10 rounded-full border border-white/10 bg-black/20 px-6 py-3 text-xs font-black uppercase tracking-[0.45em] text-white/20">
+        {isHand ? "HIGH TOUCH" : "HIGH TECH"}
+      </div>
     </div>
   );
 }
@@ -542,6 +627,8 @@ function NaluPanel({ T }: { T: Theme }) {
 // ── Main export ───────────────────────────────────────────────
 export default function Ncore2027Microsite() {
   const [dark, setDark] = useState(true);
+  const [handsOpen, setHandsOpen] = useState<number | null>(null);
+  const [handOpen,  setHandOpen]  = useState<number | null>(null);
 
   useEffect(() => {
     const saved = localStorage.getItem("ncore-theme");
@@ -931,40 +1018,178 @@ export default function Ncore2027Microsite() {
           </div>
         </section>
 
+        {/* ── Marquee Ticker ───────────────────────────────────── */}
+        <div className="overflow-hidden border-y py-4" style={{ borderColor: T.border, background: dark ? "rgba(0,0,0,0.3)" : "rgba(0,0,0,0.05)" }}>
+          <div className="marquee-track">
+            {[1,2].map(n => (
+              <span key={n} className="inline-flex items-center gap-0">
+                <span className="mx-10 text-sm font-black uppercase tracking-[0.35em]" style={{ color: A.orange }}>H.A.N.D.S.</span>
+                <span className="mx-4 opacity-30" style={{ color: T.text }}>·</span>
+                <span className="mx-10 text-sm font-black uppercase tracking-[0.35em]" style={{ color: A.blue }}>H.A.N.D.</span>
+                <span className="mx-4 opacity-30" style={{ color: T.text }}>·</span>
+                <span className="mx-10 text-sm font-semibold uppercase tracking-[0.2em]" style={{ color: T.muted }}>The world requires both hands and feet</span>
+                <span className="mx-4 opacity-30" style={{ color: T.text }}>·</span>
+                <span className="mx-10 text-sm font-black uppercase tracking-[0.35em]" style={{ color: A.orange }}>High Touch</span>
+                <span className="mx-4 opacity-30" style={{ color: T.text }}>·</span>
+                <span className="mx-10 text-sm font-black uppercase tracking-[0.35em]" style={{ color: A.blue }}>High Tech</span>
+                <span className="mx-4 opacity-30" style={{ color: T.text }}>·</span>
+                <span className="mx-10 text-sm font-semibold uppercase tracking-[0.2em]" style={{ color: T.muted }}>Social Infrastructure</span>
+                <span className="mx-4 opacity-30" style={{ color: T.text }}>·</span>
+              </span>
+            ))}
+          </div>
+        </div>
+
         {/* ── H.A.N.D.S. Housing Access ────────────────────────── */}
         <section id="hands" className="mx-auto max-w-7xl px-6 py-16">
-          <div className="relative overflow-hidden rounded-[2.5rem] p-8 md:p-12 shadow-2xl" style={{ background: T.panel, border: `1px solid ${T.border}` }}>
-            <SlideVisualBackground type="hand" />
-            <div className="relative z-10 mb-8 overflow-hidden rounded-[2rem]" style={{ maxHeight: 260 }}>
-              <img src="/hands-unity.jpg" alt="Unity hands" className="w-full object-cover object-center" style={{ objectPosition: "center 30%" }} />
-              <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.65) 100%)" }} />
-              <p className="absolute bottom-4 left-6 text-lg font-black text-white drop-shadow">Many hands. One mission.</p>
+          <div className="relative overflow-hidden rounded-[2.5rem] shadow-2xl" style={{ background: T.panel, border: `1px solid ${T.border}` }}>
+
+            {/* Watermark image — hands photo behind content */}
+            <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden rounded-[2.5rem]">
+              <img
+                src="/hands-unity.jpg"
+                alt=""
+                aria-hidden="true"
+                className="absolute inset-0 h-full w-full object-cover object-center"
+                style={{ opacity: 0.13, mixBlendMode: dark ? "screen" : "multiply" }}
+              />
+              <div className="absolute inset-0" style={{ background: dark ? "linear-gradient(to bottom right, rgba(26,47,61,0.82), rgba(39,69,82,0.88))" : "linear-gradient(to bottom right, rgba(221,237,242,0.88), rgba(240,248,251,0.92))" }} />
             </div>
-            <div className="relative z-10 grid gap-10 lg:grid-cols-[.9fr_1.1fr] lg:items-center">
-              <div>
-                <p className="text-xs font-bold uppercase tracking-[0.3em]" style={{ color: A.orange }}>H.A.N.D.S.</p>
-                <h2 className="mt-3 text-4xl font-black leading-tight" style={{ color: T.text }}>Helping Americans Negotiate Dwelling Shortages</h2>
-                <p className="mt-5 text-base leading-8" style={{ color: T.muted }}>
-                  H.A.N.D.S. positions NCORE 2027 as more than an academic gathering. It creates a public-facing resource path for Americans seeking affordable housing access, sustainable mortgage education, responsible lending pathways, and down payment assistance navigation.
-                </p>
-                <div className="mt-7 rounded-[2rem] p-5" style={{ background: T.panelAlt, border: `1px solid ${T.border}` }}>
-                  <p className="text-sm leading-7" style={{ color: T.muted }}>
-                    <span className="font-bold" style={{ color: T.text }}>Our commitment:</span>{" "}
-                    We connect people to education, participating lenders, housing nonprofits, municipal resources, and verified assistance channels — providing guidance without making loan, subsidy, or benefit promises.
+
+            <SlideVisualBackground type="hand" />
+
+            <div className="relative z-10 p-8 md:p-12">
+              {/* Hero grid */}
+              <div className="grid gap-12 lg:grid-cols-[1.1fr_.9fr] lg:items-start">
+                <div>
+                  <div className="mb-5 inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-black uppercase tracking-[0.3em]"
+                    style={{ background: `${A.orange}20`, border: `1px solid ${A.orange}45`, color: A.orange }}>
+                    🤲 The Hand · High Touch · Social Contracts
+                  </div>
+                  <h2 className="text-5xl font-black leading-none tracking-tight md:text-6xl" style={{ color: A.orange }}>H.A.N.D.S.</h2>
+                  <p className="mt-4 text-xl font-bold" style={{ color: T.muted }}>Helping Americans Negotiate Dwelling Shortages</p>
+
+                  <div className="mt-8 space-y-2 text-lg font-semibold leading-relaxed">
+                    <p style={{ color: T.text }}>Housing is more than shelter.</p>
+                    <p style={{ color: A.orange }}>It is stability.</p>
+                    <p style={{ color: T.text }}>It is identity.</p>
+                    <p style={{ color: A.teal }}>It is family preservation.</p>
+                    <p style={{ color: T.text }}>It is economic participation.</p>
+                    <p style={{ color: A.orange }}>It is dignity.</p>
+                  </div>
+
+                  <p className="mt-8 text-sm leading-8" style={{ color: T.muted }}>
+                    H.A.N.D.S. exists to help Americans navigate housing insecurity through education, conversation, technology, partnerships, and real-world resource alignment.
                   </p>
+
+                  <div className="mt-6 flex flex-wrap gap-2">
+                    {["High Touch","Social Contracts","Human-Centered Systems","Community Stabilization","Economic Dignity"].map(tag => (
+                      <span key={tag} className="rounded-full px-4 py-2 text-xs font-bold"
+                        style={{ background: tag === "High Touch" ? `${A.orange}18` : tag === "Social Contracts" ? `${A.teal}14` : `${dark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.06)"}`,
+                                 border: `1px solid ${tag === "High Touch" ? A.orange+"35" : tag === "Social Contracts" ? A.teal+"30" : (dark ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.10)")}`,
+                                 color: tag === "High Touch" ? A.orange : tag === "Social Contracts" ? A.teal : T.muted }}>
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Right: Reality card + challenge grid */}
+                <div className="space-y-5">
+                  <div className="rounded-[1.5rem] p-6" style={{ background: `${A.orange}10`, border: `1px solid ${A.orange}25` }}>
+                    <p className="text-xs font-black uppercase tracking-[0.3em]" style={{ color: A.orange }}>The Reality</p>
+                    <h3 className="mt-3 text-2xl font-black leading-tight" style={{ color: T.text }}>Millions are not failing because they lack ambition.</h3>
+                    <p className="mt-4 text-sm leading-7" style={{ color: T.muted }}>Many are struggling because the systems around housing, lending, affordability, and economic access have become increasingly difficult to navigate.</p>
+                    <p className="mt-3 text-xs font-black uppercase tracking-[0.2em]" style={{ color: A.orange }}>For some, the challenge is:</p>
+                    <div className="mt-3 grid grid-cols-2 gap-2">
+                      {["Rising rent","Inaccessible mortgages","Lack of down payment capital","Poor financial education","Credit barriers","Rising insurance costs","Unstable employment","Family displacement"].map(item => (
+                        <div key={item} className="flex items-center gap-2 rounded-xl p-2 text-xs" style={{ color: T.muted, background: dark ? "rgba(255,255,255,0.04)" : "rgba(0,0,0,0.04)" }}>
+                          <span style={{ color: A.orange }}>›</span>{item}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="rounded-[1.5rem] p-6" style={{ background: `${A.teal}10`, border: `1px solid ${A.teal}25` }}>
+                    <p className="text-xs font-black uppercase tracking-[0.2em]" style={{ color: A.teal }}>For others, the challenge is simply not knowing:</p>
+                    <div className="mt-3 space-y-2">
+                      {["Where to begin","Who to trust","What programs exist","How to qualify","How to stabilize"].map(item => (
+                        <div key={item} className="flex items-center gap-2 text-sm" style={{ color: T.muted }}>
+                          <span style={{ color: A.teal }}>›</span>{item}
+                        </div>
+                      ))}
+                    </div>
+                    <p className="mt-4 text-sm leading-7" style={{ color: T.muted }}>
+                      <span className="font-bold" style={{ color: T.text }}>H.A.N.D.S.</span> is designed to create thoughtful conversation and actionable pathways — not as charity, not as politics, but as{" "}
+                      <span className="font-bold" style={{ color: A.orange }}>coordinated social-economic infrastructure</span>.
+                    </p>
+                  </div>
                 </div>
               </div>
-              <div className="grid gap-4 sm:grid-cols-2">
-                {handsPillars.map((item, idx) => (
-                  <div key={item.title} className="rounded-[2rem] p-6" style={{ background: T.panelAlt, border: `1px solid ${T.border}` }}>
-                    <div
-                      className="flex h-11 w-11 items-center justify-center rounded-full text-lg font-black"
-                      style={{ background: A.orange, color: "#000" }}
+
+              {/* Divider */}
+              <div className="my-10 h-px" style={{ background: `linear-gradient(90deg, transparent, ${A.orange}60, ${A.teal}60, transparent)` }} />
+
+              {/* Use Cases — Accordion */}
+              <div className="mb-6">
+                <p className="text-xs font-black uppercase tracking-[0.3em]" style={{ color: A.orange }}>Real World Use Cases</p>
+                <h3 className="mt-3 text-3xl font-black" style={{ color: T.text }}>Who H.A.N.D.S. serves.</h3>
+              </div>
+              <div className="space-y-3">
+                {[
+                  {
+                    num: "1", accent: A.orange, numColor: "#000",
+                    title: "The First-Time Homebuyer", sub: "Ownership becomes realistic, not abstract.",
+                    body: "A young teacher earning stable income wants to purchase a home but believes ownership is impossible due to student loans and lack of down payment savings.",
+                    listLabel: "Through H.A.N.D.S., they discover:", listColor: A.orange,
+                    items: ["Down payment assistance programs","Municipal grants","Employer-assisted housing","Affordable mortgage pathways","Budgeting tools","Partner lenders + workshops"],
+                    result: "The result: Ownership becomes realistic rather than abstract.", resultColor: A.teal,
+                  },
+                  {
+                    num: "2", accent: A.teal, numColor: "#fff",
+                    title: "The Working Family Facing Eviction", sub: "Prevent homelessness before it begins.",
+                    body: "A two-income household experiences medical debt and temporary income disruption.",
+                    listLabel: "H.A.N.D.S. connects them to:", listColor: A.teal,
+                    items: ["Rental assistance referrals","Legal aid resources","Housing counselors","Workforce opportunities","Bridge financing education","Transitional housing pathways"],
+                    result: "The goal: Prevent homelessness before it begins.", resultColor: A.orange,
+                  },
+                  {
+                    num: "3", accent: dark ? "rgba(255,255,255,0.9)" : "#0f2130", numColor: dark ? "#0f2130" : "#fff",
+                    title: "The Returning Student", sub: "Educational continuity instead of abandonment.",
+                    body: "A first-generation college student cannot continue school due to unstable housing.",
+                    listLabel: "H.A.N.D.S. coordinates:", listColor: T.text,
+                    items: ["Campus support services","Housing referrals","Sponsor-backed aid","Transportation resources","Food + wellness support"],
+                    result: "The result: Educational continuity instead of abandonment.", resultColor: T.text,
+                  },
+                ].map((uc, i) => (
+                  <div key={i} className="overflow-hidden rounded-[1.5rem]"
+                    style={{ border: `1px solid ${uc.accent}35`, background: dark ? "rgba(255,255,255,0.02)" : "rgba(0,0,0,0.02)" }}>
+                    <button
+                      className="flex w-full items-center justify-between p-5 text-left"
+                      onClick={() => setHandsOpen(handsOpen === i ? null : i)}
                     >
-                      {idx + 1}
-                    </div>
-                    <h3 className="mt-5 text-xl font-black" style={{ color: T.text }}>{item.title}</h3>
-                    <p className="mt-3 text-sm leading-6" style={{ color: T.muted }}>{item.copy}</p>
+                      <div className="flex items-center gap-4">
+                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl text-lg font-black"
+                          style={{ background: uc.accent, color: uc.numColor }}>{uc.num}</div>
+                        <div>
+                          <p className="font-black text-base" style={{ color: T.text }}>{uc.title}</p>
+                          <p className="text-xs" style={{ color: T.muted }}>{uc.sub}</p>
+                        </div>
+                      </div>
+                      <svg className="h-5 w-5 shrink-0 transition-transform duration-300" style={{ color: T.muted, transform: handsOpen === i ? "rotate(180deg)" : "rotate(0deg)" }}
+                        fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    {handsOpen === i && (
+                      <div className="usecase-animate px-5 pb-5" style={{ background: `${uc.accent}08` }}>
+                        <p className="mb-4 text-sm leading-7" style={{ color: T.muted }}>{uc.body}</p>
+                        <p className="mb-3 text-xs font-black uppercase tracking-[0.2em]" style={{ color: uc.listColor }}>{uc.listLabel}</p>
+                        <div className="mb-4 grid grid-cols-2 gap-2">
+                          {uc.items.map(it => (
+                            <div key={it} className="rounded-xl p-3 text-sm" style={{ color: T.muted, background: dark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.04)" }}>✓ {it}</div>
+                          ))}
+                        </div>
+                        <p className="text-sm font-black" style={{ color: uc.resultColor }}>{uc.result}</p>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
@@ -972,38 +1197,263 @@ export default function Ncore2027Microsite() {
           </div>
         </section>
 
-        {/* ── H.A.N.D. Asylum Displacement ─────────────────────── */}
-        <section id="hand" className="mx-auto max-w-7xl px-6 py-16">
-          <div className="relative overflow-hidden rounded-[2.5rem] p-8 md:p-12 shadow-2xl" style={{ background: T.panel, border: `1px solid ${T.border}` }}>
-            <SlideVisualBackground type="foot" />
-            <div className="relative z-10 grid gap-10 lg:grid-cols-[1.1fr_.9fr] lg:items-center">
-              <div className="grid gap-4 sm:grid-cols-2">
-                {handPillars.map((item, idx) => (
-                  <div key={item.title} className="rounded-[2rem] p-6" style={{ background: T.panelAlt, border: `1px solid ${T.border}` }}>
-                    <div
-                      className="flex h-11 w-11 items-center justify-center rounded-full text-lg font-black text-white"
-                      style={{ background: A.blue }}
-                    >
-                      {idx + 1}
-                    </div>
-                    <h3 className="mt-5 text-xl font-black" style={{ color: T.text }}>{item.title}</h3>
-                    <p className="mt-3 text-sm leading-6" style={{ color: T.muted }}>{item.copy}</p>
+        {/* ── Bridge: Why Both Matter ───────────────────────────── */}
+        <section className="mx-auto max-w-7xl px-6 py-10">
+          <div className="relative overflow-hidden rounded-[2.5rem] p-8 md:p-12" style={{ background: T.panel, border: `1px solid ${T.border}` }}>
+            <div className="absolute inset-0 rounded-[2.5rem]" style={{ background: dark ? "linear-gradient(135deg,rgba(243,158,20,0.10) 0%,transparent 50%,rgba(42,129,186,0.10) 100%)" : "linear-gradient(135deg,rgba(243,158,20,0.07) 0%,transparent 50%,rgba(42,129,186,0.07) 100%)" }} />
+            <div className="relative z-10 text-center">
+              <p className="text-xs font-black uppercase tracking-[0.4em]" style={{ color: T.muted }}>Core TPG Philosophy</p>
+              <h2 className="mt-4 text-4xl font-black leading-tight md:text-5xl">
+                <span style={{ color: A.orange }}>"The world requires</span>{" "}
+                <span style={{ color: T.text }}>both hands</span>{" "}
+                <span style={{ color: A.blue }}>and feet."</span>
+              </h2>
+              <div className="mt-8 grid gap-5 sm:grid-cols-2">
+                <div className="rounded-[2rem] p-7 text-left" style={{ background: `${A.orange}10`, border: `1px solid ${A.orange}25` }}>
+                  <div className="text-4xl mb-3">🤲</div>
+                  <h3 className="text-xl font-black" style={{ color: A.orange }}>HANDS represent compassion.</h3>
+                  <div className="mt-4 space-y-1">
+                    {["High Touch","Social Contracts","Human-centered systems","Community stabilization","Housing access","Family preservation","Economic dignity"].map(i => (
+                      <p key={i} className="text-sm" style={{ color: T.muted }}>· {i}</p>
+                    ))}
                   </div>
-                ))}
+                  <p className="mt-5 text-sm font-bold" style={{ color: T.muted }}>Hands alone cannot scale.</p>
+                </div>
+                <div className="rounded-[2rem] p-7 text-left" style={{ background: `${A.blue}10`, border: `1px solid ${A.blue}25` }}>
+                  <div className="text-4xl mb-3">👣</div>
+                  <h3 className="text-xl font-black" style={{ color: A.blue }}>FEET represent movement.</h3>
+                  <div className="mt-4 space-y-1">
+                    {["High Tech","Social Technology","Infrastructure systems","Mobility","Navigation","Translation","Logistics + Resource coordination"].map(i => (
+                      <p key={i} className="text-sm" style={{ color: T.muted }}>· {i}</p>
+                    ))}
+                  </div>
+                  <p className="mt-5 text-sm font-bold" style={{ color: T.muted }}>Feet alone cannot heal.</p>
+                </div>
               </div>
-              <div>
-                <p className="text-xs font-bold uppercase tracking-[0.3em]" style={{ color: A.blue }}>H.A.N.D.</p>
-                <h2 className="mt-3 text-4xl font-black leading-tight" style={{ color: T.text }}>Helping Asylum Seekers Navigate Displacement</h2>
-                <p className="mt-5 text-base leading-8" style={{ color: T.muted }}>
-                  H.A.N.D. frames displacement as a humanity issue and a resource coordination challenge. We support compassionate navigation and organize real-world pathways for communication, housing, food, legal referral, transportation, clothing, and community integration.
+              <div className="mt-6 rounded-[2rem] p-7" style={{ background: T.panelAlt, border: `1px solid ${T.border}` }}>
+                <p className="text-lg font-black leading-relaxed" style={{ color: T.text }}>
+                  Technology without humanity becomes cold.<br/>Humanity without systems becomes ineffective.
                 </p>
-                <div className="mt-7 rounded-[2rem] p-5" style={{ background: T.panelAlt, border: `1px solid ${T.border}` }}>
-                  <p className="text-sm leading-7" style={{ color: T.muted }}>
-                    <span className="font-bold" style={{ color: T.text }}>Our approach:</span>{" "}
-                    NALU connects people to verified partners, official sources, and approved service providers — helping families understand available resources without making immigration, legal, benefit, or financial promises.
+                <p className="mt-4 text-sm leading-7" style={{ color: T.muted }}>
+                  TPG believes sustainable impact requires both:{" "}
+                  <span className="font-bold" style={{ color: A.orange }}>human relationships</span> and{" "}
+                  <span className="font-bold" style={{ color: A.blue }}>scalable systems</span>. Together, hands and feet create forward motion.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── H.A.N.D. Asylum Displacement ─────────────────────── */}
+        <section id="hand" className="mx-auto max-w-7xl px-6 py-6">
+          <div className="relative overflow-hidden rounded-[2.5rem] shadow-2xl" style={{ background: T.panel, border: `1px solid ${T.border}` }}>
+
+            {/* Watermark image — feet/footprints as more-visible watermark */}
+            <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden rounded-[2.5rem]">
+              <img
+                src="/hands-unity.jpg"
+                alt=""
+                aria-hidden="true"
+                className="absolute inset-0 h-full w-full object-cover object-bottom"
+                style={{ opacity: 0.22, mixBlendMode: dark ? "screen" : "multiply", filter: "hue-rotate(200deg) saturate(0.7)" }}
+              />
+              <div className="absolute inset-0" style={{ background: dark ? "linear-gradient(to bottom right, rgba(26,47,61,0.80), rgba(26,47,61,0.86))" : "linear-gradient(to bottom right, rgba(221,237,242,0.86), rgba(240,248,251,0.92))" }} />
+            </div>
+
+            <SlideVisualBackground type="foot" />
+
+            <div className="relative z-10 p-8 md:p-12">
+              {/* Hero grid — nav panel left, copy right */}
+              <div className="grid gap-12 lg:grid-cols-[.9fr_1.1fr] lg:items-start">
+
+                {/* Left: Nav systems active panel */}
+                <div className="rounded-[2rem] p-7" style={{ background: `${A.blue}08`, border: `1px solid ${A.blue}30` }}>
+                  <p className="mb-4 text-xs font-black uppercase tracking-[0.3em]" style={{ color: A.blue }}>Navigation Systems Active</p>
+                  <div className="space-y-2">
+                    {[
+                      { label: "Multilingual Translation",       status: "ACTIVE",   pulse: "#4ade80" },
+                      { label: "Emergency Housing Referrals",    status: "ACTIVE",   pulse: "#4ade80" },
+                      { label: "Resource Coordination",          status: "ACTIVE",   pulse: "#4ade80" },
+                      { label: "Legal Navigation Support",       status: "ROUTING",  pulse: "#facc15" },
+                      { label: "Workforce Transition Pathways",  status: "ACTIVE",   pulse: "#4ade80" },
+                    ].map(row => (
+                      <div key={row.label} className="flex items-center gap-3 rounded-xl p-3"
+                        style={{ background: dark ? "rgba(255,255,255,0.04)" : "rgba(0,0,0,0.04)" }}>
+                        <span className="h-2 w-2 shrink-0 rounded-full" style={{ background: row.pulse, boxShadow: `0 0 6px ${row.pulse}` }} />
+                        <span className="flex-1 text-sm" style={{ color: T.muted }}>{row.label}</span>
+                        <span className="text-xs font-bold" style={{ color: row.status === "ACTIVE" ? A.blue : "#facc15" }}>{row.status}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="mt-5 rounded-xl p-4" style={{ background: `${A.blue}12`, border: `1px solid ${A.blue}25` }}>
+                    <p className="text-xs" style={{ color: T.muted }}>NALU AI Active — <span className="font-bold" style={{ color: A.blue }}>multilingual intake assistant ready</span></p>
+                  </div>
+                </div>
+
+                {/* Right: Copy */}
+                <div>
+                  <div className="mb-5 inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-black uppercase tracking-[0.3em]"
+                    style={{ background: `${A.blue}15`, border: `1px solid ${A.blue}35`, color: A.blue }}>
+                    👣 The Foot · High Tech · Navigation Infrastructure
+                  </div>
+                  <h2 className="text-5xl font-black leading-none tracking-tight md:text-6xl" style={{ color: A.blue }}>H.A.N.D.</h2>
+                  <p className="mt-4 text-xl font-bold" style={{ color: T.muted }}>Helping Asylum Seekers Navigate Displacement</p>
+
+                  <div className="mt-8 space-y-2 text-lg font-semibold leading-relaxed">
+                    <p style={{ color: T.text }}>Displacement is not a statistic.</p>
+                    <p style={{ color: A.blue }}>It is movement.</p>
+                    <p style={{ color: T.text }}>It is uncertainty.</p>
+                    <p style={{ color: "#60a5fa" }}>It is language barriers.</p>
+                    <p style={{ color: T.text }}>It is fear.</p>
+                    <p style={{ color: A.blue }}>It is survival.</p>
+                  </div>
+
+                  <p className="mt-8 text-sm leading-8" style={{ color: T.muted }}>
+                    H.A.N.D. exists to help asylum seekers navigate displacement with humanity, organization, technology, and coordinated resource systems.
+                  </p>
+
+                  <div className="mt-6 flex flex-wrap gap-2">
+                    {["High Tech","Social Technology","Infrastructure Systems","Multilingual Navigation"].map(tag => (
+                      <span key={tag} className="rounded-full px-4 py-2 text-xs font-bold"
+                        style={{ background: tag === "High Tech" ? `${A.blue}15` : tag === "Social Technology" ? "rgba(96,165,250,0.12)" : dark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.06)",
+                                 border: `1px solid ${tag === "High Tech" ? A.blue+"35" : tag === "Social Technology" ? "rgba(96,165,250,0.30)" : (dark ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.10)")}`,
+                                 color: tag === "High Tech" ? A.blue : tag === "Social Technology" ? "#60a5fa" : T.muted }}>
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Divider */}
+              <div className="my-10 h-px" style={{ background: `linear-gradient(90deg, transparent, ${A.blue}60, transparent)` }} />
+
+              {/* Long-form two-column */}
+              <div className="mb-8 grid gap-8 lg:grid-cols-2">
+                <div>
+                  <p className="text-xs font-black uppercase tracking-[0.3em] mb-4" style={{ color: A.blue }}>The Challenge</p>
+                  <p className="text-sm leading-8" style={{ color: T.muted }}>Around the world, millions of people are forced to relocate due to violence, political instability, economic collapse, environmental disruption, and humanitarian crises.</p>
+                  <div className="mt-5 rounded-[1.5rem] p-5" style={{ background: `${A.blue}08`, border: `1px solid ${A.blue}20` }}>
+                    <p className="text-xs font-black uppercase tracking-[0.2em] mb-3" style={{ color: A.blue }}>Arrival introduces new barriers:</p>
+                    <div className="grid grid-cols-2 gap-2">
+                      {["Language","Transportation","Documentation","Healthcare","Housing","Food access","Employment","Legal navigation"].map(item => (
+                        <div key={item} className="text-sm" style={{ color: T.muted }}>· {item}</div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                <div className="rounded-[1.5rem] p-7 flex flex-col justify-center" style={{ background: T.panelAlt, border: `1px solid ${T.border}` }}>
+                  <p className="text-xl font-black leading-tight" style={{ color: T.text }}>H.A.N.D. is not designed to politicize displacement.</p>
+                  <p className="mt-3 text-xl font-black" style={{ color: A.blue }}>It is designed to humanize navigation.</p>
+                  <p className="mt-5 text-sm leading-7" style={{ color: T.muted }}>
+                    Position it as a <span className="font-bold" style={{ color: T.text }}>coordinated social-economic infrastructure framework</span> — making universities, sponsors, municipalities, and enterprise partners comfortable while preserving the humanity at the center.
                   </p>
                 </div>
               </div>
+
+              {/* Divider */}
+              <div className="mb-8 h-px" style={{ background: `linear-gradient(90deg, transparent, ${A.blue}60, transparent)` }} />
+
+              {/* Use Cases — Accordion */}
+              <div className="mb-6">
+                <p className="text-xs font-black uppercase tracking-[0.3em]" style={{ color: A.blue }}>Real World Use Cases</p>
+                <h3 className="mt-3 text-3xl font-black" style={{ color: T.text }}>Who H.A.N.D. serves.</h3>
+              </div>
+              <div className="space-y-3">
+                {[
+                  {
+                    num: "1", accent: A.blue, numColor: "#000",
+                    title: "The Newly Arrived Family", sub: "Technology reduces confusion. Humanity reduces fear.",
+                    body: "A family arrives in an unfamiliar city with limited English proficiency.",
+                    listLabel: "H.A.N.D. provides:", listColor: A.blue,
+                    items: ["Multilingual translation","Emergency housing referrals","Food resources","Transportation guidance","School enrollment assistance","Legal orientation resources"],
+                    result: "Technology reduces confusion. Humanity reduces fear.", resultColor: A.blue,
+                  },
+                  {
+                    num: "2", accent: "#3b82f6", numColor: "#fff",
+                    title: "NGO Coordination", sub: "Faster service delivery with less duplication.",
+                    body: "A nonprofit organization struggles to manage rapidly changing demand. H.A.N.D. infrastructure helps coordinate:",
+                    listLabel: "Systems provided:", listColor: "#3b82f6",
+                    items: ["Intake systems","Communication tools","Translation services","Resource allocation","Volunteer routing","Partner referrals"],
+                    result: "Faster service delivery with less duplication.", resultColor: T.text,
+                  },
+                  {
+                    num: "3", accent: "#8b5cf6", numColor: "#fff",
+                    title: "Workforce Transition", sub: "Economic participation and dignity.",
+                    body: "An asylum seeker with professional skills cannot access employment due to documentation confusion and lack of local support.",
+                    listLabel: "H.A.N.D. coordinates:", listColor: "#8b5cf6",
+                    items: ["Translation support","Credential navigation","Workforce training","Sponsor employers","Digital onboarding","Communication tools"],
+                    result: "The goal: Economic participation and dignity.", resultColor: "#8b5cf6",
+                  },
+                ].map((uc, i) => (
+                  <div key={i} className="overflow-hidden rounded-[1.5rem]"
+                    style={{ border: `1px solid ${uc.accent}35`, background: dark ? "rgba(255,255,255,0.02)" : "rgba(0,0,0,0.02)" }}>
+                    <button
+                      className="flex w-full items-center justify-between p-5 text-left"
+                      onClick={() => setHandOpen(handOpen === i ? null : i)}
+                    >
+                      <div className="flex items-center gap-4">
+                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl text-lg font-black"
+                          style={{ background: uc.accent, color: uc.numColor }}>{uc.num}</div>
+                        <div>
+                          <p className="font-black text-base" style={{ color: T.text }}>{uc.title}</p>
+                          <p className="text-xs" style={{ color: T.muted }}>{uc.sub}</p>
+                        </div>
+                      </div>
+                      <svg className="h-5 w-5 shrink-0 transition-transform duration-300" style={{ color: T.muted, transform: handOpen === i ? "rotate(180deg)" : "rotate(0deg)" }}
+                        fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    {handOpen === i && (
+                      <div className="usecase-animate px-5 pb-5" style={{ background: `${uc.accent}08` }}>
+                        <p className="mb-4 text-sm leading-7" style={{ color: T.muted }}>{uc.body}</p>
+                        <p className="mb-3 text-xs font-black uppercase tracking-[0.2em]" style={{ color: uc.listColor }}>{uc.listLabel}</p>
+                        <div className="mb-4 grid grid-cols-2 gap-2">
+                          {uc.items.map(it => (
+                            <div key={it} className="rounded-xl p-3 text-sm" style={{ color: T.muted, background: dark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.04)" }}>✓ {it}</div>
+                          ))}
+                        </div>
+                        <p className="text-sm font-black" style={{ color: uc.resultColor }}>{uc.result}</p>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── How to Participate ───────────────────────────────── */}
+        <section className="mx-auto max-w-7xl px-6 py-10">
+          <div className="rounded-[2.5rem] p-8 md:p-12" style={{ background: T.panel, border: `1px solid ${T.border}` }}>
+            <div className="mb-10 text-center">
+              <p className="text-xs font-black uppercase tracking-[0.3em]" style={{ color: T.muted }}>Universal Participation</p>
+              <h2 className="mt-3 text-4xl font-black md:text-5xl" style={{ color: T.text }}>"How Can I Participate?"</h2>
+              <p className="mt-3 text-base" style={{ color: T.muted }}>Every stakeholder has a role in coordinated social-economic infrastructure.</p>
+              <div className="mt-4 inline-flex items-center gap-2 rounded-full px-5 py-2 text-sm font-black" style={{ background: T.panelAlt, border: `1px solid ${T.border}` }}>
+                <span style={{ color: A.orange }}>H.A.N.D.S.</span><span className="opacity-40" style={{ color: T.text }}> + </span><span style={{ color: A.blue }}>H.A.N.D.</span>
+              </div>
+            </div>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {[
+                { emoji: "🎓", title: "Students",      color: A.orange, bg: `${A.orange}10`, border: `${A.orange}25`, copy: "Volunteer, research, advocate, educate. Be a bridge between institutions and communities that need access." },
+                { emoji: "🏛️", title: "Universities",  color: A.teal,   bg: `${A.teal}10`,   border: `${A.teal}25`,   copy: "Host conversations, provide resources, collect data. Institutional platforms create change at scale." },
+                { emoji: "🏦", title: "Lenders",       color: A.blue,   bg: `${A.blue}10`,   border: `${A.blue}25`,   copy: "Develop responsible mortgage products. Meet families where they are, not where we assume they should be." },
+                { emoji: "🏙️", title: "Cities",        color: "#8b5cf6", bg: "rgba(139,92,246,0.08)", border: "rgba(139,92,246,0.22)", copy: "Coordinate housing pathways, resource allocation, and municipal support that connects families to stability." },
+                { emoji: "💼", title: "Sponsors",      color: A.blue,   bg: `${A.blue}10`,   border: `${A.blue}25`,   copy: "Fund stability initiatives and educational access. Responsible visibility while creating measurable social impact." },
+                { emoji: "🤝", title: "Community",     color: T.text,   bg: T.panelAlt,      border: T.border,        copy: "Mentor families and expand awareness. The most powerful systems begin with one person choosing to show up." },
+              ].map(card => (
+                <div key={card.title} className="rounded-[1.5rem] p-6 transition-transform hover:-translate-y-1" style={{ background: card.bg, border: `1px solid ${card.border}` }}>
+                  <div className="text-3xl mb-4">{card.emoji}</div>
+                  <h3 className="text-xl font-black" style={{ color: card.color }}>{card.title}</h3>
+                  <p className="mt-3 text-sm leading-7" style={{ color: T.muted }}>{card.copy}</p>
+                </div>
+              ))}
+            </div>
+            <div className="mt-10 rounded-[2rem] p-8 text-center" style={{ background: T.panelAlt, border: `1px solid ${T.border}` }}>
+              <p className="text-3xl font-black" style={{ color: T.text }}>
+                <span style={{ color: A.orange }}>"The world requires</span> both hands <span style={{ color: A.blue }}>and feet."</span>
+              </p>
+              <p className="mt-4 text-sm" style={{ color: T.muted }}>Not charity. Not politics. Not activism alone.<br/><span className="font-bold" style={{ color: T.text }}>Coordinated social-economic infrastructure frameworks.</span></p>
             </div>
           </div>
         </section>
