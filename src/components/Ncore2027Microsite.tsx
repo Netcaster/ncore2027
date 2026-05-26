@@ -308,10 +308,15 @@ function NaluPanel({ T }: { T: Theme }) {
     setError(null);
     const rec = new SR();
     rec.lang = SPEECH_LANG[language] ?? "en-US";
-    rec.continuous = false;
-    rec.interimResults = false;
+    rec.continuous = true;
+    rec.interimResults = true;
     recognitionRef.current = rec;
-    rec.onresult = (e: any) => { setQuery(e.results[0][0].transcript); setRecording(false); };
+    rec.onresult = (e: any) => {
+      const transcript = Array.from(e.results as any[])
+        .map((r: any) => r[0].transcript)
+        .join("");
+      setQuery(transcript);
+    };
     rec.onerror = (e: any) => { setError(e.error === "not-allowed" ? "Mic access denied — check browser permissions." : `Mic error: ${e.error}`); setRecording(false); };
     rec.onend = () => setRecording(false);
     rec.start();
