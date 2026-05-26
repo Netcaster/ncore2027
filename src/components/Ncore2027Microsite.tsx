@@ -335,14 +335,12 @@ function MiniMap() {
         <p className="text-xs font-bold uppercase tracking-[0.3em]" style={{ color: "#5eead4" }}>United States Destination Map</p>
         <h3 className="mt-2 text-2xl font-black text-white">Las Vegas designated for 2027</h3>
       </div>
-      <div className="relative z-10 mt-4 rounded-xl overflow-hidden" style={{ background: "#fff", padding: "12px 12px 8px" }}>
+      <div className="relative z-10 mt-4">
         <img
-          src="/ncore-regional-map.jpg"
+          src="/ncore-regional-map.png"
           alt="NCORE 2027 National Regional Map"
           className="w-full h-auto block"
-          style={{ imageRendering: "auto" }}
         />
-        <p className="text-center text-xs font-bold uppercase tracking-widest mt-2" style={{ color: "#274552" }}>NCORE National Regions</p>
       </div>
       {/* Las Vegas callout */}
       <div className="relative z-10 mt-4 flex items-center gap-3">
