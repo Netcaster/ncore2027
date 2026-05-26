@@ -251,28 +251,55 @@ function SlideVisualBackground({ type = "hand" }: { type?: "hand" | "foot" }) {
 function MiniMap() {
   return (
     <div className="relative overflow-hidden rounded-[2rem] p-6" style={{ background: "#050f1e", border: "1px solid rgba(255,255,255,0.08)" }}>
-      <div className="absolute inset-0" style={{ background: "radial-gradient(circle at 24% 54%,rgba(34,211,238,.22),transparent 20%),radial-gradient(circle at 40% 20%,rgba(20,184,166,.12),transparent 28%)" }} />
+      <div className="absolute inset-0" style={{ background: "radial-gradient(circle at 27% 58%,rgba(34,211,238,.18),transparent 28%)" }} />
       <div className="relative z-10">
         <p className="text-xs font-bold uppercase tracking-[0.3em]" style={{ color: "#5eead4" }}>United States Destination Map</p>
         <h3 className="mt-2 text-2xl font-black text-white">Las Vegas designated for 2027</h3>
       </div>
-      <svg viewBox="0 0 900 500" className="relative z-10 mt-5 h-auto w-full">
+      <svg viewBox="0 0 920 530" className="relative z-10 mt-4 h-auto w-full">
         <defs>
-          <linearGradient id="ncoreMapGrad" x1="0" x2="1" y1="0" y2="1">
-            <stop offset="0%" stopColor="#111827"/><stop offset="100%" stopColor="#1e3a4a"/>
+          <linearGradient id="usMapGrad" x1="0" x2="1" y1="0" y2="1">
+            <stop offset="0%" stopColor="#1e3a4a"/><stop offset="100%" stopColor="#0d1b2a"/>
           </linearGradient>
-          <filter id="cyanGlow"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <filter id="lvGlow">
+            <feGaussianBlur stdDeviation="6" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
         </defs>
-        <path d="M100 185C190 90 300 105 385 130C465 152 525 105 620 130C735 160 800 220 805 300C710 340 620 352 515 335C405 318 315 358 220 330C145 308 90 260 100 185Z" fill="url(#ncoreMapGrad)" stroke="#334155" strokeWidth="2"/>
-        <circle cx="248" cy="275" r="11" fill="#22d3ee" filter="url(#cyanGlow)"/>
-        <circle cx="248" cy="275" r="30" fill="none" stroke="#22d3ee" strokeWidth="2" opacity=".5">
-          <animate attributeName="r" from="20" to="50" dur="2s" repeatCount="indefinite"/>
-          <animate attributeName="opacity" from=".7" to="0" dur="2s" repeatCount="indefinite"/>
+
+        {/* Continental US — recognisable outline */}
+        <path strokeLinejoin="round" fill="url(#usMapGrad)" stroke="#334155" strokeWidth="2.5"
+          d="M160,95 L205,85 L295,74 L410,66 L520,63 L630,67 L728,73 L800,82
+             L832,97 L840,122 L830,148 L818,163 L824,182 L812,202 L806,222 L802,240
+             L798,258 L793,276 L792,294
+             L798,312 L796,332 L788,350
+             L793,370 L787,392 L776,418
+             L758,442 L738,456
+             L718,440 L708,416 L698,392 L688,372
+             L666,360 L638,354 L610,354 L582,359
+             L554,365 L526,370 L498,376
+             L470,383 L443,386 L418,379
+             L393,368 L370,354 L348,338
+             L328,320 L302,312 L275,310
+             L248,313 L220,317 L198,319
+             L183,314 L170,299 L161,276
+             L154,250 L150,222 L150,194
+             L152,166 L154,138 L157,116
+             L160,95 Z"/>
+
+        {/* Las Vegas pin — geographically correct (western US, mid-height) */}
+        <circle cx="245" cy="274" r="11" fill="#22d3ee" filter="url(#lvGlow)"/>
+        <circle cx="245" cy="274" r="18" fill="none" stroke="#22d3ee" strokeWidth="2" opacity=".55">
+          <animate attributeName="r" from="16" to="46" dur="2.2s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" from=".75" to="0" dur="2.2s" repeatCount="indefinite"/>
         </circle>
-        <text x="278" y="268" fill="#ffffff" fontSize="22" fontWeight="800">Las Vegas</text>
-        <text x="278" y="296" fill="#5eead4" fontSize="14">NCORE 2027 Destination</text>
-        <path d="M248 275C390 180 520 195 670 250" stroke="#22d3ee" strokeWidth="2" strokeDasharray="8 10" fill="none" opacity=".6"/>
-        <path d="M248 275C350 340 495 375 660 326" stroke="#14b8a6" strokeWidth="2" strokeDasharray="8 10" fill="none" opacity=".55"/>
+
+        <text x="264" y="268" fill="#ffffff" fontSize="18" fontWeight="800" fontFamily="system-ui,sans-serif">Las Vegas</text>
+        <text x="264" y="290" fill="#5eead4" fontSize="12" fontFamily="system-ui,sans-serif">NCORE 2027 Destination</text>
+
+        {/* Dashed route lines east */}
+        <path d="M245,274 C420,200 580,215 725,260" stroke="#22d3ee" strokeWidth="2" strokeDasharray="8 10" fill="none" opacity=".48"/>
+        <path d="M245,274 C385,330 540,352 690,326" stroke="#14b8a6" strokeWidth="2" strokeDasharray="8 10" fill="none" opacity=".42"/>
       </svg>
     </div>
   );
