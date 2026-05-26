@@ -257,7 +257,7 @@ function MiniMap() {
             className="w-full h-auto block"
           />
           {/* Las Vegas pin — southern Nevada */}
-          <div className="absolute pointer-events-none" style={{ left: "40%", top: "55%", transform: "translate(-50%, -100%)" }}>
+          <div className="absolute pointer-events-none" style={{ left: "38%", top: "58%", transform: "translate(-50%, -100%)" }}>
             <svg width="32" height="40" viewBox="0 0 32 42" fill="none" xmlns="http://www.w3.org/2000/svg"
               style={{ filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.7))" }}>
               <path d="M16 0C7.163 0 0 7.163 0 16c0 5.516 2.85 10.366 7.163 13.22L16 42l8.837-12.78C29.15 26.366 32 21.516 32 16 32 7.163 24.837 0 16 0z" fill="#f39e14"/>
