@@ -295,12 +295,11 @@ function DestinationMapCard({ T }: { T: Theme }) {
       <div className="mt-6 overflow-hidden rounded-3xl" style={{ height: 400, border: `1px solid ${T.border}` }}>
         <iframe
           title="ARIA Resort Casino Las Vegas"
-          src="https://maps.google.com/maps?q=ARIA+Resort+Casino+Las+Vegas&output=embed&z=15"
+          src="https://www.openstreetmap.org/export/embed.html?bbox=-115.1820%2C36.1045%2C-115.1720%2C36.1102&layer=mapnik&marker=36.1072%2C-115.1767"
           width="100%"
           height="100%"
           className="border-0"
           loading="lazy"
-          referrerPolicy="no-referrer-when-downgrade"
         />
       </div>
     </div>
@@ -716,10 +715,10 @@ export default function Ncore2027Microsite() {
 
         {/* ── Destination map ──────────────────────────────────── */}
         <section id="destination" className="mx-auto max-w-7xl px-6 py-12">
-          <div className="grid gap-6 lg:grid-cols-[1fr_1fr] lg:items-stretch">
-            <DestinationMapCard T={T} />
+          <div className="mb-6">
             <MiniMap />
           </div>
+          <DestinationMapCard T={T} />
         </section>
 
         {/* ── Program tiles ────────────────────────────────────── */}
