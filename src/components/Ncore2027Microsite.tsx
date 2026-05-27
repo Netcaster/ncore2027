@@ -897,27 +897,6 @@ export default function Ncore2027Microsite() {
           </div>
         </section>
 
-        {/* ── Marquee Ticker ───────────────────────────────────── */}
-        <div className="overflow-hidden border-y py-4" style={{ borderColor: T.border, background: dark ? "rgba(0,0,0,0.3)" : "rgba(0,0,0,0.05)" }}>
-          <div className="marquee-track">
-            {[1,2].map(n => (
-              <span key={n} className="inline-flex items-center gap-0">
-                <span className="mx-10 text-sm font-black uppercase tracking-[0.35em]" style={{ color: A.orange }}>H.A.N.D.S.</span>
-                <span className="mx-4 opacity-30" style={{ color: T.text }}>·</span>
-                <span className="mx-10 text-sm font-black uppercase tracking-[0.35em]" style={{ color: A.blue }}>H.A.N.D.</span>
-                <span className="mx-4 opacity-30" style={{ color: T.text }}>·</span>
-                <span className="mx-10 text-sm font-semibold uppercase tracking-[0.2em]" style={{ color: T.muted }}>The world requires both hands and feet</span>
-                <span className="mx-4 opacity-30" style={{ color: T.text }}>·</span>
-                <span className="mx-10 text-sm font-black uppercase tracking-[0.35em]" style={{ color: A.orange }}>High Touch</span>
-                <span className="mx-4 opacity-30" style={{ color: T.text }}>·</span>
-                <span className="mx-10 text-sm font-black uppercase tracking-[0.35em]" style={{ color: A.blue }}>High Tech</span>
-                <span className="mx-4 opacity-30" style={{ color: T.text }}>·</span>
-                <span className="mx-10 text-sm font-semibold uppercase tracking-[0.2em]" style={{ color: T.muted }}>Social Infrastructure</span>
-                <span className="mx-4 opacity-30" style={{ color: T.text }}>·</span>
-              </span>
-            ))}
-          </div>
-        </div>
 
         {/* ── H.A.N.D.S. Housing Access ────────────────────────── */}
         <section id="hands" className="mx-auto max-w-7xl px-6 py-16">
