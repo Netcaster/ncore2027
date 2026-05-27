@@ -212,19 +212,16 @@ function SlideVisualBackground({ type = "hand" }: { type?: "hand" | "foot" }) {
       <div className="absolute -bottom-20 right-0 h-80 w-80 rounded-full blur-3xl"
         style={{ background: isHand ? "rgba(23,161,134,0.14)" : "rgba(34,211,238,0.12)" }} />
 
-      {/* Actual PPTX slide PNG — screen blend makes dark bg transparent, colors glow through */}
       {isHand ? (
         <img
           src="/ncore-hands-cluster.png"
           className="absolute bottom-[-4%] right-[-6%] w-[72%] opacity-[0.62]"
-          style={{ mixBlendMode: "screen" }}
           aria-hidden="true"
         />
       ) : (
         <img
           src="/ncore-foot-cluster.png"
           className="absolute top-[-2%] right-[-6%] h-[34%] w-auto opacity-[0.62]"
-          style={{ mixBlendMode: "screen" }}
           aria-hidden="true"
         />
       )}
