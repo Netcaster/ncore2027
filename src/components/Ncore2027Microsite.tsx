@@ -301,7 +301,7 @@ function MiniMap() {
           />
 
           {/* Las Vegas label */}
-          <div className="absolute pointer-events-none" style={{ left: "16%", top: "35%", transform: "translateX(-50%)" }}>
+          <div className="absolute pointer-events-none" style={{ left: "16%", top: "37%", transform: "translateX(-50%)" }}>
             <span style={{
               display: "inline-block",
               padding: "6px 12px",
