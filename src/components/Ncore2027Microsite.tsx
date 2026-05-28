@@ -240,12 +240,20 @@ function SlideVisualBackground({ type = "hand" }: { type?: "hand" | "foot" }) {
 // ── NCORE Regional US Map ─────────────────────────────────────
 const miniMapPulse = `
   @keyframes ncoreMapPulse {
-    0%   { transform: translate(-50%,-50%) scale(0.55); opacity: 0.96; }
-    100% { transform: translate(-50%,-50%) scale(3.4);  opacity: 0; }
+    0%   { transform: translate(-50%,-50%) scale(0.55); opacity: 0.9; }
+    100% { transform: translate(-50%,-50%) scale(4);    opacity: 0; }
   }
-  @keyframes ncoreStarBlink {
-    0%, 100% { opacity: 1; transform: translate(-50%,-50%) scale(1); }
-    50%       { opacity: 0.3; transform: translate(-50%,-50%) scale(1.18); }
+  @keyframes ncoreStarSpin {
+    from { transform: translate(-50%,-50%) rotate(0deg); }
+    to   { transform: translate(-50%,-50%) rotate(360deg); }
+  }
+  @keyframes ncoreCorePulse {
+    0%, 100% { transform: translate(-50%,-50%) scale(1);    opacity: 1; }
+    50%      { transform: translate(-50%,-50%) scale(1.35); opacity: 0.75; }
+  }
+  @keyframes ncoreGlowPulse {
+    0%, 100% { opacity: 0.55; }
+    50%      { opacity: 1; }
   }
 `;
 
@@ -286,45 +294,91 @@ function MiniMap() {
         {/* Map stage */}
         <div className="relative z-10 mx-6 mt-4 mb-6" style={{ minHeight: 300 }}>
           <img
-            src="/ncore-dark-map.png"
+            src="/ncore-clean-map.png"
             alt="NCORE 2027 National Regional Map"
             className="w-full h-auto block"
             style={{ borderRadius: "1rem" }}
           />
 
-          {/* Las Vegas label — above the starburst */}
-          <div className="absolute pointer-events-none" style={{ left: "13%", top: "30%", transform: "translateX(-50%)" }}>
+          {/* Las Vegas label */}
+          <div className="absolute pointer-events-none" style={{ left: "16%", top: "30%", transform: "translateX(-50%)" }}>
             <span style={{
               display: "inline-block",
               padding: "6px 12px",
-              border: "1px solid rgba(250,204,21,0.4)",
-              background: "rgba(2,8,23,0.72)",
+              border: "1px solid rgba(250,204,21,0.45)",
+              background: "rgba(2,8,23,0.78)",
               borderRadius: 999,
               color: "#fff",
               fontSize: 11,
               fontWeight: 800,
               letterSpacing: "0.09em",
               textTransform: "uppercase",
-              boxShadow: "0 0 20px rgba(250,204,21,0.14)",
+              boxShadow: "0 0 24px rgba(250,204,21,0.18)",
               whiteSpace: "nowrap",
             }}>Las Vegas</span>
           </div>
 
-          {/* Subtle pulse ring over the baked-in starburst */}
-          <div className="absolute pointer-events-none" style={{ left: "16%", top: "43%" }}>
+          {/* Animated starburst at Las Vegas */}
+          <div className="absolute pointer-events-none" style={{ left: "16%", top: "50%" }}>
+
+            {/* Outer glow */}
             <div style={{
               position: "absolute", left: "50%", top: "50%",
-              width: 28, height: 28, marginLeft: -14, marginTop: -14,
-              border: "1.5px solid rgba(250,204,21,0.55)",
+              width: 60, height: 60, marginLeft: -30, marginTop: -30,
+              borderRadius: "50%",
+              background: "radial-gradient(circle, rgba(250,204,21,0.35) 0%, transparent 70%)",
+              animation: "ncoreGlowPulse 1.6s infinite ease-in-out",
+            }} />
+
+            {/* Pulse ring 1 */}
+            <div style={{
+              position: "absolute", left: "50%", top: "50%",
+              width: 22, height: 22, marginLeft: -11, marginTop: -11,
+              border: "1.5px solid rgba(250,204,21,0.7)",
               borderRadius: "50%",
               animation: "ncoreMapPulse 2s infinite ease-out",
             }} />
+            {/* Pulse ring 2 */}
             <div style={{
               position: "absolute", left: "50%", top: "50%",
-              width: 28, height: 28, marginLeft: -14, marginTop: -14,
-              border: "1.5px solid rgba(250,204,21,0.55)",
+              width: 22, height: 22, marginLeft: -11, marginTop: -11,
+              border: "1.5px solid rgba(250,204,21,0.7)",
               borderRadius: "50%",
-              animation: "ncoreMapPulse 2s 0.8s infinite ease-out",
+              animation: "ncoreMapPulse 2s 0.75s infinite ease-out",
+            }} />
+            {/* Pulse ring 3 */}
+            <div style={{
+              position: "absolute", left: "50%", top: "50%",
+              width: 22, height: 22, marginLeft: -11, marginTop: -11,
+              border: "1.5px solid rgba(250,204,21,0.7)",
+              borderRadius: "50%",
+              animation: "ncoreMapPulse 2s 1.5s infinite ease-out",
+            }} />
+
+            {/* Spike star — slow spin */}
+            <div style={{
+              position: "absolute", left: "50%", top: "50%",
+              width: 18, height: 18,
+              animation: "ncoreStarSpin 8s linear infinite",
+              transform: "translate(-50%,-50%)",
+            }}>
+              {/* 4 spikes via box-shadow trick */}
+              <svg width="18" height="18" viewBox="0 0 18 18" style={{ overflow: "visible" }}>
+                <line x1="9" y1="0" x2="9" y2="18" stroke="rgba(250,204,21,0.9)" strokeWidth="1.5" strokeLinecap="round"/>
+                <line x1="0" y1="9" x2="18" y2="9" stroke="rgba(250,204,21,0.9)" strokeWidth="1.5" strokeLinecap="round"/>
+                <line x1="2" y1="2" x2="16" y2="16" stroke="rgba(250,204,21,0.6)" strokeWidth="1" strokeLinecap="round"/>
+                <line x1="16" y1="2" x2="2" y2="16" stroke="rgba(250,204,21,0.6)" strokeWidth="1" strokeLinecap="round"/>
+              </svg>
+            </div>
+
+            {/* Bright core dot */}
+            <div style={{
+              position: "absolute", left: "50%", top: "50%",
+              width: 8, height: 8, marginLeft: -4, marginTop: -4,
+              borderRadius: "50%",
+              background: "#fff",
+              boxShadow: "0 0 6px 3px rgba(250,204,21,1), 0 0 18px 6px rgba(250,204,21,0.6)",
+              animation: "ncoreCorePulse 1.6s infinite ease-in-out",
             }} />
           </div>
         </div>
