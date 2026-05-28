@@ -311,7 +311,7 @@ function MiniMap() {
           </div>
 
           {/* Subtle pulse ring over the baked-in starburst */}
-          <div className="absolute pointer-events-none" style={{ left: "13%", top: "43%" }}>
+          <div className="absolute pointer-events-none" style={{ left: "16%", top: "43%" }}>
             <div style={{
               position: "absolute", left: "50%", top: "50%",
               width: 28, height: 28, marginLeft: -14, marginTop: -14,
