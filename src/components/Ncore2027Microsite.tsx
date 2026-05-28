@@ -238,34 +238,98 @@ function SlideVisualBackground({ type = "hand" }: { type?: "hand" | "foot" }) {
 }
 
 // ── NCORE Regional US Map ─────────────────────────────────────
+const miniMapPulse = `
+  @keyframes ncoreMapPulse {
+    0%   { transform: translate(-50%,-50%) scale(0.55); opacity: 0.96; }
+    100% { transform: translate(-50%,-50%) scale(3.4);  opacity: 0; }
+  }
+  @keyframes ncoreStarBlink {
+    0%, 100% { opacity: 1; transform: translate(-50%,-50%) scale(1); }
+    50%       { opacity: 0.3; transform: translate(-50%,-50%) scale(1.18); }
+  }
+`;
+
 function MiniMap() {
   return (
-    <div className="relative overflow-hidden rounded-[2rem] p-6" style={{ background: "#050f1e", border: "1px solid rgba(255,255,255,0.08)" }}>
-      <div className="absolute inset-0" style={{ background: "radial-gradient(circle at 27% 58%,rgba(34,211,238,.18),transparent 28%)" }} />
-      <div className="relative z-10">
-        <p className="text-xs font-bold uppercase tracking-[0.3em]" style={{ color: "#5eead4" }}>United States Destination Map</p>
-        <h3 className="mt-2 text-2xl font-black text-white">Las Vegas designated for 2027</h3>
-      </div>
-      <div className="relative z-10 mt-4">
-        <div className="relative">
+    <>
+      <style>{miniMapPulse}</style>
+      {/* Outer card */}
+      <div className="relative overflow-hidden rounded-[2rem]" style={{
+        background: "linear-gradient(180deg,rgba(8,18,38,0.96),rgba(2,8,23,0.82))",
+        border: "1px solid rgba(125,211,252,0.22)",
+        boxShadow: "0 30px 100px rgba(0,0,0,0.42)",
+        minHeight: 420,
+      }}>
+        {/* Grid overlay */}
+        <div className="absolute inset-0 pointer-events-none" style={{
+          backgroundImage: "linear-gradient(rgba(125,211,252,0.055) 1px,transparent 1px),linear-gradient(90deg,rgba(125,211,252,0.055) 1px,transparent 1px)",
+          backgroundSize: "42px 42px",
+          WebkitMaskImage: "radial-gradient(circle at center,black,transparent 78%)",
+          maskImage: "radial-gradient(circle at center,black,transparent 78%)",
+        }} />
+
+        {/* Header row */}
+        <div className="relative z-10 flex items-center justify-between px-6 pt-5">
+          <span style={{
+            border: "1px solid rgba(125,211,252,0.22)",
+            background: "rgba(2,8,23,0.68)",
+            borderRadius: 999,
+            padding: "8px 14px",
+            color: "#7dd3fc",
+            fontSize: 11,
+            letterSpacing: "0.09em",
+            textTransform: "uppercase",
+          }}>NCORE / AI Network Map</span>
+          <span style={{ color: "#34d399", fontSize: 11, letterSpacing: "0.09em", textTransform: "uppercase" }}>● System Online</span>
+        </div>
+
+        {/* Map stage */}
+        <div className="relative z-10 mx-6 mt-4 mb-6" style={{ minHeight: 300 }}>
           <img
-            src="/ncore-regional-map.png"
+            src="/ncore-dark-map.png"
             alt="NCORE 2027 National Regional Map"
             className="w-full h-auto block"
+            style={{ borderRadius: "1rem" }}
           />
-          {/* Las Vegas pin — southern Nevada */}
-          <div className="absolute pointer-events-none" style={{ left: "38%", top: "58%", transform: "translate(-50%, -100%)" }}>
-            <svg width="32" height="40" viewBox="0 0 32 42" fill="none" xmlns="http://www.w3.org/2000/svg"
-              style={{ filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.7))" }}>
-              <path d="M16 0C7.163 0 0 7.163 0 16c0 5.516 2.85 10.366 7.163 13.22L16 42l8.837-12.78C29.15 26.366 32 21.516 32 16 32 7.163 24.837 0 16 0z" fill="#f39e14"/>
-              <circle cx="16" cy="16" r="7" fill="#1a2f3d" stroke="#f39e14" strokeWidth="1.5"/>
-            </svg>
-            <p className="text-center text-[9px] font-black uppercase tracking-wide whitespace-nowrap mt-0.5"
-              style={{ color: "#f39e14", textShadow: "0 1px 4px rgba(0,0,0,0.9)" }}>Las Vegas</p>
+
+          {/* Las Vegas label — above the starburst */}
+          <div className="absolute pointer-events-none" style={{ left: "33%", top: "35%", transform: "translateX(-50%)" }}>
+            <span style={{
+              display: "inline-block",
+              padding: "6px 12px",
+              border: "1px solid rgba(250,204,21,0.4)",
+              background: "rgba(2,8,23,0.72)",
+              borderRadius: 999,
+              color: "#fff",
+              fontSize: 11,
+              fontWeight: 800,
+              letterSpacing: "0.09em",
+              textTransform: "uppercase",
+              boxShadow: "0 0 20px rgba(250,204,21,0.14)",
+              whiteSpace: "nowrap",
+            }}>Las Vegas</span>
+          </div>
+
+          {/* Subtle pulse ring over the baked-in starburst */}
+          <div className="absolute pointer-events-none" style={{ left: "33%", top: "44%" }}>
+            <div style={{
+              position: "absolute", left: "50%", top: "50%",
+              width: 28, height: 28, marginLeft: -14, marginTop: -14,
+              border: "1.5px solid rgba(250,204,21,0.55)",
+              borderRadius: "50%",
+              animation: "ncoreMapPulse 2s infinite ease-out",
+            }} />
+            <div style={{
+              position: "absolute", left: "50%", top: "50%",
+              width: 28, height: 28, marginLeft: -14, marginTop: -14,
+              border: "1.5px solid rgba(250,204,21,0.55)",
+              borderRadius: "50%",
+              animation: "ncoreMapPulse 2s 0.8s infinite ease-out",
+            }} />
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
