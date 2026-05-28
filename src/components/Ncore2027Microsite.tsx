@@ -293,7 +293,7 @@ function MiniMap() {
           />
 
           {/* Las Vegas label — above the starburst */}
-          <div className="absolute pointer-events-none" style={{ left: "33%", top: "35%", transform: "translateX(-50%)" }}>
+          <div className="absolute pointer-events-none" style={{ left: "27%", top: "37%", transform: "translateX(-50%)" }}>
             <span style={{
               display: "inline-block",
               padding: "6px 12px",
@@ -311,7 +311,7 @@ function MiniMap() {
           </div>
 
           {/* Subtle pulse ring over the baked-in starburst */}
-          <div className="absolute pointer-events-none" style={{ left: "33%", top: "44%" }}>
+          <div className="absolute pointer-events-none" style={{ left: "27%", top: "50%" }}>
             <div style={{
               position: "absolute", left: "50%", top: "50%",
               width: 28, height: 28, marginLeft: -14, marginTop: -14,
