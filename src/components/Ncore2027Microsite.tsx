@@ -676,6 +676,14 @@ export default function Ncore2027Microsite() {
           </nav>
 
           <div className="flex items-center gap-3">
+            <a
+              href="/?view=aria-experience"
+              className="hidden rounded-full px-4 py-2 text-xs font-semibold transition-opacity hover:opacity-80 lg:block"
+              style={{ background: `${A.orange}22`, border: `1px solid ${A.orange}45`, color: A.orange }}
+            >
+              ARIA Experience →
+            </a>
+
             <button
               onClick={toggleTheme}
               aria-label={dark ? "Switch to day mode" : "Switch to night mode"}
