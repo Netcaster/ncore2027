@@ -236,34 +236,36 @@ export default function NcoreAriaExperienceMicrosite() {
           </motion.div>
 
           <motion.div initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.9 }}>
-            <div className="relative min-h-[480px] overflow-hidden rounded-[2rem] shadow-2xl"
+            <div className="relative overflow-hidden rounded-[2rem] shadow-2xl"
               style={{ background: T.panel, border: `1px solid ${T.border}` }}>
               <div className="absolute inset-0 rounded-[2rem]"
                 style={{ background: `radial-gradient(circle at 30% 20%, ${A.teal}28, transparent 40%), radial-gradient(circle at 75% 70%, ${A.orange}18, transparent 40%)` }} />
-              {/* NALU status bar */}
-              <div className="absolute inset-x-6 top-6 flex items-center justify-between rounded-2xl p-4"
-                style={{ background: T.panelAlt, border: `1px solid ${T.border}` }}>
-                <div className="flex items-center gap-3">
-                  <div className="grid h-10 w-10 place-items-center rounded-full text-white"
-                    style={{ background: A.teal }}><Network className="h-5 w-5" /></div>
-                  <div>
-                    <p className="text-sm font-semibold" style={{ color: T.text }}>NALU Civic Intelligence</p>
-                    <p className="text-xs" style={{ color: T.muted }}>Live translation · research · rewards</p>
+              <div className="relative flex flex-col gap-4 p-6">
+                {/* NALU status bar */}
+                <div className="flex items-center justify-between rounded-2xl p-4"
+                  style={{ background: T.panelAlt, border: `1px solid ${T.border}` }}>
+                  <div className="flex items-center gap-3">
+                    <div className="grid h-10 w-10 place-items-center rounded-full text-white"
+                      style={{ background: A.teal }}><Network className="h-5 w-5" /></div>
+                    <div>
+                      <p className="text-sm font-semibold" style={{ color: T.text }}>NALU Civic Intelligence</p>
+                      <p className="text-xs" style={{ color: T.muted }}>Live translation · research · rewards</p>
+                    </div>
                   </div>
+                  <span className="rounded-full px-3 py-1 text-xs font-bold"
+                    style={{ background: `${A.lime}18`, color: A.lime }}>Online</span>
                 </div>
-                <span className="rounded-full px-3 py-1 text-xs font-bold"
-                  style={{ background: `${A.lime}18`, color: A.lime }}>Online</span>
-              </div>
-              {/* Stat cards */}
-              <div className="absolute bottom-6 left-6 right-6 grid gap-3 md:grid-cols-2">
-                {stats.map((s) => (
-                  <div key={s.label} className="rounded-2xl p-4"
-                    style={{ background: T.panelAlt, border: `1px solid ${T.border}` }}>
-                    <p className="text-2xl font-black" style={{ color: T.text }}>{s.value}</p>
-                    <p className="mt-0.5 text-sm font-semibold" style={{ color: A.teal }}>{s.label}</p>
-                    <p className="mt-1 text-xs leading-5" style={{ color: T.muted }}>{s.detail}</p>
-                  </div>
-                ))}
+                {/* Stat cards */}
+                <div className="grid gap-3 md:grid-cols-2">
+                  {stats.map((s) => (
+                    <div key={s.label} className="rounded-2xl p-4"
+                      style={{ background: T.panelAlt, border: `1px solid ${T.border}` }}>
+                      <p className="text-2xl font-black" style={{ color: T.text }}>{s.value}</p>
+                      <p className="mt-0.5 text-sm font-semibold" style={{ color: A.teal }}>{s.label}</p>
+                      <p className="mt-1 text-xs leading-5" style={{ color: T.muted }}>{s.detail}</p>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </motion.div>
