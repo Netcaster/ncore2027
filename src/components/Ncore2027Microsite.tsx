@@ -226,13 +226,6 @@ function SlideVisualBackground({ type = "hand" }: { type?: "hand" | "foot" }) {
         />
       )}
 
-      {/* Label watermark text */}
-      <div className="absolute left-8 top-8 -rotate-[4deg] text-[6rem] font-black leading-none text-white/[0.04] md:text-[9rem]">
-        {isHand ? "H.A.N.D.S." : "H.A.N.D."}
-      </div>
-      <div className="absolute bottom-10 left-10 rounded-full border border-white/10 bg-black/20 px-6 py-3 text-xs font-black uppercase tracking-[0.45em] text-white/20">
-        {isHand ? "HIGH TOUCH" : "HIGH TECH"}
-      </div>
     </div>
   );
 }
@@ -1028,17 +1021,6 @@ export default function Ncore2027Microsite() {
         <section id="hands" className="mx-auto max-w-7xl px-6 py-16">
           <div className="relative overflow-hidden rounded-[2.5rem] shadow-2xl" style={{ background: T.panel, border: `1px solid ${T.border}` }}>
 
-            {/* Watermark image — hands photo behind content */}
-            <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden rounded-[2.5rem]">
-              <img
-                src="/ncore-hands-photo.png"
-                alt=""
-                aria-hidden="true"
-                className="absolute inset-0 h-full w-full object-cover object-center"
-                style={{ opacity: 0.13, mixBlendMode: dark ? "screen" : "multiply" }}
-              />
-              <div className="absolute inset-0" style={{ background: dark ? "linear-gradient(to bottom right, rgba(26,47,61,0.82), rgba(39,69,82,0.88))" : "linear-gradient(to bottom right, rgba(221,237,242,0.88), rgba(240,248,251,0.92))" }} />
-            </div>
 
             <SlideVisualBackground type="hand" />
 
@@ -1232,17 +1214,6 @@ export default function Ncore2027Microsite() {
         <section id="hand" className="mx-auto max-w-7xl px-6 py-6">
           <div className="relative overflow-hidden rounded-[2.5rem] shadow-2xl" style={{ background: T.panel, border: `1px solid ${T.border}` }}>
 
-            {/* Watermark image — feet/footprints as more-visible watermark */}
-            <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden rounded-[2.5rem]">
-              <img
-                src="/ncore-hands-photo.png"
-                alt=""
-                aria-hidden="true"
-                className="absolute inset-0 h-full w-full object-cover object-bottom"
-                style={{ opacity: 0.22, mixBlendMode: dark ? "screen" : "multiply", filter: "hue-rotate(200deg) saturate(0.7)" }}
-              />
-              <div className="absolute inset-0" style={{ background: dark ? "linear-gradient(to bottom right, rgba(26,47,61,0.80), rgba(26,47,61,0.86))" : "linear-gradient(to bottom right, rgba(221,237,242,0.86), rgba(240,248,251,0.92))" }} />
-            </div>
 
             <SlideVisualBackground type="foot" />
 
