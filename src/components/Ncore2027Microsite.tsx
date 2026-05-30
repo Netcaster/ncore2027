@@ -202,7 +202,7 @@ function BubbleCluster({ className = "" }: { className?: string }) {
 // ── Slide visual background — pixel-traced from PNG slides ────
 // Slide 1 PNG → H.A.N.D.S. hand-shaped bubble cluster (fingers spread upward)
 // Slide 2 PNG → H.A.N.D. footprint bubble cluster (big toe top → heel bottom)
-function SlideVisualBackground({ type = "hand" }: { type?: "hand" | "foot" }) {
+function SlideVisualBackground({ type = "hand", showCluster = true }: { type?: "hand" | "foot"; showCluster?: boolean }) {
   const isHand = type === "hand";
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-[2.5rem]">
@@ -212,7 +212,7 @@ function SlideVisualBackground({ type = "hand" }: { type?: "hand" | "foot" }) {
       <div className="absolute -bottom-20 right-0 h-80 w-80 rounded-full blur-3xl"
         style={{ background: isHand ? "rgba(23,161,134,0.14)" : "rgba(34,211,238,0.12)" }} />
 
-      {isHand ? (
+      {showCluster && (isHand ? (
         <img
           src="/ncore-hands-cluster.png"
           className="absolute bottom-[-4%] right-[-6%] w-[72%] opacity-[0.62]"
@@ -224,7 +224,7 @@ function SlideVisualBackground({ type = "hand" }: { type?: "hand" | "foot" }) {
           className="absolute top-[-2%] right-[-6%] h-[34%] w-auto opacity-[0.62]"
           aria-hidden="true"
         />
-      )}
+      ))}
 
     </div>
   );
@@ -1215,11 +1215,11 @@ export default function Ncore2027Microsite() {
           <div className="relative overflow-hidden rounded-[2.5rem] shadow-2xl" style={{ background: T.panel, border: `1px solid ${T.border}` }}>
 
 
-            <SlideVisualBackground type="foot" />
+            <SlideVisualBackground type="foot" showCluster={false} />
 
             <div className="relative z-10 p-8 md:p-12">
-              {/* Hero grid — nav panel left, copy right */}
-              <div className="grid gap-12 lg:grid-cols-[.9fr_1.1fr] lg:items-start">
+              {/* Hero grid — nav panel | copy | visual */}
+              <div className="grid gap-12 lg:grid-cols-[.9fr_1.1fr_280px] lg:items-center">
 
                 {/* Left: Nav systems active panel */}
                 <div className="rounded-[2rem] p-7" style={{ background: `${A.blue}08`, border: `1px solid ${A.blue}30` }}>
@@ -1278,6 +1278,16 @@ export default function Ncore2027Microsite() {
                     ))}
                   </div>
                 </div>
+
+                {/* Right: Bubble visual — contained column */}
+                <div className="hidden lg:flex items-center justify-center">
+                  <img
+                    src="/ncore-foot-cluster.png"
+                    className="w-full max-w-[260px] opacity-80"
+                    aria-hidden="true"
+                  />
+                </div>
+
               </div>
 
               {/* Divider */}
