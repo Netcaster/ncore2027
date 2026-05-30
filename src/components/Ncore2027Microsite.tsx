@@ -1219,7 +1219,7 @@ export default function Ncore2027Microsite() {
 
             <div className="relative z-10 p-8 md:p-12">
               {/* Hero grid — nav panel | copy | visual */}
-              <div className="grid gap-12 lg:grid-cols-[.9fr_1.1fr_280px] lg:items-center">
+              <div className="grid gap-12 lg:grid-cols-[.9fr_1.1fr_380px] lg:items-stretch">
 
                 {/* Left: Nav systems active panel */}
                 <div className="rounded-[2rem] p-7" style={{ background: `${A.blue}08`, border: `1px solid ${A.blue}30` }}>
@@ -1280,10 +1280,10 @@ export default function Ncore2027Microsite() {
                 </div>
 
                 {/* Right: Bubble visual — contained column */}
-                <div className="hidden lg:flex items-center justify-center">
+                <div className="hidden lg:flex items-center justify-center h-full">
                   <img
                     src="/ncore-foot-cluster.png"
-                    className="w-full max-w-[260px] opacity-80"
+                    className="w-full h-full object-contain opacity-80"
                     aria-hidden="true"
                   />
                 </div>
