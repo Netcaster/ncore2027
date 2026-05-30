@@ -678,7 +678,7 @@ export default function Ncore2027Microsite() {
           <div className="flex items-center gap-3">
             <a
               href="/?view=aria-experience"
-              className="hidden rounded-full px-4 py-2 text-xs font-semibold transition-opacity hover:opacity-80 lg:block"
+              className="hidden rounded-full px-3 py-1.5 text-[10px] font-semibold transition-opacity hover:opacity-80 lg:block"
               style={{ background: `${A.orange}22`, border: `1px solid ${A.orange}45`, color: A.orange }}
             >
               ARIA Experience →
