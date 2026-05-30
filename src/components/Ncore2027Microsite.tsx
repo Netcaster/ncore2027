@@ -675,7 +675,7 @@ export default function Ncore2027Microsite() {
             ))}
             <a
               href="/?view=aria-experience"
-              className="font-semibold transition-opacity hover:opacity-70"
+              className="text-xs font-semibold transition-opacity hover:opacity-70"
               style={{ color: A.orange }}
             >
               ARIA Experience →
