@@ -678,7 +678,7 @@ export default function Ncore2027Microsite() {
           <div className="flex items-center gap-3">
             <a
               href="/?view=aria-experience"
-              className="hidden rounded-full px-3 py-1.5 text-[10px] font-semibold transition-opacity hover:opacity-80 lg:block"
+              className="hidden rounded-full px-2.5 py-1 text-[9px] font-semibold transition-opacity hover:opacity-80 lg:block"
               style={{ background: `${A.orange}22`, border: `1px solid ${A.orange}45`, color: A.orange }}
             >
               ARIA Experience →
@@ -687,15 +687,15 @@ export default function Ncore2027Microsite() {
             <button
               onClick={toggleTheme}
               aria-label={dark ? "Switch to day mode" : "Switch to night mode"}
-              className="flex h-9 w-9 items-center justify-center rounded-full transition-all hover:opacity-80"
+              className="flex h-7 w-7 items-center justify-center rounded-full transition-all hover:opacity-80"
               style={{ background: T.glassBg, border: `1px solid ${T.border}`, color: T.text }}
             >
-              {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+              {dark ? <Sun className="h-3.5 w-3.5" /> : <Moon className="h-3.5 w-3.5" />}
             </button>
 
             <a
               href="#nalu"
-              className="rounded-full px-5 py-2 text-sm font-semibold text-white shadow-lg transition-opacity hover:opacity-90"
+              className="rounded-full px-3.5 py-1.5 text-xs font-semibold text-white shadow-lg transition-opacity hover:opacity-90"
               style={{ background: A.teal }}
             >
               Ask NALU
