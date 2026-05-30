@@ -256,13 +256,13 @@ export default function NcoreAriaExperienceMicrosite() {
                     style={{ background: `${A.lime}18`, color: A.lime }}>Online</span>
                 </div>
                 {/* Stat cards */}
-                <div className="grid gap-3 md:grid-cols-2">
+                <div className="grid gap-2 md:grid-cols-2">
                   {stats.map((s) => (
-                    <div key={s.label} className="rounded-2xl p-4"
+                    <div key={s.label} className="rounded-xl p-3"
                       style={{ background: T.panelAlt, border: `1px solid ${T.border}` }}>
-                      <p className="text-2xl font-black" style={{ color: T.text }}>{s.value}</p>
-                      <p className="mt-0.5 text-sm font-semibold" style={{ color: A.teal }}>{s.label}</p>
-                      <p className="mt-1 text-xs leading-5" style={{ color: T.muted }}>{s.detail}</p>
+                      <p className="text-xl font-black" style={{ color: T.text }}>{s.value}</p>
+                      <p className="mt-0.5 text-xs font-semibold" style={{ color: A.teal }}>{s.label}</p>
+                      <p className="mt-0.5 text-xs leading-4" style={{ color: T.muted }}>{s.detail}</p>
                     </div>
                   ))}
                 </div>
