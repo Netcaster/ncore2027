@@ -673,16 +673,16 @@ export default function Ncore2027Microsite() {
                 {item.label}
               </a>
             ))}
-          </nav>
-
-          <div className="flex items-center gap-3">
             <a
               href="/?view=aria-experience"
-              className="hidden text-xs font-semibold transition-opacity hover:opacity-70 lg:block"
+              className="font-semibold transition-opacity hover:opacity-70"
               style={{ color: A.orange }}
             >
               ARIA Experience →
             </a>
+          </nav>
+
+          <div className="flex items-center gap-3">
 
             <button
               onClick={toggleTheme}
