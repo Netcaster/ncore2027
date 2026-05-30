@@ -678,8 +678,8 @@ export default function Ncore2027Microsite() {
           <div className="flex items-center gap-3">
             <a
               href="/?view=aria-experience"
-              className="hidden rounded-full px-2.5 py-1 text-[9px] font-semibold transition-opacity hover:opacity-80 lg:block"
-              style={{ background: `${A.orange}22`, border: `1px solid ${A.orange}45`, color: A.orange }}
+              className="hidden text-xs font-semibold transition-opacity hover:opacity-70 lg:block"
+              style={{ color: A.orange }}
             >
               ARIA Experience →
             </a>
@@ -695,8 +695,8 @@ export default function Ncore2027Microsite() {
 
             <a
               href="#nalu"
-              className="rounded-full px-3.5 py-1.5 text-xs font-semibold text-white shadow-lg transition-opacity hover:opacity-90"
-              style={{ background: A.teal }}
+              className="text-xs font-semibold transition-opacity hover:opacity-70"
+              style={{ color: A.teal }}
             >
               Ask NALU
             </a>
