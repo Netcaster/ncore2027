@@ -265,15 +265,6 @@ export default function NcoreAriaExperienceMicrosite() {
                   </div>
                 ))}
               </div>
-              {/* Centre badge */}
-              <div className="absolute left-1/2 top-1/2 grid h-40 w-40 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full shadow-2xl"
-                style={{ background: `${A.teal}20`, border: `1px solid ${A.teal}45` }}>
-                <div className="text-center">
-                  <p className="text-xs uppercase tracking-[0.3em]" style={{ color: A.teal }}>ARIA</p>
-                  <p className="mt-1 text-xl font-black" style={{ color: T.text }}>Las Vegas</p>
-                  <p className="mt-1 text-xs" style={{ color: T.muted }}>Destination Platform</p>
-                </div>
-              </div>
             </div>
           </motion.div>
         </section>
